@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    /**
+     * Type checking rules
+     */
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // This option set: alwaysStrict, strictNullChecks, strictBindCallApply,
+    // strictFunctionTypes, strictPropertyInitialization, noImplicitAny,
+    // noImplicitThis, useUnknownInCatchVariables.
+    "strict": true,
+    "strictNullChecks": false,
+
+    /**
+     * Modules rules
+     */
+    "baseUrl": "./src",
+    "module": "commonjs",
+    "moduleResolution": "NodeNext",
+    "paths": {
+      "@app/*": ["*"]
+    },
+
+    /**
+     * Emit rules
+     */
+    "declaration": false,
+    "outDir": "./dist",
+    "removeComments": true,
+    "sourceMap": true,
+
+    /**
+     * Interop Constraints
+     */
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+
+    /**
+     * Language and Environment
+     */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "ES2017",
+
+    /**
+     * Completeness
+     */
+    "skipLibCheck": true
+  }
+}

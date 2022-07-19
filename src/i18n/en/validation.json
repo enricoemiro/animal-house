@@ -1,0 +1,17 @@
+{
+  "array": {
+    "type": "The {property} is not an array.",
+    "unique": "The values of the {property} must be unique.",
+    "minSize": "The array must have at least {constraints.0} element.",
+    "maxSize": "The array must have at most {constraints.0} element."
+  },
+  "string": {
+    "enum": "Allowed values are: [{values}].",
+    "email": "\"{value}\" is not a valid email address.",
+    "minLength": "The {property} must contain at least {constraints.0} character(s).",
+    "maxLength": "The {property} must contain a maximum of {constraints.0} character(s).",
+    "mongoId": "\"{value}\" is not a valid mongo id.",
+    "dateString": "\"{value}\" is not a valid ISO8601 date.",
+    "uuid4": "\"{value}\" is not a valid UUIDv4."
+  }
+}

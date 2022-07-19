@@ -1,0 +1,11 @@
+{
+  "controller": {
+    "createAdmin": "An admin account has been created: \"${email}\".",
+    "createAllPermissions": {
+      "zero": "The permissions already exist.",
+      "one": "A permission has been created: [{permissions}].",
+      "other": "{count} permissions have been created: [{permissions}]."
+    },
+    "deleteAllPermissions": "All permissions have been deleted."
+  }
+}
