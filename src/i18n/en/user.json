@@ -1,0 +1,22 @@
+{
+  "controller": {
+    "updatePermissions": {
+      "one": "The permission \"{permissions}\" has been successfully added to the user \"{email}\" ",
+      "other": "The permissions \"{permissions}\" have been successfully added to the user \"{email}\""
+    },
+    "deletePermissions": {
+      "one": "The permission \"{permissions}\" has been successfully removed from the user \"{email}\" ",
+      "other": "The permissions \"{permissions}\" have been successfully removed from the user \"{email}\""
+    }
+  },
+  "dto": {
+    "passwordMatch": "Passwords do not match."
+  },
+  "exception": {
+    "emailTaken": "A user with this email address already exists.",
+    "notFound": "The user could not be found.",
+    "blocked": "The user's account has been blocked.",
+    "notActivated": "The user's account has not yet been activated.",
+    "passwordMismatch": "Login failed. Invalid user ID or password."
+  }
+}
