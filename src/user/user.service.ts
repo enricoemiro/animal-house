@@ -68,7 +68,8 @@ export class UserService {
    * @param status User new status.
    */
   public async updateStatus(user: UserDocument, status: Status) {
-    await user.updateOne({ status }).exec();
+    user.status = status;
+    await user.save();
   }
 
   /**
