@@ -1,4 +1,9 @@
-import { IntersectionType, PickType } from '@nestjs/mapped-types';
+import {
+  IntersectionType,
+  OmitType,
+  PartialType,
+  PickType,
+} from '@nestjs/mapped-types';
 import {
   IsDateString,
   IsEmail,
@@ -49,6 +54,12 @@ export class UserDto {
   })
   permissions: string[];
 }
+
+export class UserUpdateAccountDto extends OmitType(PartialType(UserDto), [
+  'password',
+  'confirmPassword',
+  'permissions',
+]) {}
 
 export class UserPermissionsDto extends IntersectionType(
   PickType(UserDto, ['email'] as const),

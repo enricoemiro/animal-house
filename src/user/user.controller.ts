@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
+  Session,
   UseGuards,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
@@ -15,7 +17,7 @@ import { AuthGuard } from '@app/auth/auth.guard';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
 
-import { UserPermissionsDto } from './user.dto';
+import { UserPermissionsDto, UserUpdateAccountDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -27,6 +29,26 @@ export class UserController {
     private permissionService: PermissionService,
     private i18nService: I18nService,
   ) {}
+
+  @Post('update/account')
+  @HttpCode(HttpStatus.OK)
+  public async updateAccount(
+    @Session() session: Record<string, any>,
+    @Body() userUpdateAccountDto: UserUpdateAccountDto,
+  ) {
+    if (Object.keys(userUpdateAccountDto).length === 0) {
+      throw new BadRequestException();
+    }
+
+    await this.userService.update(
+      { _id: session.user.id },
+      userUpdateAccountDto,
+    );
+
+    return {
+      message: this.i18nService.t('user.controller.updateAccount'),
+    };
+  }
 
   @Post('update/permissions')
   @HttpCode(HttpStatus.OK)
