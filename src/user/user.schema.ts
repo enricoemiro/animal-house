@@ -59,6 +59,7 @@ export class User {
 
   @Prop({
     type: [{ type: Types.ObjectId, ref: 'Permission' }],
+    unique: false,
   })
   permissions: Permission[];
 }
