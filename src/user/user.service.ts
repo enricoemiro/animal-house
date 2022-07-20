@@ -43,11 +43,18 @@ export class UserService {
    * @param data The user data to be updated.
    * @returns the updated user.
    */
-  public async update(
-    filter: FilterQuery<UserDocument>,
-    data: Partial<User> & Omit<User, 'password'>,
-  ) {
-    return this.userModel.updateOne(filter, data).exec();
+  public async update(filter: FilterQuery<UserDocument>, data: Partial<User>) {
+    try {
+      return await this.userModel
+        .updateOne(filter, data, { runValidators: true })
+        .exec();
+    } catch (error: any) {
+      if (error.errors?.email?.kind === 'unique') {
+        throw new UserEmailTakenException();
+      }
+
+      throw error;
+    }
   }
 
   /**
