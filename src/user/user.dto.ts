@@ -59,7 +59,7 @@ export class UserUpdateAccountDto extends OmitType(PartialType(UserDto), [
   'password',
   'confirmPassword',
   'permissions',
-]) {}
+] as const) {}
 
 export class UserPermissionsDto extends IntersectionType(
   PickType(UserDto, ['email'] as const),
