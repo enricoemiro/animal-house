@@ -15,10 +15,16 @@ import { RequiresPermissions } from '@app/acl/acl.decorator';
 import { AclGuard } from '@app/acl/acl.guard';
 import { RequiresAuth } from '@app/auth/auth.decorator';
 import { AuthGuard } from '@app/auth/auth.guard';
+import { HasherService } from '@app/hasher/hasher.service';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
 
-import { UserPermissionsDto, UserUpdateAccountDto } from './user.dto';
+import {
+  UserPermissionsDto,
+  UserUpdateAccountDto,
+  UserUpdatePasswordDto,
+} from './user.dto';
+import { UserPasswordMismatchException } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -29,6 +35,7 @@ export class UserController {
     private userService: UserService,
     private permissionService: PermissionService,
     private i18nService: I18nService,
+    private hasherService: HasherService,
   ) {}
 
   @Post('update/account')
@@ -64,6 +71,31 @@ export class UserController {
 
     return {
       message: this.i18nService.t('user.controller.deleteAccount'),
+    };
+  }
+
+  @Post('update/password')
+  @HttpCode(HttpStatus.OK)
+  public async updatePassword(
+    @Body()
+    { password: oldPassword, newPassword }: UserUpdatePasswordDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const user = await this.userService.findById(session.user.id);
+
+    const doPasswordsMatch = await this.hasherService.compare(
+      oldPassword,
+      user.password,
+    );
+
+    if (!doPasswordsMatch) {
+      throw new UserPasswordMismatchException();
+    }
+
+    await this.userService.updatePassword(user, newPassword);
+
+    return {
+      message: this.i18nService.t('user.controller.updatePassword'),
     };
   }
 

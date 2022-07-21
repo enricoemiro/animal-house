@@ -43,6 +43,7 @@ import { UserService } from './user.service';
       },
     ]),
     forwardRef(() => PermissionModule),
+    HasherModule,
   ],
   providers: [UserService],
   controllers: [UserController],

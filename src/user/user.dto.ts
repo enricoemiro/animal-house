@@ -61,6 +61,15 @@ export class UserUpdateAccountDto extends OmitType(PartialType(UserDto), [
   'permissions',
 ] as const) {}
 
+export class UserUpdatePasswordDto extends PickType(UserDto, [
+  'password',
+  'confirmPassword',
+] as const) {
+  @MaxLength(64, { message: t('validation.string.maxLength') })
+  @MinLength(8, { message: t('validation.string.minLength') })
+  newPassword: string;
+}
+
 export class UserPermissionsDto extends IntersectionType(
   PickType(UserDto, ['email'] as const),
   PickType(PermissionDto, ['names'] as const),
