@@ -1,6 +1,7 @@
 {
   "controller": {
     "updateAccount": "Your account has been successfully updated.",
+    "deleteAccount": "Your account has been successfully deleted.",
     "updatePermissions": {
       "one": "The permission \"{permissions}\" has been successfully added to the user \"{email}\" ",
       "other": "The permissions \"{permissions}\" have been successfully added to the user \"{email}\""

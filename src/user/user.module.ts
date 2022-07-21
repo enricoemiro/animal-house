@@ -1,9 +1,12 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 
 import { HasherModule } from '@app/hasher/hasher.module';
 import { HasherService } from '@app/hasher/hasher.service';
 import { PermissionModule } from '@app/permission/permission.module';
+import { TokenModule } from '@app/token/token.module';
+import { TokenService } from '@app/token/token.service';
 
 import { UserController } from './user.controller';
 import { User, UserDocument, UserSchema } from './user.schema';
@@ -14,8 +17,12 @@ import { UserService } from './user.service';
     MongooseModule.forFeatureAsync([
       {
         name: User.name,
-        useFactory: (hasherService: HasherService) => {
+        useFactory: (
+          hasherService: HasherService,
+          tokenService: TokenService,
+        ) => {
           const schema = UserSchema;
+
           schema.pre<UserDocument>('save', async function () {
             if (!this.isModified('password')) return;
 
@@ -23,10 +30,17 @@ import { UserService } from './user.service';
 
             this.password = hashedPassword;
           });
+
+          schema.pre<any>('deleteOne', async function () {
+            const userId = new Types.ObjectId(this._conditions._id);
+
+            await tokenService.deleteByOwnerId(userId);
+          });
+
           return schema;
         },
-        inject: [HasherService],
-        imports: [HasherModule],
+        inject: [HasherService, TokenService],
+        imports: [HasherModule, TokenModule],
       },
     ]),
     forwardRef(() => PermissionModule),

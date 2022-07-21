@@ -4,6 +4,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Post,
   Session,
   UseGuards,
@@ -47,6 +48,22 @@ export class UserController {
 
     return {
       message: this.i18nService.t('user.controller.updateAccount'),
+    };
+  }
+
+  @Post('delete/account')
+  @HttpCode(HttpStatus.OK)
+  public async deleteAccount(@Session() session: Record<string, any>) {
+    const result = await this.userService.deleteById(session.user.id);
+
+    if (result.deletedCount === 0) {
+      throw new InternalServerErrorException();
+    }
+
+    await session.destroy();
+
+    return {
+      message: this.i18nService.t('user.controller.deleteAccount'),
     };
   }
 

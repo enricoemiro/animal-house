@@ -138,6 +138,15 @@ export class UserService {
   }
 
   /**
+   * Delete a user by his id.
+   *
+   * @param userId User id.
+   */
+  public async deleteById(userId: Types.ObjectId) {
+    return this.userModel.deleteOne({ _id: userId }).exec();
+  }
+
+  /**
    * Delete user permissions.
    *
    * @param user UserDocument to be updated.
