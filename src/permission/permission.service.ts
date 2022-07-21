@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, ProjectionType } from 'mongoose';
 
 import { PermissionsNotFoundException } from './permission.exception';
+import { PermissionWithId } from './permission.interface';
 import {
   Permission,
   PermissionDocument,
@@ -38,8 +39,13 @@ export class PermissionService {
    * @param filter Permission filter query.
    * @returns the found permissions.
    */
-  public async find(filter: FilterQuery<PermissionDocument>) {
-    const permissions = await this.permissionModel.find(filter).exec();
+  public async find(
+    filter: FilterQuery<PermissionWithId>,
+    projection?: ProjectionType<PermissionWithId>,
+  ) {
+    const permissions = await this.permissionModel
+      .find(filter, projection)
+      .exec();
 
     if (permissions.length === 0) {
       throw new PermissionsNotFoundException();
@@ -53,8 +59,8 @@ export class PermissionService {
    *
    * @returns the found permissions.
    */
-  public async findAll() {
-    return this.find({});
+  public async findAll(projection?: ProjectionType<PermissionWithId>) {
+    return this.find({}, projection);
   }
 
   /**
@@ -63,8 +69,11 @@ export class PermissionService {
    * @param names[] Permission names.
    * @returns the found permissions.
    */
-  public async findByNames(names: PermissionName[]) {
-    return this.find({ name: { $in: names } });
+  public async findByNames(
+    names: PermissionName[],
+    projection?: ProjectionType<PermissionWithId>,
+  ) {
+    return this.find({ name: { $in: names } }, projection);
   }
 
   /**
