@@ -1,6 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
 
 import { HasherModule } from '@app/hasher/hasher.module';
 import { HasherService } from '@app/hasher/hasher.service';
@@ -32,7 +31,7 @@ import { UserService } from './user.service';
           });
 
           schema.pre<any>('deleteOne', async function () {
-            const userId = new Types.ObjectId(this._conditions._id);
+            const userId = this._conditions._id;
 
             await tokenService.deleteByOwnerId(userId);
           });
