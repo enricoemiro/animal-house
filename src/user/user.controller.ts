@@ -28,7 +28,6 @@ import {
   UserUpdatePasswordDto,
 } from './user.dto';
 import { UserPasswordMismatchException } from './user.exception';
-import { Status } from './user.schema';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -57,7 +56,7 @@ export class UserController {
     }
 
     await this.sessionService.revoke(user._id);
-    await this.userService.updateStatus(user, Status.BLOCKED);
+    await this.userService.block(user);
 
     return {
       message: this.i18nService.t('user.controller.blockAccount', {

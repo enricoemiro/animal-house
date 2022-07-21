@@ -21,7 +21,6 @@ import {
   UserNotActivatedException,
   UserPasswordMismatchException,
 } from '@app/user/user.exception';
-import { Status } from '@app/user/user.schema';
 import { UserService } from '@app/user/user.service';
 
 import { RequiresAuth } from './auth.decorator';
@@ -83,7 +82,7 @@ export class AuthController {
       uuid: activationToken,
     });
 
-    await this.userService.updateStatus(user, Status.ACTIVATED);
+    await this.userService.activate(user);
     await this.tokenService.deleteByUUID(token.uuid);
 
     this.mailerService.sendAsyncMail('mailtrap', {
@@ -151,12 +150,10 @@ export class AuthController {
   ) {
     const user = await this.userService.findByEmail(email);
 
-    switch (user.status) {
-      case Status.NOT_ACTIVATED:
-        throw new UserNotActivatedException();
-
-      case Status.BLOCKED:
-        throw new UserBlockedException();
+    if (!user.isActive) {
+      throw new UserNotActivatedException();
+    } else if (user.isBlocked) {
+      throw new UserBlockedException();
     }
 
     const doPasswordsMatch = await this.hasherService.compare(

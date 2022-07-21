@@ -9,7 +9,7 @@ import {
   UserNotFoundException,
 } from './user.exception';
 import { UserWithId } from './user.interface';
-import { Status, User, UserDocument } from './user.schema';
+import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
@@ -69,17 +69,6 @@ export class UserService {
    */
   public async updatePassword(user: UserDocument, newPassword: string) {
     user.password = newPassword;
-    await user.save();
-  }
-
-  /**
-   * Update user status.
-   *
-   * @param user User to be updated.
-   * @param status User new status.
-   */
-  public async updateStatus(user: UserDocument, status: Status) {
-    user.status = status;
     await user.save();
   }
 
@@ -175,5 +164,23 @@ export class UserService {
     });
 
     await user.save();
+  }
+
+  /**
+   * Activate a user's account.
+   *
+   * @param user User to be activated.
+   */
+  public async activate(user: UserDocument) {
+    await user.updateOne({ isActive: true }).exec();
+  }
+
+  /**
+   * Block a user's account.
+   *
+   * @param user User to be blocked.
+   */
+  public async block(user: UserDocument) {
+    await user.updateOne({ isBlocked: true }).exec();
   }
 }

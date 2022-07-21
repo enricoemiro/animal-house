@@ -11,7 +11,6 @@ import { I18nService } from 'nestjs-i18n';
 
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
-import { Status } from '@app/user/user.schema';
 import { UserService } from '@app/user/user.service';
 
 import { DevCreateAdminDto } from './dev.dto';
@@ -33,7 +32,7 @@ export class DevController {
     const permissions = await this.permissionService.findAll();
 
     await this.userService.updatePermissions(user, permissions);
-    await this.userService.updateStatus(user, Status.ACTIVATED);
+    await this.userService.activate(user);
 
     return {
       message: this.i18nService.t('dev.controller.createAdmin', {
