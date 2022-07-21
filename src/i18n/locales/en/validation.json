@@ -12,6 +12,7 @@
     "maxLength": "The {property} must contain a maximum of {constraints.0} character(s).",
     "mongoId": "\"{value}\" is not a valid mongo id.",
     "dateString": "\"{value}\" is not a valid ISO8601 date.",
-    "uuid4": "\"{value}\" is not a valid UUIDv4."
+    "uuid4": "\"{value}\" is not a valid UUIDv4.",
+    "isString": "\"{value}\" is not a string."
   }
 }
