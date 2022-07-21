@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
   Post,
   Session,
   UseGuards,
@@ -18,13 +19,16 @@ import { AuthGuard } from '@app/auth/auth.guard';
 import { HasherService } from '@app/hasher/hasher.service';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
+import { SessionService } from '@app/session/session.service';
 
 import {
+  UserBlockAccountDto,
   UserPermissionsDto,
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
 import { UserPasswordMismatchException } from './user.exception';
+import { Status } from './user.schema';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -36,7 +40,31 @@ export class UserController {
     private permissionService: PermissionService,
     private i18nService: I18nService,
     private hasherService: HasherService,
+    private sessionService: SessionService,
   ) {}
+
+  @Post('block/account')
+  @HttpCode(HttpStatus.OK)
+  @RequiresPermissions(PermissionName.USER_BLOCK_ACCOUNT)
+  public async blockAccount(
+    @Body() { email }: UserBlockAccountDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const user = await this.userService.findByEmail(email);
+
+    if (user._id.equals(session.user.id)) {
+      throw new NotFoundException();
+    }
+
+    await this.sessionService.revoke(user._id);
+    await this.userService.updateStatus(user, Status.BLOCKED);
+
+    return {
+      message: this.i18nService.t('user.controller.blockAccount', {
+        args: { email },
+      }),
+    };
+  }
 
   @Post('update/account')
   @HttpCode(HttpStatus.OK)

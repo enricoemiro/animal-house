@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { HasherModule } from '@app/hasher/hasher.module';
 import { HasherService } from '@app/hasher/hasher.service';
 import { PermissionModule } from '@app/permission/permission.module';
+import { SessionModule } from '@app/session/session.module';
 import { TokenModule } from '@app/token/token.module';
 import { TokenService } from '@app/token/token.service';
 
@@ -44,6 +45,7 @@ import { UserService } from './user.service';
     ]),
     forwardRef(() => PermissionModule),
     HasherModule,
+    SessionModule,
   ],
   providers: [UserService],
   controllers: [UserController],

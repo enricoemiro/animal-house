@@ -7,6 +7,7 @@ export type PermissionDocument = Permission & Document;
 export enum PermissionName {
   PERMISSION_READ_ALL = 'permission:read_all',
 
+  USER_BLOCK_ACCOUNT = 'user:block_account',
   USER_UPDATE_PERMISSIONS = 'user:update_permissions',
   USER_DELETE_PERMISSIONS = 'user:delete_permissions',
 }
