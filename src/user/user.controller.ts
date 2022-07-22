@@ -57,8 +57,8 @@ export class UserController {
       throw new UserNotOnSelf();
     }
 
-    await this.sessionService.revoke(user._id);
     await this.userService.block(user);
+    await this.sessionService.revoke(user._id);
 
     return {
       message: this.i18nService.t('user.controller.blockAccount', {
