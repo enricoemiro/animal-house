@@ -133,14 +133,17 @@ export class UserController {
     const user = await this.userService.findByEmail(email);
     const permissions = await this.permissionService.findByNames(names);
 
-    await this.userService.updatePermissions(user, permissions);
+    const addedPermissions = await this.userService.updatePermissions(
+      user,
+      permissions,
+    );
 
     return {
       message: this.i18nService.t('user.controller.updatePermissions', {
         args: {
           email,
-          permissions: names.join(', '),
-          count: names.length,
+          permissions: addedPermissions.join(', '),
+          count: addedPermissions.length,
         },
       }),
     };
@@ -153,14 +156,17 @@ export class UserController {
     const user = await this.userService.findByEmail(email);
     const permissions = await this.permissionService.findByNames(names);
 
-    await this.userService.deletePermissions(user, permissions);
+    const deletedPermissions = await this.userService.deletePermissions(
+      user,
+      permissions,
+    );
 
     return {
       message: this.i18nService.t('user.controller.deletePermissions', {
         args: {
           email,
-          permissions: names.join(', '),
-          count: names.length,
+          permissions: deletedPermissions.join(', '),
+          count: deletedPermissions.length,
         },
       }),
     };

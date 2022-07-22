@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { differenceBy, unionBy } from 'lodash';
 import { FilterQuery, Model, ProjectionType, Types } from 'mongoose';
 
-import { PermissionDocument } from '@app/permission/permission.schema';
+import {
+  PermissionDocument,
+  PermissionName,
+} from '@app/permission/permission.schema';
 
 import {
   UserEmailTakenException,
@@ -77,18 +81,23 @@ export class UserService {
    *
    * @param user User to be updated.
    * @param permissions Permissions to be added.
+   * @returns array of added permissions.
    */
   public async updatePermissions(
     user: UserDocument,
     permissions: PermissionDocument[],
-  ) {
-    permissions.forEach((permission: PermissionDocument) => {
-      if (!user.permissions.includes(permission._id)) {
-        user.permissions.push(permission._id);
-      }
-    });
+  ): Promise<PermissionName[]> {
+    const union = unionBy(user.permissions, permissions, 'name');
 
-    await user.save();
+    // This means that at least one permission has been added.
+    if (union.length > user.permissions.length) {
+      await this.update({ _id: user._id }, { permissions: union });
+    }
+
+    // By doing that, we only get the permissions that have been added.
+    return differenceBy(union, user.permissions, 'name').map(
+      (permission) => permission.name,
+    );
   }
 
   /**
@@ -154,19 +163,23 @@ export class UserService {
    *
    * @param user UserDocument to be updated.
    * @param permissions Array of PermissionDocument.
+   * @returns array of deleted permissions.
    */
   public async deletePermissions(
     user: UserDocument,
     permissions: PermissionDocument[],
-  ) {
-    permissions.forEach((permission: PermissionDocument) => {
-      if (user.permissions.includes(permission._id)) {
-        const index = user.permissions.indexOf(permission._id);
-        user.permissions.splice(index, 1);
-      }
-    });
+  ): Promise<PermissionName[]> {
+    const difference = differenceBy(user.permissions, permissions, 'name');
 
-    await user.save();
+    // This means that at least one permission has been deleted.
+    if (difference.length < user.permissions.length) {
+      await this.update({ id: user._id }, { permissions: difference });
+    }
+
+    // By doing that, we only get the permissions that have been deleted.
+    return differenceBy(user.permissions, difference, 'name').map(
+      (permission) => permission.name,
+    );
   }
 
   /**
