@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Options, argon2id, hash, verify } from 'argon2';
 import { randomUUID } from 'node:crypto';
 
+import { UserPasswordMismatchException } from '@app/user/user.exception';
+
 @Injectable()
 export class HasherService {
   private options: Options & { raw?: false } = {};
@@ -20,8 +22,12 @@ export class HasherService {
   public async compare(
     plain: string | Buffer,
     encrypted: string,
-  ): Promise<boolean> {
-    return verify(encrypted, plain, this.options);
+  ): Promise<void> {
+    const doPasswordsMatch = await verify(encrypted, plain, this.options);
+
+    if (!doPasswordsMatch) {
+      throw new UserPasswordMismatchException();
+    }
   }
 
   public async hash(plain: string | Buffer): Promise<string> {

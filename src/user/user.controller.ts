@@ -25,11 +25,7 @@ import {
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
-import {
-  UserCouldNotBeDeleted,
-  UserNotOnSelf,
-  UserPasswordMismatchException,
-} from './user.exception';
+import { UserCouldNotBeDeleted, UserNotOnSelf } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -112,15 +108,7 @@ export class UserController {
   ) {
     const user = await this.userService.findById(session.user.id);
 
-    const doPasswordsMatch = await this.hasherService.compare(
-      oldPassword,
-      user.password,
-    );
-
-    if (!doPasswordsMatch) {
-      throw new UserPasswordMismatchException();
-    }
-
+    await this.hasherService.compare(oldPassword, user.password);
     await this.userService.updatePassword(user, newPassword);
 
     return {

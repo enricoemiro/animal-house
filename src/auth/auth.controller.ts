@@ -19,7 +19,6 @@ import { TokenService } from '@app/token/token.service';
 import {
   UserBlockedException,
   UserNotActivatedException,
-  UserPasswordMismatchException,
 } from '@app/user/user.exception';
 import { UserService } from '@app/user/user.service';
 
@@ -156,14 +155,7 @@ export class AuthController {
       throw new UserBlockedException();
     }
 
-    const doPasswordsMatch = await this.hasherService.compare(
-      password,
-      user.password,
-    );
-
-    if (!doPasswordsMatch) {
-      throw new UserPasswordMismatchException();
-    }
+    await this.hasherService.compare(password, user.password);
 
     session.user = { id: user._id };
 
