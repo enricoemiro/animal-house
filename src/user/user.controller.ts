@@ -4,8 +4,6 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  InternalServerErrorException,
-  NotFoundException,
   Post,
   Session,
   UseGuards,
@@ -27,7 +25,11 @@ import {
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
-import { UserPasswordMismatchException } from './user.exception';
+import {
+  UserCouldNotBeDeleted,
+  UserNotOnSelf,
+  UserPasswordMismatchException,
+} from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -52,7 +54,7 @@ export class UserController {
     const user = await this.userService.findByEmail(email);
 
     if (user._id.equals(session.user.id)) {
-      throw new NotFoundException();
+      throw new UserNotOnSelf();
     }
 
     await this.sessionService.revoke(user._id);
@@ -91,7 +93,7 @@ export class UserController {
     const result = await this.userService.deleteById(session.user.id);
 
     if (result.deletedCount === 0) {
-      throw new InternalServerErrorException();
+      throw new UserCouldNotBeDeleted();
     }
 
     await session.destroy();
@@ -129,8 +131,16 @@ export class UserController {
   @Post('update/permissions')
   @HttpCode(HttpStatus.OK)
   @RequiresPermissions(PermissionName.USER_UPDATE_PERMISSIONS)
-  public async updatePermissions(@Body() { email, names }: UserPermissionsDto) {
+  public async updatePermissions(
+    @Body() { email, names }: UserPermissionsDto,
+    @Session() session: Record<string, any>,
+  ) {
     const user = await this.userService.findByEmail(email);
+
+    if (user._id.equals(session.user.id)) {
+      throw new UserNotOnSelf();
+    }
+
     const permissions = await this.permissionService.findByNames(names);
 
     const addedPermissions = await this.userService.updatePermissions(
@@ -152,8 +162,16 @@ export class UserController {
   @Post('delete/permissions')
   @HttpCode(HttpStatus.OK)
   @RequiresPermissions(PermissionName.USER_DELETE_PERMISSIONS)
-  public async deletePermissions(@Body() { email, names }: UserPermissionsDto) {
+  public async deletePermissions(
+    @Body() { email, names }: UserPermissionsDto,
+    @Session() session: Record<string, any>,
+  ) {
     const user = await this.userService.findByEmail(email);
+
+    if (user._id.equals(session.user.id)) {
+      throw new UserNotOnSelf();
+    }
+
     const permissions = await this.permissionService.findByNames(names);
 
     const deletedPermissions = await this.userService.deletePermissions(
