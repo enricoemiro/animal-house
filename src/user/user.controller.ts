@@ -129,11 +129,9 @@ export class UserController {
       throw new UserNotOnSelf();
     }
 
-    const permissions = await this.permissionService.findByNames(names);
-
     const addedPermissions = await this.userService.updatePermissions(
       user,
-      permissions,
+      await this.permissionService.findByNames(names),
     );
 
     return {
@@ -160,11 +158,9 @@ export class UserController {
       throw new UserNotOnSelf();
     }
 
-    const permissions = await this.permissionService.findByNames(names);
-
     const deletedPermissions = await this.userService.deletePermissions(
       user,
-      permissions,
+      await this.permissionService.findByNames(names),
     );
 
     return {
