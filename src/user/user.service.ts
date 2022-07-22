@@ -173,7 +173,7 @@ export class UserService {
 
     // This means that at least one permission has been deleted.
     if (difference.length < user.permissions.length) {
-      await this.update({ id: user._id }, { permissions: difference });
+      await this.update({ _id: user._id }, { permissions: difference });
     }
 
     // By doing that, we only get the permissions that have been deleted.
