@@ -102,7 +102,10 @@ export class UserService {
     filter: FilterQuery<UserWithId>,
     projection?: ProjectionType<UserWithId>,
   ): Promise<UserDocument> {
-    const user = await this.userModel.findOne(filter, projection).exec();
+    const user = await this.userModel
+      .findOne(filter, projection)
+      .populate('permissions')
+      .exec();
 
     if (!user) {
       throw new UserNotFoundException();
