@@ -15,6 +15,7 @@ import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { HasherService } from '@app/hasher/hasher.service';
+import { SessionService } from '@app/session/session.service';
 import { TokenService } from '@app/token/token.service';
 import {
   UserBlockedException,
@@ -42,6 +43,7 @@ export class AuthController {
     private hasherService: HasherService,
     private userService: UserService,
     private i18nService: I18nService,
+    private sessionService: SessionService,
   ) {}
 
   @Post('register')
@@ -157,7 +159,7 @@ export class AuthController {
 
     await this.hasherService.compare(password, user.password);
 
-    session.user = { id: user._id };
+    session.user = this.sessionService.createFromUserDocument(user);
 
     return {
       message: this.i18nService.t('auth.controller.login'),

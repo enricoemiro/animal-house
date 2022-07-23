@@ -134,6 +134,10 @@ export class UserController {
       await this.permissionService.findByNames(names),
     );
 
+    if (addedPermissions.length > 0) {
+      await this.sessionService.invalidate(user._id);
+    }
+
     return {
       message: this.i18nService.t('user.controller.updatePermissions', {
         args: {
@@ -162,6 +166,10 @@ export class UserController {
       user,
       await this.permissionService.findByNames(names),
     );
+
+    if (deletedPermissions.length > 0) {
+      await this.sessionService.invalidate(user._id);
+    }
 
     return {
       message: this.i18nService.t('user.controller.deletePermissions', {

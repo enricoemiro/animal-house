@@ -3,6 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, Types } from 'mongoose';
 
+import { UserDocument } from '@app/user/user.schema';
+
+import { UserSession } from './session.interface';
+
 @Injectable()
 export class SessionService {
   private collectionName;
@@ -17,14 +21,64 @@ export class SessionService {
   }
 
   /**
+   * Create a user session.
+   *
+   * @param user UserDocument.
+   * @returns the user session object.
+   */
+  public createFromUserDocument(user: UserDocument): UserSession {
+    return {
+      id: user._id,
+      permissions: user.permissions.map((permission) => permission.name),
+      isBlocked: user.isBlocked,
+      isOutdated: false,
+    };
+  }
+
+  /**
+   * Invalidate a session.
+   *
+   * @param userId User id.
+   */
+  public async invalidate(userId: Types.ObjectId) {
+    const result = await this.findOne(userId);
+
+    if (!result) {
+      return;
+    }
+
+    await this.collection().updateOne(
+      { _id: result._id },
+      { $set: { 'session.user.isOutdated': true } },
+    );
+  }
+
+  /**
    * Revoke a session.
    *
    * @param userId User id.
    * @returns the session found.
    */
   public async revoke(userId: Types.ObjectId) {
-    return this.connection
-      .collection(this.collectionName)
-      .deleteOne({ 'session.user.id': userId });
+    return this.collection().deleteOne({ 'session.user.id': userId });
+  }
+
+  /**
+   * Find a session.
+   *
+   * @param userId User id.
+   * @returns the session found.
+   */
+  private async findOne(userId: Types.ObjectId) {
+    return this.collection().findOne({ 'session.user.id': userId });
+  }
+
+  /**
+   * Shortcut to get the session collection.
+   *
+   * @returns the sessions collection.
+   */
+  private collection() {
+    return this.connection.collection(this.collectionName);
   }
 }

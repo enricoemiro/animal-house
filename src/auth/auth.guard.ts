@@ -1,12 +1,21 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
+
+import { UserSession } from '@app/session/session.interface';
+import { SessionService } from '@app/session/session.service';
+import { UserService } from '@app/user/user.service';
 
 import { REQUIRES_AUTH_KEY } from './auth.decorator';
 import { AuthGuardException } from './auth.exception';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  public constructor(private reflector: Reflector) {}
+  public constructor(
+    private reflector: Reflector,
+    private sessionService: SessionService,
+    private userService: UserService,
+  ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiresAuth = this.reflector.getAllAndOverride<boolean>(
@@ -14,13 +23,22 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    const request = context.switchToHttp().getRequest();
+    const request: Request = context.switchToHttp().getRequest();
 
-    return requiresAuth ? this.auth(request) : this.noAuth(request);
+    return requiresAuth ? await this.auth(request) : this.noAuth(request);
   }
 
-  public auth(request: any) {
-    if (request.session?.user) {
+  public async auth(request: Request) {
+    const userSession: UserSession = request.session?.user;
+
+    if (userSession && !userSession.isOutdated && !userSession.isBlocked) {
+      return true;
+    }
+
+    if (userSession && userSession?.isOutdated) {
+      const user = await this.userService.findById(userSession.id);
+      request.session.user = this.sessionService.createFromUserDocument(user);
+
       return true;
     }
 
@@ -29,7 +47,7 @@ export class AuthGuard implements CanActivate {
     throw new AuthGuardException();
   }
 
-  public noAuth(request: any) {
+  public noAuth(request: Request) {
     if (!request.session?.user) {
       return true;
     }
