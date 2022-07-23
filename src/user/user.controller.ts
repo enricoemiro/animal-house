@@ -22,6 +22,7 @@ import { SessionService } from '@app/session/session.service';
 import {
   UserBlockAccountDto,
   UserPermissionsDto,
+  UserUnblockAccountDto,
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
@@ -58,6 +59,29 @@ export class UserController {
 
     return {
       message: this.i18nService.t('user.controller.blockAccount', {
+        args: { email },
+      }),
+    };
+  }
+
+  @Post('unblock/account')
+  @HttpCode(HttpStatus.OK)
+  @RequiresPermissions(PermissionName.USER_UNBLOCK_ACCOUNT)
+  public async unblockAccount(
+    @Body() { email }: UserUnblockAccountDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const user = await this.userService.findByEmail(email);
+
+    if (user._id.equals(session.user.id)) {
+      throw new UserNotOnSelf();
+    }
+
+    await this.userService.unblock(user);
+    await this.sessionService.invalidate(user._id);
+
+    return {
+      message: this.i18nService.t('user.controller.unblockAccount', {
         args: { email },
       }),
     };

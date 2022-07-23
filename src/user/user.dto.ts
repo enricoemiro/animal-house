@@ -59,6 +59,10 @@ export class UserBlockAccountDto extends PickType(UserDto, [
   'email',
 ] as const) {}
 
+export class UserUnblockAccountDto extends PickType(UserDto, [
+  'email',
+] as const) {}
+
 export class UserUpdateAccountDto extends OmitType(PartialType(UserDto), [
   'password',
   'confirmPassword',

@@ -199,4 +199,13 @@ export class UserService {
   public async block(user: UserDocument) {
     await user.updateOne({ isBlocked: true }).exec();
   }
+
+  /**
+   * Unblock a user's account.
+   *
+   * @param user User to be blocked.
+   */
+  public async unblock(user: UserDocument) {
+    await user.updateOne({ isBlocked: false }).exec();
+  }
 }
