@@ -26,6 +26,9 @@
     "notActivated": "The user's account has not yet been activated.",
     "passwordMismatch": "Login failed. Invalid user ID or password.",
     "notOnSelf": "This action can not be done on oneself.",
-    "couldNotBeDeleted": "Your account could not be deleted. Please try again later."
+    "couldNotBeDeleted": "Your account could not be deleted. Please try again later.",
+    "alreadyBlocked": "The user's account is already blocked.",
+    "alreadyUnblocked": "The user's account is already unblocked.",
+    "alreadyActivated": "The user's account is already activated."
   }
 }

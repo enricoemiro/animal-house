@@ -9,6 +9,9 @@ import {
 } from '@app/permission/permission.schema';
 
 import {
+  UserAlreadyActivatedException,
+  UserAlreadyBlockedException,
+  UserAlreadyUnblockedException,
   UserEmailTakenException,
   UserNotFoundException,
 } from './user.exception';
@@ -186,26 +189,41 @@ export class UserService {
    * Activate a user's account.
    *
    * @param user User to be activated.
+   * @throws {UserAlreadyActivatedException} When the user is already activated.
    */
   public async activate(user: UserDocument) {
-    await user.updateOne({ isActive: true }).exec();
+    if (user.isActive) {
+      throw new UserAlreadyActivatedException();
+    }
+
+    return this.update({ _id: user._id }, { isActive: true });
   }
 
   /**
    * Block a user's account.
    *
    * @param user User to be blocked.
+   * @throws {UserAlreadyBlockedException} When the user is already blocked.
    */
   public async block(user: UserDocument) {
-    await user.updateOne({ isBlocked: true }).exec();
+    if (user.isBlocked) {
+      throw new UserAlreadyBlockedException();
+    }
+
+    return this.update({ _id: user._id }, { isBlocked: true });
   }
 
   /**
    * Unblock a user's account.
    *
    * @param user User to be blocked.
+   * @throws {UserAlreadyUnblockedException} When the user is already unblocked.
    */
   public async unblock(user: UserDocument) {
-    await user.updateOne({ isBlocked: false }).exec();
+    if (user.isBlocked === false) {
+      throw new UserAlreadyUnblockedException();
+    }
+
+    return this.update({ _id: user._id }, { isBlocked: false });
   }
 }
