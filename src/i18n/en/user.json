@@ -1,6 +1,6 @@
 {
   "controller": {
-    "blockAccount": "The account \"{email}\" was successfully blocked.",
+    "blockAccount": "The account \"{email}\" has been successfully blocked.",
     "updateAccount": "Your account has been successfully updated.",
     "deleteAccount": "Your account has been successfully deleted.",
     "updatePassword": "Your password has been successfully changed.",
