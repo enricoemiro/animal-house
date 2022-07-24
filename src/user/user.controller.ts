@@ -90,6 +90,10 @@ export class UserController {
       userUpdateAccountDto,
     );
 
+    if (userUpdateAccountDto.email) {
+      await this.sessionService.invalidate(session.user.id);
+    }
+
     return {
       message: this.i18nService.t('user.controller.updateAccount'),
     };
