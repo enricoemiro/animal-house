@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     return requiresAuth ? await this.auth(request) : this.noAuth(request);
   }
 
-  public async auth(request: Request) {
+  private async auth(request: Request) {
     const userSession: UserSession = request.session?.user;
 
     if (userSession && !userSession.isOutdated && !userSession.isBlocked) {
@@ -47,7 +47,7 @@ export class AuthGuard implements CanActivate {
     throw new AuthGuardException();
   }
 
-  public noAuth(request: Request) {
+  private noAuth(request: Request) {
     if (!request.session?.user) {
       return true;
     }
