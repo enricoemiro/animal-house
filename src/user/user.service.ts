@@ -45,6 +45,19 @@ export class UserService {
   }
 
   /**
+   * Create many users.
+   *
+   * @param data Array of user objects.
+   */
+  public async createMany(
+    data: Array<
+      Partial<User> & Required<Pick<User, 'name' | 'email' | 'password'>>
+    >,
+  ) {
+    return this.userModel.insertMany(data, { ordered: false });
+  }
+
+  /**
    * Update a user.
    *
    * @param filter The filter user query.
@@ -150,6 +163,13 @@ export class UserService {
     projection?: ProjectionType<UserWithId>,
   ) {
     return this.findOne({ email }, projection);
+  }
+
+  /**
+   * Delete all users.
+   */
+  public async deleteAll() {
+    return this.userModel.deleteMany({});
   }
 
   /**

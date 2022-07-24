@@ -26,10 +26,19 @@ import { UserService } from './user.service';
           schema.pre<UserDocument>('save', async function () {
             if (!this.isModified('password')) return;
 
-            const hashedPassword = await hasherService.hash(this.password);
-
-            this.password = hashedPassword;
+            this.password = await hasherService.hash(this.password);
           });
+
+          schema.pre<any>(
+            'insertMany',
+            async function (_next: any, users: UserDocument[]) {
+              await Promise.all(
+                users.map(async function (user) {
+                  user.password = await hasherService.hash(user.password);
+                }),
+              );
+            },
+          );
 
           schema.pre<any>('deleteOne', async function () {
             const userId = this._conditions._id;
