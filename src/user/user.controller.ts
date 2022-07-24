@@ -12,7 +12,7 @@ import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
 import { AclGuard } from '@app/acl/acl.guard';
-import { RequiresAuth } from '@app/auth/auth.decorator';
+import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
 import { AuthGuard } from '@app/auth/auth.guard';
 import { HasherService } from '@app/hasher/hasher.service';
 import { PermissionName } from '@app/permission/permission.schema';
@@ -26,7 +26,7 @@ import {
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
-import { UserCouldNotBeDeleted, UserNotOnSelf } from './user.exception';
+import { UserCouldNotBeDeleted } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -43,16 +43,10 @@ export class UserController {
 
   @Post('block/account')
   @HttpCode(HttpStatus.OK)
+  @RequiresNotOnSelf(true)
   @RequiresPermissions(PermissionName.USER_BLOCK_ACCOUNT)
-  public async blockAccount(
-    @Body() { email }: UserBlockAccountDto,
-    @Session() session: Record<string, any>,
-  ) {
+  public async blockAccount(@Body() { email }: UserBlockAccountDto) {
     const user = await this.userService.findByEmail(email);
-
-    if (user._id.equals(session.user.id)) {
-      throw new UserNotOnSelf();
-    }
 
     await this.userService.block(user);
     await this.sessionService.revoke(user._id);
@@ -66,16 +60,10 @@ export class UserController {
 
   @Post('unblock/account')
   @HttpCode(HttpStatus.OK)
+  @RequiresNotOnSelf(true)
   @RequiresPermissions(PermissionName.USER_UNBLOCK_ACCOUNT)
-  public async unblockAccount(
-    @Body() { email }: UserUnblockAccountDto,
-    @Session() session: Record<string, any>,
-  ) {
+  public async unblockAccount(@Body() { email }: UserUnblockAccountDto) {
     const user = await this.userService.findByEmail(email);
-
-    if (user._id.equals(session.user.id)) {
-      throw new UserNotOnSelf();
-    }
 
     await this.userService.unblock(user);
     await this.sessionService.invalidate(user._id);
@@ -142,16 +130,10 @@ export class UserController {
 
   @Post('update/permissions')
   @HttpCode(HttpStatus.OK)
+  @RequiresNotOnSelf(true)
   @RequiresPermissions(PermissionName.USER_UPDATE_PERMISSIONS)
-  public async updatePermissions(
-    @Body() { email, names }: UserPermissionsDto,
-    @Session() session: Record<string, any>,
-  ) {
+  public async updatePermissions(@Body() { email, names }: UserPermissionsDto) {
     const user = await this.userService.findByEmail(email);
-
-    if (user._id.equals(session.user.id)) {
-      throw new UserNotOnSelf();
-    }
 
     const addedPermissions = await this.userService.updatePermissions(
       user,
@@ -175,16 +157,10 @@ export class UserController {
 
   @Post('delete/permissions')
   @HttpCode(HttpStatus.OK)
+  @RequiresNotOnSelf(true)
   @RequiresPermissions(PermissionName.USER_DELETE_PERMISSIONS)
-  public async deletePermissions(
-    @Body() { email, names }: UserPermissionsDto,
-    @Session() session: Record<string, any>,
-  ) {
+  public async deletePermissions(@Body() { email, names }: UserPermissionsDto) {
     const user = await this.userService.findByEmail(email);
-
-    if (user._id.equals(session.user.id)) {
-      throw new UserNotOnSelf();
-    }
 
     const deletedPermissions = await this.userService.deletePermissions(
       user,

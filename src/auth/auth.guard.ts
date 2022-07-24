@@ -6,8 +6,11 @@ import { UserSession } from '@app/session/session.interface';
 import { SessionService } from '@app/session/session.service';
 import { UserService } from '@app/user/user.service';
 
-import { REQUIRES_AUTH_KEY } from './auth.decorator';
-import { AuthGuardException } from './auth.exception';
+import { REQUIRES_AUTH_KEY, REQUIRES_NOT_ON_SELF_KEY } from './auth.decorator';
+import {
+  AuthGuardException,
+  AuthGuardNotOnSelfException,
+} from './auth.exception';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,9 +26,24 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
+    const requiresNotOnSelf = this.reflector.getAllAndOverride<boolean>(
+      REQUIRES_NOT_ON_SELF_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
     const request: Request = context.switchToHttp().getRequest();
 
-    return requiresAuth ? await this.auth(request) : this.noAuth(request);
+    if (requiresAuth) {
+      const auth = await this.auth(request);
+
+      if (requiresNotOnSelf) {
+        return auth && this.notOnSelf(request);
+      }
+
+      return auth;
+    }
+
+    return this.noAuth(request);
   }
 
   private async auth(request: Request) {
@@ -56,5 +74,15 @@ export class AuthGuard implements CanActivate {
     // that does not require authentication.
     // E.g.: the user wants to access the route /register
     throw new AuthGuardException();
+  }
+
+  private notOnSelf(request: Request) {
+    const { email } = request.body || {};
+
+    if (email === request.session.user.email) {
+      throw new AuthGuardNotOnSelfException();
+    }
+
+    return true;
   }
 }

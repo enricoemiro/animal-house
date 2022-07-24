@@ -29,6 +29,7 @@ export class SessionService {
   public createFromUserDocument(user: UserDocument): UserSession {
     return {
       id: user._id,
+      email: user.email,
       permissions: user.permissions.map((permission) => permission.name),
       isBlocked: user.isBlocked,
       isOutdated: false,

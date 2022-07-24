@@ -51,12 +51,6 @@ export class UserPasswordMismatchException extends BadRequestException {
   }
 }
 
-export class UserNotOnSelf extends BadRequestException {
-  public constructor() {
-    super('user.exception.notOnSelf');
-  }
-}
-
 export class UserCouldNotBeDeleted extends InternalServerErrorException {
   public constructor() {
     super('user.exception.couldNotBeDeleted');

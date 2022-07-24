@@ -9,6 +9,11 @@ export interface UserSession {
   id: Types.ObjectId;
 
   /**
+   * User email.
+   */
+  email: string;
+
+  /**
    * User permissions.
    */
   permissions: PermissionName[];
