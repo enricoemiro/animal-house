@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { differenceBy, unionBy } from 'lodash';
-import { FilterQuery, Model, ProjectionType, Types } from 'mongoose';
+import { FilterQuery, PaginateModel, ProjectionType, Types } from 'mongoose';
+import 'mongoose-paginate-v2';
 
+import { PaginateNotFound } from '@app/paginate/paginate.exception';
 import {
   PermissionDocument,
   PermissionName,
@@ -21,7 +23,7 @@ import { User, UserDocument } from './user.schema';
 @Injectable()
 export class UserService {
   public constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: PaginateModel<UserDocument>,
   ) {}
 
   /**
@@ -203,6 +205,40 @@ export class UserService {
     return differenceBy(user.permissions, difference, 'name').map(
       (permission) => permission.name,
     );
+  }
+
+  /**
+   * Paginate users.
+   *
+   * @param filter User filter query.
+   * @param page Page to start the search.
+   * @param limit Maximum number of users to show.
+   * @throws {UserPaginateNotFoundException} When no users have been found.
+   * @returns array of users.
+   */
+  public async paginate(
+    filter: FilterQuery<UserWithId>,
+    page: number,
+    limit: number,
+  ) {
+    const result = await this.userModel.paginate(filter, {
+      page,
+      limit,
+      select: '-password -__v',
+      populate: ['permissions'],
+      leanWithId: false,
+    });
+
+    if (result.docs.length === 0) {
+      throw new PaginateNotFound();
+    }
+
+    return {
+      docs: result.docs,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      pagingCounter: result.pagingCounter,
+    };
   }
 
   /**

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -15,6 +16,7 @@ import { AclGuard } from '@app/acl/acl.guard';
 import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
 import { AuthGuard } from '@app/auth/auth.guard';
 import { HasherService } from '@app/hasher/hasher.service';
+import { PaginateDto } from '@app/paginate/paginate.dto';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
 import { SessionService } from '@app/session/session.service';
@@ -40,6 +42,14 @@ export class UserController {
     private hasherService: HasherService,
     private sessionService: SessionService,
   ) {}
+
+  @Get('read')
+  @RequiresPermissions(PermissionName.USER_READ)
+  public async read(@Body() { page, limit }: PaginateDto) {
+    const result = await this.userService.paginate({}, page, limit);
+
+    return result;
+  }
 
   @Post('block/account')
   @HttpCode(HttpStatus.OK)
