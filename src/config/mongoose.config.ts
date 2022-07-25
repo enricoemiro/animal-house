@@ -14,6 +14,7 @@ export class MongooseConfigService implements MongooseOptionsFactory {
       uri: this.configService.get<string>('DB_URL'),
       connectionFactory: (connection) => {
         connection.plugin(require('mongoose-unique-validator'));
+        connection.plugin(require('mongoose-paginate-v2'));
         return connection;
       },
     };
