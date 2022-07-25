@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { differenceBy, unionBy } from 'lodash';
 import { FilterQuery, PaginateModel, ProjectionType, Types } from 'mongoose';
-import 'mongoose-paginate-v2';
 
 import { PaginateNotFound } from '@app/paginate/paginate.exception';
 import {

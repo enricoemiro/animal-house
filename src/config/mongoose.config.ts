@@ -4,6 +4,8 @@ import {
   MongooseModuleOptions,
   MongooseOptionsFactory,
 } from '@nestjs/mongoose';
+import mongoosePaginateV2 from 'mongoose-paginate-v2';
+import mongooseUniqueValidator from 'mongoose-unique-validator';
 
 @Injectable()
 export class MongooseConfigService implements MongooseOptionsFactory {
@@ -13,8 +15,8 @@ export class MongooseConfigService implements MongooseOptionsFactory {
     return {
       uri: this.configService.get<string>('DB_URL'),
       connectionFactory: (connection) => {
-        connection.plugin(require('mongoose-unique-validator'));
-        connection.plugin(require('mongoose-paginate-v2'));
+        connection.plugin(mongooseUniqueValidator);
+        connection.plugin(mongoosePaginateV2);
         return connection;
       },
     };
