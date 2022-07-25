@@ -1,10 +1,17 @@
 {
   "controller": {
+    "blockAccount": "The account \"{email}\" has been successfully blocked.",
+    "unblockAccount": "The account \"{email}\" has been successfully unblocked.",
+    "updateAccount": "Your account has been successfully updated.",
+    "deleteAccount": "Your account has been successfully deleted.",
+    "updatePassword": "Your password has been successfully changed.",
     "updatePermissions": {
+      "zero": "No permissions have been added.",
       "one": "The permission \"{permissions}\" has been successfully added to the user \"{email}\" ",
       "other": "The permissions \"{permissions}\" have been successfully added to the user \"{email}\""
     },
     "deletePermissions": {
+      "zero": "No permissions have been removed.",
       "one": "The permission \"{permissions}\" has been successfully removed from the user \"{email}\" ",
       "other": "The permissions \"{permissions}\" have been successfully removed from the user \"{email}\""
     }
@@ -17,6 +24,10 @@
     "notFound": "The user could not be found.",
     "blocked": "The user's account has been blocked.",
     "notActivated": "The user's account has not yet been activated.",
-    "passwordMismatch": "Login failed. Invalid user ID or password."
+    "passwordMismatch": "Login failed. Invalid user ID or password.",
+    "couldNotBeDeleted": "Your account could not be deleted. Please try again later.",
+    "alreadyBlocked": "The user's account is already blocked.",
+    "alreadyUnblocked": "The user's account is already unblocked.",
+    "alreadyActivated": "The user's account is already activated."
   }
 }

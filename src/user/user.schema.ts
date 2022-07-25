@@ -11,12 +11,6 @@ export enum Gender {
   OTHER = 'other',
 }
 
-export enum Status {
-  ACTIVATED = 'activated',
-  NOT_ACTIVATED = 'not_activated',
-  BLOCKED = 'blocked',
-}
-
 @Schema({ timestamps: true, autoCreate: true })
 export class User {
   @Prop({
@@ -51,14 +45,20 @@ export class User {
   address: string;
 
   @Prop({
-    type: String,
-    enum: Status,
-    default: Status.NOT_ACTIVATED,
+    type: Boolean,
+    default: false,
   })
-  status: Status;
+  isActive: boolean;
+
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  isBlocked: boolean;
 
   @Prop({
     type: [{ type: Types.ObjectId, ref: 'Permission' }],
+    unique: false,
   })
   permissions: Permission[];
 }

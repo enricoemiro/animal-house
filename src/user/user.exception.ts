@@ -1,4 +1,7 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 export class UserEmailTakenException extends BadRequestException {
   public constructor() {
@@ -18,6 +21,24 @@ export class UserBlockedException extends BadRequestException {
   }
 }
 
+export class UserAlreadyBlockedException extends BadRequestException {
+  public constructor() {
+    super('user.exception.alreadyBlocked');
+  }
+}
+
+export class UserAlreadyUnblockedException extends BadRequestException {
+  public constructor() {
+    super('user.exception.alreadyUnblocked');
+  }
+}
+
+export class UserAlreadyActivatedException extends BadRequestException {
+  public constructor() {
+    super('user.exception.alreadyActivated');
+  }
+}
+
 export class UserNotActivatedException extends BadRequestException {
   public constructor() {
     super('user.exception.notActivated');
@@ -27,5 +48,11 @@ export class UserNotActivatedException extends BadRequestException {
 export class UserPasswordMismatchException extends BadRequestException {
   public constructor() {
     super('user.exception.passwordMismatch');
+  }
+}
+
+export class UserCouldNotBeDeleted extends InternalServerErrorException {
+  public constructor() {
+    super('user.exception.couldNotBeDeleted');
   }
 }

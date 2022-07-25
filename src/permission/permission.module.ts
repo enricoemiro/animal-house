@@ -1,6 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { SessionModule } from '@app/session/session.module';
 import { UserModule } from '@app/user/user.module';
 
 import { PermissionController } from './permission.controller';
@@ -16,6 +17,7 @@ import { PermissionService } from './permission.service';
       },
     ]),
     forwardRef(() => UserModule),
+    SessionModule,
   ],
   providers: [PermissionService],
   controllers: [PermissionController],

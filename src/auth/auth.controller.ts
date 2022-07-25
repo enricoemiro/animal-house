@@ -15,13 +15,12 @@ import { Request } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 import { HasherService } from '@app/hasher/hasher.service';
+import { SessionService } from '@app/session/session.service';
 import { TokenService } from '@app/token/token.service';
 import {
   UserBlockedException,
   UserNotActivatedException,
-  UserPasswordMismatchException,
 } from '@app/user/user.exception';
-import { Status } from '@app/user/user.schema';
 import { UserService } from '@app/user/user.service';
 
 import { RequiresAuth } from './auth.decorator';
@@ -44,6 +43,7 @@ export class AuthController {
     private hasherService: HasherService,
     private userService: UserService,
     private i18nService: I18nService,
+    private sessionService: SessionService,
   ) {}
 
   @Post('register')
@@ -83,7 +83,7 @@ export class AuthController {
       uuid: activationToken,
     });
 
-    await this.userService.updateStatus(user, Status.ACTIVATED);
+    await this.userService.activate(user);
     await this.tokenService.deleteByUUID(token.uuid);
 
     this.mailerService.sendAsyncMail('mailtrap', {
@@ -151,24 +151,15 @@ export class AuthController {
   ) {
     const user = await this.userService.findByEmail(email);
 
-    switch (user.status) {
-      case Status.NOT_ACTIVATED:
-        throw new UserNotActivatedException();
-
-      case Status.BLOCKED:
-        throw new UserBlockedException();
+    if (!user.isActive) {
+      throw new UserNotActivatedException();
+    } else if (user.isBlocked) {
+      throw new UserBlockedException();
     }
 
-    const doPasswordsMatch = await this.hasherService.compare(
-      password,
-      user.password,
-    );
+    await this.hasherService.compare(password, user.password);
 
-    if (!doPasswordsMatch) {
-      throw new UserPasswordMismatchException();
-    }
-
-    session.user = { id: user._id };
+    session.user = this.sessionService.createFromUserDocument(user);
 
     return {
       message: this.i18nService.t('auth.controller.login'),

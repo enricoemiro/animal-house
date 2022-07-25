@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ProjectionType, Types } from 'mongoose';
 
 import {
   TokenCouldNotBeCreatedException,
   TokenNotFoundException,
 } from './token.exception';
+import { TokenWithId } from './token.interface';
 import { Token, TokenDocument } from './token.schema';
 
 @Injectable()
@@ -41,8 +42,11 @@ export class TokenService {
    * @param filter.uuid Token uuid (optional).
    * @returns the found token.
    */
-  public async findOne(filter: Partial<Token>) {
-    const token = await this.tokenModel.findOne(filter).exec();
+  public async findOne(
+    filter: Partial<TokenWithId>,
+    projection?: ProjectionType<TokenWithId>,
+  ) {
+    const token = await this.tokenModel.findOne(filter, projection).exec();
 
     if (!token) {
       throw new TokenNotFoundException();
@@ -70,6 +74,15 @@ export class TokenService {
 
       throw error;
     }
+  }
+
+  /**
+   * Delete all tokens associated with the ownerId.
+   *
+   * @param ownerId Owner Id.
+   */
+  public async deleteByOwnerId(ownerId: Types.ObjectId) {
+    return this.tokenModel.deleteOne({ ownerId }).exec();
   }
 
   /**

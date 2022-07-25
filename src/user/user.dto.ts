@@ -1,4 +1,9 @@
-import { IntersectionType, PickType } from '@nestjs/mapped-types';
+import {
+  IntersectionType,
+  OmitType,
+  PartialType,
+  PickType,
+} from '@nestjs/mapped-types';
 import {
   IsDateString,
   IsEmail,
@@ -48,6 +53,29 @@ export class UserDto {
     message: t('validation.string.mongoId'),
   })
   permissions: string[];
+}
+
+export class UserBlockAccountDto extends PickType(UserDto, [
+  'email',
+] as const) {}
+
+export class UserUnblockAccountDto extends PickType(UserDto, [
+  'email',
+] as const) {}
+
+export class UserUpdateAccountDto extends OmitType(PartialType(UserDto), [
+  'password',
+  'confirmPassword',
+  'permissions',
+] as const) {}
+
+export class UserUpdatePasswordDto extends PickType(UserDto, [
+  'password',
+  'confirmPassword',
+] as const) {
+  @MaxLength(64, { message: t('validation.string.maxLength') })
+  @MinLength(8, { message: t('validation.string.minLength') })
+  newPassword: string;
 }
 
 export class UserPermissionsDto extends IntersectionType(
