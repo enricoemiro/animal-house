@@ -40,16 +40,11 @@ export class SessionService {
    * Invalidate a session.
    *
    * @param userId User id.
+   * @returns the updated session.
    */
   public async invalidate(userId: Types.ObjectId) {
-    const result = await this.findOne(userId);
-
-    if (!result) {
-      return;
-    }
-
-    await this.collection().updateOne(
-      { _id: result._id },
+    return this.collection().findOneAndUpdate(
+      { 'session.user.id': userId },
       { $set: { 'session.user.isOutdated': true } },
     );
   }
@@ -58,20 +53,10 @@ export class SessionService {
    * Revoke a session.
    *
    * @param userId User id.
-   * @returns the session found.
+   * @returns the result of the deletion.
    */
   public async revoke(userId: Types.ObjectId) {
     return this.collection().deleteOne({ 'session.user.id': userId });
-  }
-
-  /**
-   * Find a session.
-   *
-   * @param userId User id.
-   * @returns the session found.
-   */
-  private async findOne(userId: Types.ObjectId) {
-    return this.collection().findOne({ 'session.user.id': userId });
   }
 
   /**
