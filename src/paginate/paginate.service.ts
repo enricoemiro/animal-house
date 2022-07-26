@@ -31,6 +31,7 @@ export class PaginateService {
       prevPage: result.prevPage,
       nextPage: result.nextPage,
       indexFirstDoc: result.pagingCounter,
+      totalPages: result.totalPages,
     };
   }
 }
