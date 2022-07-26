@@ -74,6 +74,18 @@ class EnvironmentVariables {
 
   @IsNumber()
   SESSION_STORE_TTL: number;
+
+  @IsString()
+  AWS_BUCKET_NAME: string;
+
+  @IsString()
+  AWS_BUCKET_REGION: string;
+
+  @IsString()
+  AWS_ACCESS_KEY: string;
+
+  @IsString()
+  AWS_SECRET_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {
