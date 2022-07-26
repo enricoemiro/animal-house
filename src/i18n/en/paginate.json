@@ -1,4 +1,13 @@
 {
+  "dto": {
+    "page": {
+      "min": "The \"page\" filter must not be less than {constraints.0}."
+    },
+    "limit": {
+      "min": "The \"limit\" filter must not be less than {constraints.0}.",
+      "max": "The \"limit\" filter must not be greater than {constraints.0}."
+    }
+  },
   "exception": {
     "notFound": "With these search criteria, no documents were found."
   }

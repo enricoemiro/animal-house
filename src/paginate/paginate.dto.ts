@@ -1,12 +1,11 @@
-import { IsInt, Max, Min } from 'class-validator';
+import { Max, Min } from 'class-validator';
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 export class PaginateDto {
-  @IsInt()
-  @Min(1)
+  @Min(1, { message: i18nValidationMessage('paginate.dto.page.min') })
   page: number;
 
-  @IsInt()
-  @Min(1)
-  @Max(100)
+  @Min(1, { message: i18nValidationMessage('paginate.dto.limit.min') })
+  @Max(100, { message: i18nValidationMessage('paginate.dto.limit.max') })
   limit: number;
 }
