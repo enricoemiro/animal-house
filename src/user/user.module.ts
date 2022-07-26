@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { HasherModule } from '@app/hasher/hasher.module';
@@ -53,7 +53,7 @@ import { UserService } from './user.service';
         imports: [HasherModule, TokenModule],
       },
     ]),
-    forwardRef(() => PermissionModule),
+    PermissionModule,
     HasherModule,
     SessionModule,
     PaginateModule,

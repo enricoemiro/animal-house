@@ -7,6 +7,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { WinstonModule } from 'nest-winston';
 import { I18nModule } from 'nestjs-i18n';
 
+import { AclGuard } from '@app/acl/acl.guard';
+import { AuthGuard } from '@app/auth/auth.guard';
 import { AuthModule } from '@app/auth/auth.module';
 import { configModuleOptions } from '@app/config/env.config';
 import { i18nModuleOptions } from '@app/config/i18n.config';
@@ -48,6 +50,14 @@ import { AllExceptionsFilter } from '@app/utils/filters/allExceptions.filters';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AclGuard,
     },
     {
       provide: APP_FILTER,

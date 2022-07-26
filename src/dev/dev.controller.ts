@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
+import { RequiresAuth } from '@app/auth/auth.decorator';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
 import { UserService } from '@app/user/user.service';
@@ -21,6 +22,7 @@ import { DevGuard } from './dev.guard';
 
 @Controller('dev')
 @UseGuards(DevGuard)
+@RequiresAuth(false)
 export class DevController {
   public constructor(
     private userService: UserService,

@@ -10,5 +10,6 @@ import { AuthController } from './auth.controller';
 @Module({
   imports: [TokenModule, UserModule, HasherModule, SessionModule],
   controllers: [AuthController],
+  exports: [SessionModule],
 })
 export class AuthModule {}

@@ -7,14 +7,11 @@ import {
   HttpStatus,
   Post,
   Session,
-  UseGuards,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
-import { AclGuard } from '@app/acl/acl.guard';
 import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
-import { AuthGuard } from '@app/auth/auth.guard';
 import { HasherService } from '@app/hasher/hasher.service';
 import { PaginateDto } from '@app/paginate/paginate.dto';
 import { PermissionName } from '@app/permission/permission.schema';
@@ -32,7 +29,6 @@ import { UserCouldNotBeDeleted } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
-@UseGuards(AuthGuard, AclGuard)
 @RequiresAuth(true)
 export class UserController {
   public constructor(
