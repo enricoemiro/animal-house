@@ -53,7 +53,7 @@ export class UserController {
 
   @Post('block/account')
   @HttpCode(HttpStatus.OK)
-  @RequiresNotOnSelf(true)
+  @RequiresNotOnSelf()
   @RequiresPermissions(PermissionName.USER_BLOCK_ACCOUNT)
   public async blockAccount(@Body() { email }: UserBlockAccountDto) {
     const user = await this.userService.findByEmail(email);
@@ -70,7 +70,7 @@ export class UserController {
 
   @Post('unblock/account')
   @HttpCode(HttpStatus.OK)
-  @RequiresNotOnSelf(true)
+  @RequiresNotOnSelf()
   @RequiresPermissions(PermissionName.USER_UNBLOCK_ACCOUNT)
   public async unblockAccount(@Body() { email }: UserUnblockAccountDto) {
     const user = await this.userService.findByEmail(email);
@@ -144,7 +144,7 @@ export class UserController {
 
   @Post('update/permissions')
   @HttpCode(HttpStatus.OK)
-  @RequiresNotOnSelf(true)
+  @RequiresNotOnSelf()
   @RequiresPermissions(PermissionName.USER_UPDATE_PERMISSIONS)
   public async updatePermissions(@Body() { email, names }: UserPermissionsDto) {
     const user = await this.userService.findByEmail(email);
@@ -171,7 +171,7 @@ export class UserController {
 
   @Post('delete/permissions')
   @HttpCode(HttpStatus.OK)
-  @RequiresNotOnSelf(true)
+  @RequiresNotOnSelf()
   @RequiresPermissions(PermissionName.USER_DELETE_PERMISSIONS)
   public async deletePermissions(@Body() { email, names }: UserPermissionsDto) {
     const user = await this.userService.findByEmail(email);
