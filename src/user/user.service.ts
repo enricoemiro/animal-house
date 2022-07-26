@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { differenceBy, unionBy } from 'lodash';
 import { FilterQuery, PaginateModel, ProjectionType, Types } from 'mongoose';
 
-import { PaginateNotFound } from '@app/paginate/paginate.exception';
+import { PaginateService } from '@app/paginate/paginate.service';
 import {
   PermissionDocument,
   PermissionName,
@@ -23,6 +23,7 @@ import { User, UserDocument } from './user.schema';
 export class UserService {
   public constructor(
     @InjectModel(User.name) private userModel: PaginateModel<UserDocument>,
+    private paginateService: PaginateService,
   ) {}
 
   /**
@@ -209,35 +210,29 @@ export class UserService {
   /**
    * Paginate users.
    *
-   * @param filter User filter query.
    * @param page Page to start the search.
    * @param limit Maximum number of users to show.
-   * @throws {UserPaginateNotFoundException} When no users have been found.
+   * @throws {PaginateNotFound} When no users have been found.
    * @returns array of users.
    */
-  public async paginate(
-    filter: FilterQuery<UserWithId>,
-    page: number,
-    limit: number,
-  ) {
-    const result = await this.userModel.paginate(filter, {
-      page,
-      limit,
-      select: '-password -__v',
-      populate: ['permissions'],
-      leanWithId: false,
-    });
-
-    if (result.docs.length === 0) {
-      throw new PaginateNotFound();
-    }
-
-    return {
-      docs: result.docs,
-      prevPage: result.prevPage,
-      nextPage: result.nextPage,
-      pagingCounter: result.pagingCounter,
-    };
+  public async paginate(page: number, limit: number) {
+    return this.paginateService.paginate(
+      this.userModel,
+      {},
+      {
+        page,
+        limit,
+        select: '-password -__v',
+        populate: [
+          {
+            path: 'permissions',
+            select: 'name',
+            transform: (doc: any) => doc.name,
+          },
+        ],
+        leanWithId: false,
+      },
+    );
   }
 
   /**

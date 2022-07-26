@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { HasherModule } from '@app/hasher/hasher.module';
 import { HasherService } from '@app/hasher/hasher.service';
+import { PaginateModule } from '@app/paginate/paginate.module';
 import { PermissionModule } from '@app/permission/permission.module';
 import { SessionModule } from '@app/session/session.module';
 import { TokenModule } from '@app/token/token.module';
@@ -55,6 +56,7 @@ import { UserService } from './user.service';
     forwardRef(() => PermissionModule),
     HasherModule,
     SessionModule,
+    PaginateModule,
   ],
   providers: [UserService],
   controllers: [UserController],

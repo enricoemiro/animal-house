@@ -46,7 +46,7 @@ export class UserController {
   @Get('read')
   @RequiresPermissions(PermissionName.USER_READ)
   public async read(@Body() { page, limit }: PaginateDto) {
-    const result = await this.userService.paginate({}, page, limit);
+    const result = await this.userService.paginate(page, limit);
 
     return result;
   }
