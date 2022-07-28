@@ -3,6 +3,7 @@
     "blockAccount": "The account \"{email}\" has been successfully blocked.",
     "unblockAccount": "The account \"{email}\" has been successfully unblocked.",
     "updateAccount": "Your account has been successfully updated.",
+    "updateAccountPicture": "Your account picture has been successfully added.",
     "deleteAccount": "Your account has been successfully deleted.",
     "updatePassword": "Your password has been successfully changed.",
     "updatePermissions": {

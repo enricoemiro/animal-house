@@ -7,12 +7,18 @@ import {
   HttpStatus,
   Post,
   Session,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
 import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
 import { HasherService } from '@app/hasher/hasher.service';
+import { ImageType } from '@app/image/image.interface';
+import { ImageFilePipe } from '@app/image/image.pipe';
+import { ImageService } from '@app/image/image.service';
 import { PaginateDto } from '@app/paginate/paginate.dto';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
@@ -37,6 +43,7 @@ export class UserController {
     private i18nService: I18nService,
     private hasherService: HasherService,
     private sessionService: SessionService,
+    private imageService: ImageService,
   ) {}
 
   @Get('read')
@@ -118,6 +125,23 @@ export class UserController {
 
     return {
       message: this.i18nService.t('user.controller.deleteAccount'),
+    };
+  }
+
+  @Post('update/account/picture')
+  @UseInterceptors(FileInterceptor('picture'))
+  public async updateAccountPicture(
+    @UploadedFile(ImageFilePipe) picture: Express.Multer.File,
+    @Session() session: Record<string, any>,
+  ) {
+    await this.imageService.create({
+      ownerId: session.user.id,
+      type: ImageType.USER,
+      buffer: picture.buffer,
+    });
+
+    return {
+      message: this.i18nService.t('user.controller.updateAccountPicture'),
     };
   }
 
