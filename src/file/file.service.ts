@@ -1,9 +1,10 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { existsSync, mkdirSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
+import { AwsService } from '@app/aws/aws.service';
 import { Environment } from '@app/config/env.config';
 import { extractPath } from '@app/utils/helpers';
 
@@ -12,14 +13,12 @@ import { FileOptions } from './file.interface';
 @Injectable()
 export class FileService {
   private isDev: boolean = undefined;
-  private s3Client: S3Client = undefined;
 
-  public constructor(private configService: ConfigService) {
+  public constructor(
+    private configService: ConfigService,
+    private awsService: AwsService,
+  ) {
     this.isDev = this.configService.get('APP_MODE') === Environment.DEVELOPMENT;
-
-    if (!this.isDev) {
-      this.s3Client = this.createS3Client();
-    }
   }
 
   /**
@@ -43,17 +42,13 @@ export class FileService {
    * @returns the file created.
    */
   private async saveToS3({ path, buffer }: FileOptions) {
-    try {
-      return await this.s3Client.send(
-        new PutObjectCommand({
-          Bucket: this.configService.get('AWS_BUCKET_NAME'),
-          Key: path,
-          Body: buffer,
-        }),
-      );
-    } catch (error: any) {
-      throw error;
-    }
+    return this.awsService.s3Client.send(
+      new PutObjectCommand({
+        Bucket: this.configService.get('AWS_BUCKET_NAME'),
+        Key: path,
+        Body: buffer,
+      }),
+    );
   }
 
   /**
@@ -63,31 +58,12 @@ export class FileService {
    * @param obj.buffer File buffer.
    */
   private async saveToDisk({ path, buffer }: FileOptions) {
-    try {
-      const { dirname } = extractPath(path);
+    const { dirname } = extractPath(path);
 
-      if (!existsSync(dirname)) {
-        mkdirSync(dirname, { recursive: true });
-      }
-
-      return await writeFile(path, buffer);
-    } catch (error: any) {
-      throw error;
+    if (!existsSync(dirname)) {
+      mkdirSync(dirname, { recursive: true });
     }
-  }
 
-  /**
-   * Create the S3Client instance.
-   *
-   * @returns the S3Client instance.
-   */
-  private createS3Client() {
-    return new S3Client({
-      region: this.configService.get('AWS_BUCKET_REGION'),
-      credentials: {
-        accessKeyId: this.configService.get('AWS_ACCESS_KEY'),
-        secretAccessKey: this.configService.get('AWS_SECRET_KEY'),
-      },
-    });
+    return writeFile(path, buffer);
   }
 }

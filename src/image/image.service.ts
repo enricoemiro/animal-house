@@ -42,10 +42,6 @@ export class ImageService {
     image: Buffer,
     resizeOptions: ResizeOptions = { width: 512, height: 512 },
   ) {
-    try {
-      return await sharp(image).resize(resizeOptions).webp().toBuffer();
-    } catch (error: any) {
-      throw error;
-    }
+    return sharp(image).resize(resizeOptions).webp().toBuffer();
   }
 }
