@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 
 import { PermissionName } from '@app/permission/permission.schema';
 
-export interface UserSession {
+export interface UserSessionOptions {
   /**
    * User id.
    */
@@ -31,6 +31,6 @@ export interface UserSession {
 
 declare module 'express-session' {
   interface SessionData {
-    user: UserSession;
+    user: UserSessionOptions;
   }
 }

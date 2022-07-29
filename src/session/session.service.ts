@@ -5,7 +5,7 @@ import { Connection, Types } from 'mongoose';
 
 import { UserDocument } from '@app/user/user.schema';
 
-import { UserSession } from './session.interface';
+import { UserSessionOptions } from './session.interface';
 
 @Injectable()
 export class SessionService {
@@ -26,7 +26,7 @@ export class SessionService {
    * @param user UserDocument.
    * @returns the user session object.
    */
-  public createFromUserDocument(user: UserDocument): UserSession {
+  public createFromUserDocument(user: UserDocument): UserSessionOptions {
     return {
       id: user._id,
       email: user.email,

@@ -22,6 +22,8 @@ import { ImageService } from '@app/image/image.service';
 import { PaginateDto } from '@app/paginate/paginate.dto';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
+import { UserSession } from '@app/session/session.decorator';
+import { UserSessionOptions } from '@app/session/session.interface';
 import { SessionService } from '@app/session/session.service';
 
 import {
@@ -31,7 +33,6 @@ import {
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
-import { UserCouldNotBeDeleted } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -91,20 +92,17 @@ export class UserController {
   @Post('update/account')
   @HttpCode(HttpStatus.OK)
   public async updateAccount(
-    @Session() session: Record<string, any>,
+    @UserSession() user: UserSessionOptions,
     @Body() userUpdateAccountDto: UserUpdateAccountDto,
   ) {
     if (Object.keys(userUpdateAccountDto).length === 0) {
       throw new BadRequestException();
     }
 
-    await this.userService.update(
-      { _id: session.user.id },
-      userUpdateAccountDto,
-    );
+    await this.userService.update({ _id: user.id }, userUpdateAccountDto);
 
     if (userUpdateAccountDto.email) {
-      await this.sessionService.invalidate(session.user.id);
+      await this.sessionService.invalidate(user.id);
     }
 
     return {
@@ -115,13 +113,9 @@ export class UserController {
   @Post('delete/account')
   @HttpCode(HttpStatus.OK)
   public async deleteAccount(@Session() session: Record<string, any>) {
-    const result = await this.userService.deleteById(session.user.id);
+    await this.userService.deleteById(session.user.id);
 
-    if (result.deletedCount === 0) {
-      throw new UserCouldNotBeDeleted();
-    }
-
-    await session.destroy();
+    session.destroy();
 
     return {
       message: this.i18nService.t('user.controller.deleteAccount'),
@@ -132,10 +126,10 @@ export class UserController {
   @UseInterceptors(FileInterceptor('picture'))
   public async updateAccountPicture(
     @UploadedFile(ImageFilePipe) picture: Express.Multer.File,
-    @Session() session: Record<string, any>,
+    @UserSession() user: UserSessionOptions,
   ) {
     await this.imageService.create({
-      ownerId: session.user.id,
+      ownerId: user.id,
       type: ImageType.USER,
       buffer: picture.buffer,
     });
@@ -146,11 +140,8 @@ export class UserController {
   }
 
   @Post('delete/account/picture')
-  public async deleteAccountPicture(@Session() session: Record<string, any>) {
-    await this.imageService.delete({
-      ownerId: session.user.id,
-      type: ImageType.USER,
-    });
+  public async deleteAccountPicture(@UserSession() user: UserSessionOptions) {
+    await this.imageService.delete({ ownerId: user.id, type: ImageType.USER });
 
     return {
       message: this.i18nService.t('user.controller.deleteAccountPicture'),
@@ -162,7 +153,7 @@ export class UserController {
   public async updatePassword(
     @Body()
     { password: oldPassword, newPassword }: UserUpdatePasswordDto,
-    @Session() session: Record<string, any>,
+    @UserSession() session: Record<string, any>,
   ) {
     const user = await this.userService.findById(session.user.id);
 
