@@ -10,7 +10,7 @@ import { join } from 'path';
 export const i18nModuleOptions: I18nOptions = {
   fallbackLanguage: 'en',
   loaderOptions: {
-    path: join(__dirname, '/../i18n/'),
+    path: join(__dirname, '/../i18n/locales'),
     watch: true,
   },
 };
