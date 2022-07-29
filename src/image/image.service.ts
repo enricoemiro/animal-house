@@ -9,6 +9,12 @@ import { ImageOptions, ImageType } from './image.interface';
 export class ImageService {
   public constructor(private fileService: FileService) {}
 
+  /**
+   * Create an image.
+   *
+   * @param imageOptions Image options.
+   * @returns the result of the create operation.
+   */
   public async create(imageOptions: ImageOptions) {
     const webpBuffer = await this.toWebp(imageOptions.buffer);
 
@@ -18,6 +24,12 @@ export class ImageService {
     });
   }
 
+  /**
+   * Delete an image.
+   *
+   * @param imageOptions Image options.
+   * @returns the result of the delete operation.
+   */
   public async delete(imageOptions: Omit<ImageOptions, 'buffer'>) {
     return this.fileService.delete({
       path: `${this.buildPath(imageOptions)}.webp`,
@@ -25,9 +37,10 @@ export class ImageService {
   }
 
   /**
-   * Return the file path.
+   * Build the file path.
    *
-   * @param fileOptions File options.
+   * @param obj.ownerId Image owner id.
+   * @param obj.type Image type.
    * @returns the file path.
    */
   private buildPath({ ownerId, type }: Omit<ImageOptions, 'buffer'>) {

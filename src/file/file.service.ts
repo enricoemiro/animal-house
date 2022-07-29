@@ -1,12 +1,9 @@
-import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { existsSync, mkdirSync } from 'node:fs';
-import { unlink, writeFile } from 'node:fs/promises';
 
-import { AwsService } from '@app/aws/aws.service';
 import { Environment } from '@app/config/env.config';
-import { extractPath } from '@app/utils/helpers';
+import { DiskService } from '@app/storage/disk/disk.service';
+import { S3Service } from '@app/storage/s3/s3.service';
 
 import { FileOptions } from './file.interface';
 
@@ -16,7 +13,8 @@ export class FileService {
 
   public constructor(
     private configService: ConfigService,
-    private awsService: AwsService,
+    private s3Service: S3Service,
+    private diskService: DiskService,
   ) {
     this.isDev = this.configService.get('APP_MODE') === Environment.DEVELOPMENT;
   }
@@ -26,12 +24,12 @@ export class FileService {
    *
    * @param fileOptions File options.
    */
-  public async create(fileOptions: FileOptions) {
+  public async create({ path, buffer }: FileOptions) {
     if (this.isDev) {
-      return this.saveToDisk(fileOptions);
+      return this.diskService.save(path, buffer);
     }
 
-    return this.saveToS3(fileOptions);
+    return this.s3Service.save(path, buffer);
   }
 
   /**
@@ -41,73 +39,9 @@ export class FileService {
    */
   public async delete({ path }: Pick<FileOptions, 'path'>) {
     if (this.isDev) {
-      return this.deleteFromDisk(path);
+      return this.diskService.delete(path);
     }
 
-    return this.deleteFromS3(path);
-  }
-
-  /**
-   * Save a file inside the S3 bucket.
-   *
-   * @param obj.path File path.
-   * @param obj.buffer File buffer.
-   * @returns the file created.
-   */
-  private async saveToS3({ path, buffer }: FileOptions) {
-    return this.awsService.s3Client.send(
-      new PutObjectCommand({
-        Bucket: this.configService.get('AWS_BUCKET_NAME'),
-        Key: path,
-        Body: buffer,
-      }),
-    );
-  }
-
-  /**
-   * Save a file in the disk storage.
-   *
-   * @param obj.path File path.
-   * @param obj.buffer File buffer.
-   */
-  private async saveToDisk({ path, buffer }: FileOptions) {
-    const { dirname } = extractPath(path);
-
-    if (!existsSync(dirname)) {
-      mkdirSync(dirname, { recursive: true });
-    }
-
-    return writeFile(path, buffer);
-  }
-
-  /**
-   * Delete a file from the disk storage.
-   *
-   * @param path File path.
-   */
-  private async deleteFromDisk(path: string) {
-    try {
-      return await unlink(path);
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
-        console.log(error);
-      }
-
-      throw error;
-    }
-  }
-
-  /**
-   * Delete a file from the s3 storage.
-   *
-   * @param path File path.
-   */
-  private async deleteFromS3(path: string) {
-    return this.awsService.s3Client.send(
-      new DeleteObjectCommand({
-        Bucket: this.configService.get('AWS_BUCKET_NAME'),
-        Key: path,
-      }),
-    );
+    return this.s3Service.delete(path);
   }
 }
