@@ -1,8 +1,8 @@
-import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { existsSync, mkdirSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { unlink, writeFile } from 'node:fs/promises';
 
 import { AwsService } from '@app/aws/aws.service';
 import { Environment } from '@app/config/env.config';
@@ -32,6 +32,19 @@ export class FileService {
     }
 
     return this.saveToS3(fileOptions);
+  }
+
+  /**
+   * Delete a file.
+   *
+   * @param obj.path File path.
+   */
+  public async delete({ path }: Pick<FileOptions, 'path'>) {
+    if (this.isDev) {
+      return this.deleteFromDisk(path);
+    }
+
+    return this.deleteFromS3(path);
   }
 
   /**
@@ -65,5 +78,36 @@ export class FileService {
     }
 
     return writeFile(path, buffer);
+  }
+
+  /**
+   * Delete a file from the disk storage.
+   *
+   * @param path File path.
+   */
+  private async deleteFromDisk(path: string) {
+    try {
+      return await unlink(path);
+    } catch (error: any) {
+      if (error.code === 'ENOENT') {
+        console.log(error);
+      }
+
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a file from the s3 storage.
+   *
+   * @param path File path.
+   */
+  private async deleteFromS3(path: string) {
+    return this.awsService.s3Client.send(
+      new DeleteObjectCommand({
+        Bucket: this.configService.get('AWS_BUCKET_NAME'),
+        Key: path,
+      }),
+    );
   }
 }

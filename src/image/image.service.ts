@@ -18,13 +18,19 @@ export class ImageService {
     });
   }
 
+  public async delete(imageOptions: Omit<ImageOptions, 'buffer'>) {
+    return this.fileService.delete({
+      path: `${this.buildPath(imageOptions)}.webp`,
+    });
+  }
+
   /**
    * Return the file path.
    *
    * @param fileOptions File options.
    * @returns the file path.
    */
-  private buildPath({ ownerId, type }: ImageOptions) {
+  private buildPath({ ownerId, type }: Omit<ImageOptions, 'buffer'>) {
     switch (type) {
       case ImageType.USER:
         return `users/${ownerId}`;

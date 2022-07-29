@@ -145,6 +145,18 @@ export class UserController {
     };
   }
 
+  @Post('delete/account/picture')
+  public async deleteAccountPicture(@Session() session: Record<string, any>) {
+    await this.imageService.delete({
+      ownerId: session.user.id,
+      type: ImageType.USER,
+    });
+
+    return {
+      message: this.i18nService.t('user.controller.deleteAccountPicture'),
+    };
+  }
+
   @Post('update/password')
   @HttpCode(HttpStatus.OK)
   public async updatePassword(
