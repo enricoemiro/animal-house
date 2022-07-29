@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { PermissionName } from '@app/permission/permission.schema';
-import { UserSession } from '@app/session/session.interface';
+import { UserSessionOptions } from '@app/session/session.interface';
 
 import { REQUIRES_PERMISSIONS_KEY } from './acl.decorator';
 import { AclGuardException } from './acl.exception';
@@ -30,7 +30,7 @@ export class AclGuard implements CanActivate {
   }
 
   private hasPermissions(
-    user: UserSession,
+    user: UserSessionOptions,
     requiredPermissions: PermissionName[],
   ) {
     return requiredPermissions.every((permission) =>

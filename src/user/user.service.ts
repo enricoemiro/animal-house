@@ -13,6 +13,7 @@ import {
   UserAlreadyActivatedException,
   UserAlreadyBlockedException,
   UserAlreadyUnblockedException,
+  UserCouldNotBeDeleted,
   UserEmailTakenException,
   UserNotFoundException,
 } from './user.exception';
@@ -180,7 +181,11 @@ export class UserService {
    * @param userId User id.
    */
   public async deleteById(userId: Types.ObjectId) {
-    return this.userModel.deleteOne({ _id: userId }).exec();
+    const result = await this.userModel.deleteOne({ _id: userId }).exec();
+
+    if (result.deletedCount === 0) {
+      throw new UserCouldNotBeDeleted();
+    }
   }
 
   /**

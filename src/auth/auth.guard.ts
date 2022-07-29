@@ -2,7 +2,6 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 
-import { UserSession } from '@app/session/session.interface';
 import { SessionService } from '@app/session/session.service';
 import { UserService } from '@app/user/user.service';
 
@@ -47,7 +46,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private async auth(request: Request) {
-    const userSession: UserSession = request.session?.user;
+    const userSession = request.session?.user;
 
     if (userSession && !userSession.isOutdated && !userSession.isBlocked) {
       return true;

@@ -7,15 +7,23 @@ import {
   HttpStatus,
   Post,
   Session,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
 import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
 import { HasherService } from '@app/hasher/hasher.service';
+import { ImageType } from '@app/image/image.interface';
+import { ImageFilePipe } from '@app/image/image.pipe';
+import { ImageService } from '@app/image/image.service';
 import { PaginateDto } from '@app/paginate/paginate.dto';
 import { PermissionName } from '@app/permission/permission.schema';
 import { PermissionService } from '@app/permission/permission.service';
+import { UserSession } from '@app/session/session.decorator';
+import { UserSessionOptions } from '@app/session/session.interface';
 import { SessionService } from '@app/session/session.service';
 
 import {
@@ -25,7 +33,6 @@ import {
   UserUpdateAccountDto,
   UserUpdatePasswordDto,
 } from './user.dto';
-import { UserCouldNotBeDeleted } from './user.exception';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -37,6 +44,7 @@ export class UserController {
     private i18nService: I18nService,
     private hasherService: HasherService,
     private sessionService: SessionService,
+    private imageService: ImageService,
   ) {}
 
   @Get('read')
@@ -84,20 +92,17 @@ export class UserController {
   @Post('update/account')
   @HttpCode(HttpStatus.OK)
   public async updateAccount(
-    @Session() session: Record<string, any>,
+    @UserSession() user: UserSessionOptions,
     @Body() userUpdateAccountDto: UserUpdateAccountDto,
   ) {
     if (Object.keys(userUpdateAccountDto).length === 0) {
       throw new BadRequestException();
     }
 
-    await this.userService.update(
-      { _id: session.user.id },
-      userUpdateAccountDto,
-    );
+    await this.userService.update({ _id: user.id }, userUpdateAccountDto);
 
     if (userUpdateAccountDto.email) {
-      await this.sessionService.invalidate(session.user.id);
+      await this.sessionService.invalidate(user.id);
     }
 
     return {
@@ -108,16 +113,38 @@ export class UserController {
   @Post('delete/account')
   @HttpCode(HttpStatus.OK)
   public async deleteAccount(@Session() session: Record<string, any>) {
-    const result = await this.userService.deleteById(session.user.id);
+    await this.userService.deleteById(session.user.id);
 
-    if (result.deletedCount === 0) {
-      throw new UserCouldNotBeDeleted();
-    }
-
-    await session.destroy();
+    session.destroy();
 
     return {
       message: this.i18nService.t('user.controller.deleteAccount'),
+    };
+  }
+
+  @Post('update/account/picture')
+  @UseInterceptors(FileInterceptor('picture'))
+  public async updateAccountPicture(
+    @UploadedFile(ImageFilePipe) picture: Express.Multer.File,
+    @UserSession() user: UserSessionOptions,
+  ) {
+    await this.imageService.create({
+      ownerId: user.id,
+      type: ImageType.USER,
+      buffer: picture.buffer,
+    });
+
+    return {
+      message: this.i18nService.t('user.controller.updateAccountPicture'),
+    };
+  }
+
+  @Post('delete/account/picture')
+  public async deleteAccountPicture(@UserSession() user: UserSessionOptions) {
+    await this.imageService.delete({ ownerId: user.id, type: ImageType.USER });
+
+    return {
+      message: this.i18nService.t('user.controller.deleteAccountPicture'),
     };
   }
 
@@ -126,7 +153,7 @@ export class UserController {
   public async updatePassword(
     @Body()
     { password: oldPassword, newPassword }: UserUpdatePasswordDto,
-    @Session() session: Record<string, any>,
+    @UserSession() session: Record<string, any>,
   ) {
     const user = await this.userService.findById(session.user.id);
 

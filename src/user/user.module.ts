@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { HasherModule } from '@app/hasher/hasher.module';
 import { HasherService } from '@app/hasher/hasher.service';
+import { ImageModule } from '@app/image/image.module';
 import { PaginateModule } from '@app/paginate/paginate.module';
 import { PermissionModule } from '@app/permission/permission.module';
 import { SessionModule } from '@app/session/session.module';
@@ -57,6 +58,7 @@ import { UserService } from './user.service';
     HasherModule,
     SessionModule,
     PaginateModule,
+    ImageModule,
   ],
   providers: [UserService],
   controllers: [UserController],
