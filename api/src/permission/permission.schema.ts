@@ -16,6 +16,10 @@ export enum PermissionName {
   HEAD_OFFICE_CREATE = 'headOffice:create',
   HEAD_OFFICE_DELETE = 'headOffice:delete',
   HEAD_OFFICE_UPDATE = 'headOffice:update',
+
+  ACTIVITY_CREATE = 'activity:create',
+  ACTIVITY_DELETE = 'activity:delete',
+  ACTIVITY_UPDATE = 'activity:update',
 }
 
 @Schema({ timestamps: true, autoCreate: true })
