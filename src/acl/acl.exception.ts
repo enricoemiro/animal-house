@@ -1,7 +1,12 @@
-import { ForbiddenException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
-export class AclGuardException extends ForbiddenException {
+import { I18nHttpException } from '@app/i18n/i18n.interface';
+
+export class AclGuardException extends I18nHttpException {
   public constructor() {
-    super('exception.forbidden');
+    super({
+      key: 'exception.forbidden',
+      status: HttpStatus.FORBIDDEN,
+    });
   }
 }

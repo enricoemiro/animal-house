@@ -2,14 +2,15 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpException,
+  HttpStatus,
   Inject,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { I18nService } from 'nestjs-i18n';
 import { Logger } from 'winston';
+
+import { I18nHttpException } from '@app/i18n/i18n.interface';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -24,38 +25,52 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
 
     const context = host.switchToHttp();
-    const { body, statusCode } = this.handleErrors(exception);
+    const { body, status } = this.exceptionHandler(exception);
 
-    httpAdapter.reply(context.getResponse(), body, statusCode);
+    httpAdapter.reply(context.getResponse(), body, status);
   }
 
-  private handleErrors(exception: any) {
-    this.logger.info(exception);
-
-    if (exception instanceof HttpException) {
-      return this.handleHttpException(exception);
+  /**
+   * Exception handler.
+   *
+   * @param exception Exception thrown.
+   * @returns response object.
+   */
+  private exceptionHandler(exception: any) {
+    if (exception instanceof I18nHttpException) {
+      return this.i18nHttpExceptionHandler(exception);
     }
 
-    // If the exception could not be resolved, save it in the error log.
-    this.logger.error(exception);
-
-    return this.defaultException();
+    return this.defaultException(exception);
   }
 
-  private handleHttpException(exception: HttpException) {
-    const [body, statusCode] = [exception.getResponse(), exception.getStatus()];
-
-    if (typeof body === 'object') {
-      (body as any).message = this.i18nService.t((body as any).message);
-    }
-
+  /**
+   * I18n http exception handler.
+   *
+   * @param exception Exception thrown.
+   * @returns response object.
+   */
+  private i18nHttpExceptionHandler(exception: I18nHttpException) {
     return {
-      body,
-      statusCode,
+      body: exception.getI18nResponse(this.i18nService),
+      status: exception.getStatus(),
     };
   }
 
-  private defaultException() {
-    return this.handleHttpException(new InternalServerErrorException());
+  /**
+   * Default exception (internal server error).
+   *
+   * @param exception Exception thrown.
+   * @returns response object.
+   */
+  private defaultException(exception: any) {
+    this.logger.error(exception);
+
+    return this.i18nHttpExceptionHandler(
+      new I18nHttpException({
+        key: 'exception.internalServerError',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      }),
+    );
   }
 }

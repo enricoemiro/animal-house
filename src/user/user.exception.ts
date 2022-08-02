@@ -1,58 +1,84 @@
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
-export class UserEmailTakenException extends BadRequestException {
+import { I18nHttpException } from '@app/i18n/i18n.interface';
+
+export class UserEmailTakenException extends I18nHttpException {
   public constructor() {
-    super('user.exception.emailTaken');
+    super({
+      key: 'user.exception.emailTaken',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserNotFoundException extends BadRequestException {
+export class UserNotFoundException extends I18nHttpException {
   public constructor() {
-    super('user.exception.notFound');
+    super({
+      key: 'user.exception.notFound',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserBlockedException extends BadRequestException {
+export class UserBlockedException extends I18nHttpException {
   public constructor() {
-    super('user.exception.blocked');
+    super({
+      key: 'user.exception.blocked',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserAlreadyBlockedException extends BadRequestException {
+export class UserAlreadyBlockedException extends I18nHttpException {
   public constructor() {
-    super('user.exception.alreadyBlocked');
+    super({
+      key: 'user.exception.alreadyBlocked',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserAlreadyUnblockedException extends BadRequestException {
+export class UserAlreadyUnblockedException extends I18nHttpException {
   public constructor() {
-    super('user.exception.alreadyUnblocked');
+    super({
+      key: 'user.exception.alreadyUnblocked',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserAlreadyActivatedException extends BadRequestException {
+export class UserAlreadyActivatedException extends I18nHttpException {
   public constructor() {
-    super('user.exception.alreadyActivated');
+    super({
+      key: 'user.exception.alreadyActivated',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserNotActivatedException extends BadRequestException {
+export class UserNotActivatedException extends I18nHttpException {
   public constructor() {
-    super('user.exception.notActivated');
+    super({
+      key: 'user.exception.notActivated',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserPasswordMismatchException extends BadRequestException {
+export class UserPasswordMismatchException extends I18nHttpException {
   public constructor() {
-    super('user.exception.passwordMismatch');
+    super({
+      key: 'user.exception.passwordMismatch',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class UserCouldNotBeDeleted extends InternalServerErrorException {
+export class UserCouldNotBeDeleted extends I18nHttpException {
   public constructor() {
-    super('user.exception.couldNotBeDeleted');
+    super({
+      key: 'user.exception.couldNotBeDeleted',
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    });
   }
 }

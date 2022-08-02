@@ -1,13 +1,21 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
-export class AuthGuardException extends NotFoundException {
+import { I18nHttpException } from '@app/i18n/i18n.interface';
+
+export class AuthGuardException extends I18nHttpException {
   public constructor() {
-    super('exception.notFound');
+    super({
+      key: 'exception.notFound',
+      status: HttpStatus.NOT_FOUND,
+    });
   }
 }
 
-export class AuthGuardNotOnSelfException extends BadRequestException {
+export class AuthGuardNotOnSelfException extends I18nHttpException {
   public constructor() {
-    super('auth.exception.notOnSelf');
+    super({
+      key: 'auth.exception.notOnSelf',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
