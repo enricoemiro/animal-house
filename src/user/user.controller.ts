@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Session as ExpressSession } from 'express-session';
 import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
@@ -112,10 +113,12 @@ export class UserController {
 
   @Post('delete/account')
   @HttpCode(HttpStatus.OK)
-  public async deleteAccount(@Session() session: Record<string, any>) {
-    await this.userService.deleteById(session.user.id);
-
-    session.destroy();
+  public async deleteAccount(
+    @UserSession() user: UserSessionOptions,
+    @Session() session: ExpressSession,
+  ) {
+    await this.userService.deleteById(user.id);
+    await this.sessionService.destroy(session);
 
     return {
       message: this.i18nService.t('user.controller.deleteAccount'),
