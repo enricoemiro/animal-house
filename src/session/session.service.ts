@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection } from '@nestjs/mongoose';
+import { Session } from 'express-session';
 import { Connection, Types } from 'mongoose';
 
+import { I18nHttpException } from '@app/i18n/i18n.interface';
 import { UserDocument } from '@app/user/user.schema';
 
 import { UserSessionOptions } from './session.interface';
@@ -34,6 +36,22 @@ export class SessionService {
       isBlocked: user.isBlocked,
       isOutdated: false,
     };
+  }
+
+  /**
+   * Destroy a session.
+   *
+   * @param session Session to destroy.
+   */
+  public async destroy(session: Session) {
+    session.destroy((error: any) => {
+      if (error) {
+        throw new I18nHttpException({
+          key: 'exception.internalServerError',
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+        });
+      }
+    });
   }
 
   /**

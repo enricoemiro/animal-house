@@ -5,13 +5,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  InternalServerErrorException,
   Post,
-  Req,
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Session as ExpressSession } from 'express-session';
 import { I18nService } from 'nestjs-i18n';
 
 import { HasherService } from '@app/hasher/hasher.service';
@@ -169,12 +167,8 @@ export class AuthController {
   @Get('logout')
   @HttpCode(HttpStatus.OK)
   @RequiresAuth(true)
-  public async logout(@Req() req: Request) {
-    req.session.destroy((error) => {
-      if (error) {
-        throw new InternalServerErrorException();
-      }
-    });
+  public async logout(@Session() session: ExpressSession) {
+    await this.sessionService.destroy(session);
 
     return {
       message: this.i18nService.t('auth.controller.logout'),

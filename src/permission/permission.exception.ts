@@ -1,7 +1,12 @@
-import { BadRequestException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
-export class PermissionsNotFoundException extends BadRequestException {
+import { I18nHttpException } from '@app/i18n/i18n.interface';
+
+export class PermissionsNotFoundException extends I18nHttpException {
   public constructor() {
-    super('The permissions could not be found.');
+    super({
+      key: 'permission.exception.notFound',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
