@@ -5,7 +5,11 @@ import { Request } from 'express';
 import { SessionService } from '@app/session/session.service';
 import { UserService } from '@app/user/user.service';
 
-import { REQUIRES_AUTH_KEY, REQUIRES_NOT_ON_SELF_KEY } from './auth.decorator';
+import {
+  REQUIRES_AUTH_KEY,
+  REQUIRES_NOT_ON_SELF_KEY,
+  SKIP_AUTH_KEY,
+} from './auth.decorator';
 import {
   AuthGuardException,
   AuthGuardNotOnSelfException,
@@ -20,6 +24,8 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request: Request = context.switchToHttp().getRequest();
+
     const requiresAuth = this.reflector.getAllAndOverride<boolean>(
       REQUIRES_AUTH_KEY,
       [context.getHandler(), context.getClass()],
@@ -30,7 +36,14 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    const request: Request = context.switchToHttp().getRequest();
+    const skipAuth = this.reflector.getAllAndOverride<boolean>(SKIP_AUTH_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (skipAuth) {
+      return this.skipAuth();
+    }
 
     if (requiresAuth) {
       const auth = await this.auth(request);
@@ -82,6 +95,10 @@ export class AuthGuard implements CanActivate {
       throw new AuthGuardNotOnSelfException();
     }
 
+    return true;
+  }
+
+  private async skipAuth() {
     return true;
   }
 }

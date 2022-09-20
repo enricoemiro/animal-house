@@ -12,6 +12,10 @@ export enum PermissionName {
   USER_UNBLOCK_ACCOUNT = 'user:unblock_account',
   USER_UPDATE_PERMISSIONS = 'user:update_permissions',
   USER_DELETE_PERMISSIONS = 'user:delete_permissions',
+
+  HEAD_OFFICE_CREATE = 'headOffice:create',
+  HEAD_OFFICE_DELETE = 'headOffice:delete',
+  HEAD_OFFICE_UPDATE = 'headOffice:update',
 }
 
 @Schema({ timestamps: true, autoCreate: true })
