@@ -23,6 +23,9 @@ function HeaderNavbar() {
 
         <Navbar.Collapse id="header">
           <Nav className="ms-auto mt-lg-0 mt-3">
+            <Nav.Link>Home</Nav.Link>
+            <Nav.Link>Games</Nav.Link>
+
             <Button
               variant="outline-secondary"
               className="d-flex justify-content-center align-items-center rounded-pill"

@@ -10,7 +10,7 @@ function Home() {
       <Header breadcrumb={false} />
 
       <main className="flex-shrink-0" style={{ paddingTop: '70px' }}>
-        <section className="d-flex align-items-center py-5 bg-light border-bottom">
+        <section className="d-flex align-items-center py-5 bg-white border-bottom">
           <Container>
             <Row className="align-items-center g-5">
               <Col sm="12" md="6" className="text-center text-md-start">
@@ -32,7 +32,7 @@ function Home() {
                 <Image
                   src="./images/home.jpeg"
                   alt=""
-                  className="w-100 rounded-3 shadow-sm"
+                  className="w-100 rounded-3 shadow-lg"
                   style={{
                     objectFit: 'cover',
                     objectPosition: '50% 60%',
@@ -44,7 +44,7 @@ function Home() {
           </Container>
         </section>
 
-        <section className="py-5 border-bottom">
+        <section className="py-5 border-bottom text-center">
           <Container>
             <Row className="row-cols-1 row-cols-md-3">
               <Col>
@@ -77,6 +77,7 @@ function Home() {
 
               <Col>
                 <h1 className="h3">Adoptable</h1>
+
                 <p className="text-muted">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
                   ut consequat dolor. In eros nisi, bibendum bibendum eleifend
@@ -91,14 +92,19 @@ function Home() {
           </Container>
         </section>
 
-        <section className="bg-light py-5 border-bottom">
+        <section className="py-5 border-bottom">
           <Container>
-            <div className="d-flex align-items-center justify-content-between">
-              <h1 className="h2 fw-bold mb-0">Ready to dive in?</h1>
-              <div>
-                <Button>Get Started</Button>
-              </div>
-            </div>
+            <Row className="row-cols-1 row-cols-md-2 align-items-center">
+              <Col>
+                <h1 className="h1 fw-bold mb-0">Ready to dive in?</h1>
+              </Col>
+
+              <Col className="d-flex justify-content-end">
+                <Button className="rounded" size="lg" variant="outline-primary">
+                  Get Started
+                </Button>
+              </Col>
+            </Row>
           </Container>
         </section>
       </main>
