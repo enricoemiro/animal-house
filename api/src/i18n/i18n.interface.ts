@@ -108,7 +108,7 @@ export class I18nHttpException extends HttpException {
         return 'Bad Gateway';
 
       case HttpStatus.SERVICE_UNAVAILABLE:
-        return 'Service Unavailable';
+        return 'Activity Unavailable';
 
       case HttpStatus.GATEWAY_TIMEOUT:
         return 'Gateway Timeout';

@@ -1,140 +1,122 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, PaginateModel, ProjectionType } from 'mongoose';
+import { differenceBy } from 'lodash';
+import { FilterQuery, PaginateModel, ProjectionType, Types } from 'mongoose';
 
+import { ActivityDocument } from '@app/activity/activity.schema';
+import { ActivityService } from '@app/activity/activity.service';
 import { PaginateService } from '@app/paginate/paginate.service';
 
+import { HeadOfficeDto } from './headOffice.dto';
 import {
-  HeadOfficeLocationAlreadyExistException,
-  HeadOfficeNotDeletedException,
+  HeadOfficeCouldNotBeDeletedException,
+  HeadOfficeLocationAlreadyTakenException,
   HeadOfficeNotFoundException,
-  HeadOfficePhoneAlreadyUsedException,
+  HeadOfficePhoneAlreadyTakenException,
 } from './headOffice.exception';
 import { HeadOfficeWithId } from './headOffice.interface';
 import { HeadOffice, HeadOfficeDocument } from './headOffice.schema';
 
 @Injectable()
-export class HeadOfficeService {
+export class HeadOfficeService implements OnModuleInit {
+  private activityService: ActivityService;
+
   public constructor(
     @InjectModel(HeadOffice.name)
     private headOfficeModel: PaginateModel<HeadOfficeDocument>,
     private paginateService: PaginateService,
+    private moduleRef: ModuleRef,
   ) {}
 
   /**
-   * Create new head office
-   * @param data head office schema
-   * @throws {HeadOfficeLocationAlreadyExistException} if there is another head office with same location
-   * @throws {HeadOfficePhoneAlreadyUsedException} if there is another head office with same phone
-   * @returns the newly created head office
+   * Init activity service.
+   *
+   * @see {@link https://docs.nestjs.com/fundamentals/module-ref#retrieving-instances}
    */
-  public async create(data: HeadOffice) {
+  public onModuleInit() {
+    this.activityService = this.moduleRef.get(ActivityService, {
+      strict: false,
+    });
+  }
+
+  /**
+   * Create a new head office.
+   *
+   * @param data Head office object.
+   * @see {@link HeadOfficeService#uniqueExceptionHandler} Unique exception handler.
+   * @returns the newly created head office.
+   */
+  public async create(
+    data: Partial<HeadOfficeDto> & Required<Omit<HeadOfficeDto, 'activities'>>,
+  ) {
     try {
       return await new this.headOfficeModel(data).save();
     } catch (error: any) {
-      this.throwUniqueException(error);
+      this.uniqueExceptionHandler(error);
+
       throw error;
     }
   }
 
   /**
-   * Delete a head office
-   * @throws {HeadOfficeNotDeletedException} when can't delete the head office
-   * @param location location of the head office to delete
-   */
-  public async delete(location: string) {
-    const result = await this.headOfficeModel.deleteOne({ location }).exec();
-    if (result.deletedCount == 0) {
-      throw new HeadOfficeNotDeletedException();
-    }
-  }
-
-  /**
-   * Update head office
-   * @param filter head office filter query
-   * @param updatedData partial head office
-   * @throws {HeadOfficeLocationAlreadyExistException} if there is another head office with same location
-   * @throws {HeadOfficePhoneAlreadyUsedException} if there is another head office with same phone
-   * @returns the updated head office
+   * Update an head office.
+   *
+   * @param filter Head office filter query.
+   * @param data Head office data to be updated.
+   * @see {@link HeadOfficeService#uniqueExceptionHandler} Unique exception handler.
+   * @returns the updated head office.
    */
   public async update(
     filter: FilterQuery<HeadOfficeWithId>,
-    updatedData: Partial<HeadOfficeWithId>,
+    data: Partial<HeadOffice>,
   ) {
     try {
       return await this.headOfficeModel
-        .updateOne(filter, updatedData, { runValidators: true })
+        .updateOne(filter, data, { runValidators: true })
         .exec();
     } catch (error: any) {
-      this.throwUniqueException(error);
+      this.uniqueExceptionHandler(error);
+
       throw error;
     }
   }
 
-  /**
-   * Find head office
-   * @param filter head office filter query
-   * @throws {HeadOfficeNotFoundException} when no head office is found
-   * @returns the found head offices
-   */
-  public async find(filter: FilterQuery<HeadOfficeWithId>) {
-    const headOffices = await this.headOfficeModel.find(filter).exec();
+  public async updateActivities(
+    headOffice: HeadOfficeDocument,
+    activities: ActivityDocument[],
+  ) {
+    const union = [];
 
-    if (headOffices.length === 0) {
-      throw new HeadOfficeNotFoundException();
+    for (let i = 0; i < headOffice.activities.length; i++) {
+      union.push(headOffice.activities[i]);
     }
 
-    return headOffices;
-  }
-
-  /**
-   *
-   * @returns found head offices
-   */
-  public async findAll() {
-    return this.find({});
-  }
-
-  /**
-   *
-   * @param location location to look for
-   * @param projection head office projection
-   * @returns the found head office
-   */
-  public async findByLocation(
-    location: string,
-    projection?: ProjectionType<HeadOfficeWithId>,
-  ) {
-    return this.findOne({ location }, projection);
-  }
-
-  /**
-   * Find head office
-   * @param headOfficeId head office Id
-   * @param projection head office projection
-   * @throws {HeadOfficeNotFoundException} when no head office is found
-   * @returns the found head office
-   */
-  public async findById(
-    headOfficeId: string,
-    projection?: ProjectionType<HeadOfficeWithId>,
-  ) {
-    const headOffice = await this.headOfficeModel
-      .findById(headOfficeId, projection)
-      .exec();
-    if (!headOffice) {
-      throw new HeadOfficeNotFoundException();
+    // Insert only the activity that don't already belong to the head office
+    for (let i = 0; i < activities.length; i++) {
+      if (!headOffice.activities.includes(activities[i]._id)) {
+        union.push(activities[i]);
+      }
     }
 
-    return headOffice;
+    // This means that at least one activity has been added.
+    if (union.length > headOffice.activities.length) {
+      await this.update({ _id: headOffice._id }, { activities: union });
+    }
+
+    // By doing that, we only get the activities that have been added.
+    return differenceBy(union, headOffice.activities, '_id').map(
+      (activity) => activity.name,
+    );
   }
 
   /**
-   * Find head office
-   * @param filter head office filter query
-   * @param projection head office projection
-   * @throws {HeadOfficeNotFoundException} when no head office is found
-   * @returns the found head office
+   * Find an head office.
+   *
+   * @param filter Head office filter query.
+   * @param projection Head office projection.
+   * @throws {HeadOfficeNotFoundException} When the head office is not found.
+   * @returns the found head office.
    */
   public async findOne(
     filter: FilterQuery<HeadOfficeWithId>,
@@ -149,6 +131,32 @@ export class HeadOfficeService {
     }
 
     return headOffice;
+  }
+
+  /**
+   * Find an head office by his location.
+   *
+   * @param location Head office location.
+   * @see {@link HeadOffice#findOne}
+   */
+  public async findByLocation(
+    location: string,
+    projection?: ProjectionType<HeadOfficeWithId>,
+  ) {
+    return this.findOne({ location }, projection);
+  }
+
+  /**
+   * Find an head office by his id.
+   *
+   * @param id Head office id.
+   * @see {@link HeadOffice#findOne}
+   */
+  public async findById(
+    id: Types.ObjectId,
+    projection?: ProjectionType<HeadOfficeWithId>,
+  ) {
+    return this.findOne({ _id: id }, projection);
   }
 
   /**
@@ -172,15 +180,66 @@ export class HeadOfficeService {
   }
 
   /**
-   * Throw exception about unique error
-   * @param error try and catch error
+   * Delete an head office (including all his associated activities).
+   *
+   * @param location Head office location.
+   * @throws {HeadOfficeNotDeletedException} When the head office can not be deleted.
    */
-  private throwUniqueException(error: any) {
-    if (error.errors?.location?.kind === 'unique') {
-      throw new HeadOfficeLocationAlreadyExistException();
+  public async delete(location: string) {
+    const headOffice = await this.findByLocation(location);
+
+    if (headOffice.activities.length > 0) {
+      await this.activityService.deleteMany(headOffice._id);
     }
+
+    const result = await this.headOfficeModel.deleteOne({ location }).exec();
+
+    if (result.deletedCount == 0) {
+      throw new HeadOfficeCouldNotBeDeletedException();
+    }
+  }
+
+  /**
+   * Delete the activity in input from the headOffice that match with the filter
+   *
+   * @param filter Head office filter query.
+   * @param activity Activity to delete.
+   */
+  public async deleteActivity(
+    filter: FilterQuery<HeadOfficeWithId>,
+    activity: ActivityDocument,
+  ) {
+    const headOffice = await this.findOne(filter);
+
+    const difference = [];
+    const index = headOffice.activities.indexOf(activity._id);
+
+    for (let i = 0; i < headOffice.activities.length; i++) {
+      if (i != index) {
+        difference.push(headOffice.activities[i]);
+      }
+    }
+
+    // This means that at least one activity has been deleted.
+    if (difference.length < headOffice.activities.length) {
+      await this.update({ _id: headOffice._id }, { activities: difference });
+    }
+  }
+
+  /**
+   * Unique exception handler.
+   *
+   * @param error Exception thrown.
+   * @throws {HeadOfficeLocationAlreadyTakenException}
+   * @throws {HeadOfficePhoneAlreadyTakenException}
+   */
+  private uniqueExceptionHandler(error: any) {
+    if (error.errors?.location?.kind === 'unique') {
+      throw new HeadOfficeLocationAlreadyTakenException();
+    }
+
     if (error.errors?.phone?.kind === 'unique') {
-      throw new HeadOfficePhoneAlreadyUsedException();
+      throw new HeadOfficePhoneAlreadyTakenException();
     }
   }
 }

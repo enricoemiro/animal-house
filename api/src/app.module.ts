@@ -8,6 +8,7 @@ import { WinstonModule } from 'nest-winston';
 import { I18nModule } from 'nestjs-i18n';
 
 import { AclGuard } from '@app/acl/acl.guard';
+import { ActivityModule } from '@app/activity/activity.module';
 import { AuthGuard } from '@app/auth/auth.guard';
 import { AuthModule } from '@app/auth/auth.module';
 import { configModuleOptions } from '@app/config/env.config';
@@ -17,11 +18,10 @@ import { MongooseConfigService } from '@app/config/mongoose.config';
 import { ThrottlerConfigService } from '@app/config/throttler.config';
 import { WinstonConfigService } from '@app/config/winston.config';
 import { DevModule } from '@app/dev/dev.module';
+import { HeadOfficeModule } from '@app/headOffice/headOffice.module';
 import { PermissionModule } from '@app/permission/permission.module';
 import { UserModule } from '@app/user/user.module';
 import { AllExceptionsFilter } from '@app/utils/filters/allExceptions.filters';
-
-import { HeadOfficeModule } from './headOffice/headOffice.module';
 
 @Module({
   imports: [
@@ -48,6 +48,7 @@ import { HeadOfficeModule } from './headOffice/headOffice.module';
     PermissionModule,
     DevModule,
     HeadOfficeModule,
+    ActivityModule,
   ],
   providers: [
     {

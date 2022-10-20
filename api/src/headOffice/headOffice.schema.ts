@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+
+import { Activity } from '@app/activity/activity.schema';
 
 export type HeadOfficeDocument = HeadOffice & Document;
 
@@ -30,6 +32,12 @@ export class HeadOffice {
     required: true,
   })
   closingTime: string;
+
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: 'Activity' }],
+    unique: false,
+  })
+  activities: Activity[];
 }
 
 export const HeadOfficeSchema = SchemaFactory.createForClass(HeadOffice);

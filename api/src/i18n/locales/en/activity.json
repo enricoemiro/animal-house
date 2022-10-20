@@ -1,0 +1,12 @@
+{
+  "controller": {
+    "createActivity": " A new service has been created succesfully",
+    "deleteActivity": "Activity deleted successfully",
+    "updateActivity": "Activity updated succesfully"
+  },
+  "exception": {
+    "emptyId": "The Id can't be empty",
+    "notFound": "The service couldn't be found",
+    "notDeleted": "Activity hasn't been deleted"
+  }
+}

@@ -1,36 +1,39 @@
-import { BadRequestException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
-export class HeadOfficeLocationAlreadyExistException extends BadRequestException {
+import { I18nHttpException } from '@app/i18n/i18n.interface';
+
+export class HeadOfficeLocationAlreadyTakenException extends I18nHttpException {
   public constructor() {
-    super('headOffice.exception.locationAlreadyExist');
+    super({
+      key: 'headOffice.exception.locationTaken',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class HeadOfficeNotFoundException extends BadRequestException {
+export class HeadOfficePhoneAlreadyTakenException extends I18nHttpException {
   public constructor() {
-    super('headOffice.exception.notFound');
+    super({
+      key: 'headOffice.exception.phoneTaken',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class HeadOfficePhoneAlreadyUsedException extends BadRequestException {
+export class HeadOfficeNotFoundException extends I18nHttpException {
   public constructor() {
-    super('headOffice.exception.phoneAlreadyUsed');
+    super({
+      key: 'headOffice.exception.notFound',
+      status: HttpStatus.BAD_REQUEST,
+    });
   }
 }
 
-export class HeadOfficeLocationDoesNotMatchException extends BadRequestException {
+export class HeadOfficeCouldNotBeDeletedException extends I18nHttpException {
   public constructor() {
-    super('headOffice.exception.locationDoesNotMatch');
-  }
-}
-
-export class HeadOfficeEmptyIdException extends BadRequestException {
-  public constructor() {
-    super('headOffice.exception.emptyId');
-  }
-}
-export class HeadOfficeNotDeletedException extends BadRequestException {
-  public constructor() {
-    super('headOffice.exception.notDeleted');
+    super({
+      key: 'headOffice.exception.couldNotBeDeleted',
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    });
   }
 }
