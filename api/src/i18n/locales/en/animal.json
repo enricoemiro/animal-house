@@ -1,0 +1,13 @@
+{
+  "controller": {
+    "createAnimal": "A new animal has been created succesfully",
+    "updateAnimal": "The animal \"{name}\" has been updated succesfully",
+    "deleteAnimal": "The animal \"{name}\" has been deleted succesfully",
+    "updateAnimalPicture": "The animal's picture has been updated succesfully",
+    "deleteAnimalPicture": "The animal's picture has been deleted succesfully"
+  },
+  "exception": {
+    "notFound": "The animal couldn't be found.",
+    "notDeleted": "Animal hasn't been deleted"
+  }
+}

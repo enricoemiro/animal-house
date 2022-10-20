@@ -20,6 +20,10 @@ export enum PermissionName {
   ACTIVITY_CREATE = 'activity:create',
   ACTIVITY_DELETE = 'activity:delete',
   ACTIVITY_UPDATE = 'activity:update',
+
+  ANIMAL_CREATE = 'animal:create',
+  ANIMAL_UPDATE = 'animal:update',
+  ANIMAL_DELETE = 'animal:delete',
 }
 
 @Schema({ timestamps: true, autoCreate: true })
