@@ -23,6 +23,8 @@ import { PermissionModule } from '@app/permission/permission.module';
 import { UserModule } from '@app/user/user.module';
 import { AllExceptionsFilter } from '@app/utils/filters/allExceptions.filters';
 
+import { AnimalModule } from './animal/animal.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(configModuleOptions),
@@ -49,6 +51,7 @@ import { AllExceptionsFilter } from '@app/utils/filters/allExceptions.filters';
     DevModule,
     HeadOfficeModule,
     ActivityModule,
+    AnimalModule,
   ],
   providers: [
     {

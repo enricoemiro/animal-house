@@ -16,4 +16,5 @@ export interface ImageOptions extends Pick<FileOptions, 'buffer'> {
 
 export enum ImageType {
   USER = 'user',
+  ANIMAL = 'animal',
 }

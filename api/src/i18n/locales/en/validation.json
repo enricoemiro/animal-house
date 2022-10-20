@@ -17,5 +17,8 @@
   },
   "number": {
     "isNumber": "\"{value}\" is not a number."
+  },
+  "boolean": {
+    "isBoolean": "\"{value}\" is not a boolean."
   }
 }

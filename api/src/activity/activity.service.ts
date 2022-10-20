@@ -152,7 +152,6 @@ export class ActivityService {
    * @throws {ActivityNotDeletedException} When no activity is deleted
    */
   public async deleteMany(filter: FilterQuery<ActivityWithId>) {
-    console.log(filter);
     const result = await this.activityModel.deleteMany(filter).exec();
 
     if (result.deletedCount == 0) {

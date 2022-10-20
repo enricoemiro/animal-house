@@ -47,6 +47,8 @@ export class ImageService {
     switch (type) {
       case ImageType.USER:
         return `users/${ownerId}`;
+      case ImageType.ANIMAL:
+        return `animals/${ownerId}`;
     }
   }
 
