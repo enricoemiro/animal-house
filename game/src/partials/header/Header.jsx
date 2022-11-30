@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import HeaderBreadcrumb from './HeaderBreadcrumb';
+import HeaderBreadcrumb from './HeaderBreadcumb';
 import HeaderNavbar from './HeaderNavbar';
 
 function Header({ breadcrumb = true }) {

@@ -1,5 +1,6 @@
 import { Button, Form, Image } from 'react-bootstrap';
-import {useState} from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 async function login(credentials) {
   return fetch("", {
@@ -24,7 +25,7 @@ function Login() {
   return (
     <Form onSubmit={handleLoginSubmit}>
       <div className="d-flex align-items-center mb-3 pb-1">
-        <Image className="" src="../images/shared/paw1.png"></Image>
+        <Image className="" src="../images/paw1.png"></Image>
         <span className="h1 fw-bold mb-0 p-1">Animal house</span>
       </div>
 
@@ -61,9 +62,7 @@ function Login() {
       </a>
       <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>
         Don't have an account?{' '}
-        <a href="#!" style={{ color: '#393f81' }}>
-          Register here
-        </a>
+        <Link style={{color: '#393f81'}} to="/signup">Click here to register</Link>
       </p>
     </Form>
   );

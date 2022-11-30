@@ -14,7 +14,7 @@ function Base() {
               <Row className="g-0">
                 <Col className="col-md-6 col-lg-5 d-none d-md-block">
                   <Image
-                    src="../images/login/login2.jpg"
+                    src="../images/login2.jpg"
                     alt="decoration login card"
                     className="img-fluid"
                     style={{ borderRadius: '1rem 0 0 1rem' }}

@@ -7,7 +7,7 @@ function Signup() {
         <Row>
           <Col>
             <div className="d-flex align-items-center justify-content-center mb-2 pb-1">
-              <Image className="" src="../images/shared/paw1.png"></Image>
+              <Image className="" src="../images/paw1.png"></Image>
               <span className="h1 fw-bold mb-0 p-1">Animal house</span>
             </div>
           </Col>
