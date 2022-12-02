@@ -1,8 +1,40 @@
+import { useState } from 'react';
 import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import axios from 'axios';
+
+async function signup(credentials) {
+  const requestUrl = import.meta.env.VITE_API_BASE_URL + "/auth/register"; 
+  const response = await axios.post(requestUrl, {
+    name: credentials.name,
+    email: credentials.email,
+    password: credentials.password 
+  }, 
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true,
+  },
+  );
+  return response;
+}
 
 function Signup() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState("");
+
+  async function handleSignupSubmit(event) {
+    event.preventDefault();  
+    const response = await signup({name, email, password});
+    console.log(response);
+  
+    setUser(response);
+  } 
+  
   return (
-    <Form>
+    <Form onSubmit={handleSignupSubmit}>
       <Container>
         <Row>
           <Col>
@@ -58,7 +90,7 @@ function Signup() {
 
         <Row>
           <div className="pt-1 mb-4 d-grid gap-2">
-            <Button variant="dark" size="lg" className="">
+            <Button type='submit' variant="dark" size="lg" className="">
               Register
             </Button>
           </div>

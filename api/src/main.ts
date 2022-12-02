@@ -13,6 +13,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.setGlobalPrefix('v1');
+  app.enableCors({
+    origin: configService.get('CLIENT_BASE_URL'),
+    credentials: true,
+  });
   app.use(expressSession(configService));
   app.useGlobalPipes(i18nValidationPipe);
   app.useGlobalFilters(i18nValidationExceptionFilter);

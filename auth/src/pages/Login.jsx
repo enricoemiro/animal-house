@@ -1,25 +1,49 @@
 import { Button, Form, Image } from 'react-bootstrap';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-async function login(credentials) {
-  return fetch("", {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(credentials)
-  }).then(data => data.json())
+async function getLoggedUser() {
+  const requestUrl = import.meta.env.VITE_API_BASE_URL + "/user/read/account/info"; 
+  const response = await axios.post(requestUrl, {}, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true,
+  },);
+  
+  return response;
 }
 
+async function login(credentials) {
+  const requestUrl = import.meta.env.VITE_API_BASE_URL + "/auth/login"; 
+  const response = await axios.post(requestUrl, {
+    email: credentials.email,
+    password: credentials.password 
+  }, 
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true,
+  },
+  );
+  return response;
+}
+
+
 function Login() {
-  const [mail, setMail] = useState();
-  const [password, setPassword] = useState();
-  const [response, setResponse] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
 
   async function handleLoginSubmit(event) {
     event.preventDefault();  
-    const response = await login({mail, password});
-
-    setResponse(response);
+    const response = await login({email, password});
+    console.log(response);
+    const res = await getLoggedUser();
+    console.log(res);
+    setUser(response);
   } 
 
   return (
@@ -38,7 +62,7 @@ function Login() {
           className="form-control-lg"
           type="email"
           placeholder="Email address"
-          onChange={event => setMail(event.target.value)}
+          onChange={event => setEmail(event.target.value)}
         ></Form.Control>
       </Form.Group>
 

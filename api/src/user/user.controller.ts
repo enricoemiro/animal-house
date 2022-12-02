@@ -15,7 +15,11 @@ import { Session as ExpressSession } from 'express-session';
 import { I18nService } from 'nestjs-i18n';
 
 import { RequiresPermissions } from '@app/acl/acl.decorator';
-import { RequiresAuth, RequiresNotOnSelf } from '@app/auth/auth.decorator';
+import {
+  RequiresAuth,
+  RequiresNotOnSelf,
+  SkipAuth,
+} from '@app/auth/auth.decorator';
 import { HasherService } from '@app/hasher/hasher.service';
 import { ImageType } from '@app/image/image.interface';
 import { ImageFilePipe } from '@app/image/image.pipe';
@@ -219,6 +223,20 @@ export class UserController {
           count: deletedPermissions.length,
         },
       }),
+    };
+  }
+
+  @Post('read/account/info')
+  @HttpCode(HttpStatus.OK)
+  @RequiresNotOnSelf()
+  @SkipAuth()
+  public async readAccountInfo(@UserSession() user: UserSessionOptions) {
+    if (user.isOutdated) {
+      return null;
+    }
+
+    return {
+      info: await this.userService.findById(user.id),
     };
   }
 }
