@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import json
+import shutil
+from termcolor import colored
+
+
+# Create an ArgumentParser object
+parser = argparse.ArgumentParser(description="Collect files for deployment")
+parser.add_argument("json_file", help="path to the JSON file")
+args = parser.parse_args()
+
+# Open the JSON file
+with open(args.json_file, "r") as f:
+    data = json.load(f)
+
+# Extract the name of the output folder
+output_dir = os.path.join(os.path.dirname(args.json_file), data["outputDir"])
+
+# Get the absolute path of the output folder
+output_dir_abs = os.path.abspath(output_dir)
+
+# Create the output folder, if it does not exist
+# If the output folder already exists, ask the user if they want to delete it
+if os.path.exists(output_dir_abs):
+    user_input = input(
+        colored(
+            f'Output folder "{output_dir_abs}" already exists. Do you want to delete it? [y/n] ',
+            color="blue",
+        )
+    )
+
+    # If the user confirms, delete the output folder
+    if user_input.lower() == "y":
+        shutil.rmtree(output_dir_abs)
+
+        # Print the full path of the deleted folder
+        print(
+            colored(f"Deleted folder: {os.path.abspath(output_dir_abs)}", color="green")
+        )
+    else:
+        print(colored("Aborted.", color="red"))
+        exit(1)
+
+# Create the output folder
+os.makedirs(output_dir_abs)
+
+# For each item in the "includes" array, copy the file or directory to the output folder
+for item in data["includes"]:
+    src = os.path.join(os.path.dirname(args.json_file), item)
+
+    if not os.path.exists(src):
+        print(colored(f"Error: {src} does not exist", color="red"))
+        exit(1)
+    elif os.path.isdir(src):
+        shutil.copytree(src, os.path.join(output_dir_abs, item))
+    else:
+        shutil.copy(src, output_dir_abs)
+
+print(colored("Files and directories copied successfully!", color="green"))
