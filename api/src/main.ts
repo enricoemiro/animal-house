@@ -1,23 +1,31 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import session from 'express-session';
+// @ts-expect-error
+import helmet from 'helmet';
 
-import { AppModule } from '@app/app.module';
-import {
-  i18nValidationExceptionFilter,
-  i18nValidationPipe,
-} from '@app/config/i18n.config';
-import { expressSession } from '@app/config/session.config';
+import { AppModule } from './app.module';
+import { sessionOptions } from './config/session';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
-  app.setGlobalPrefix('v1');
-  app.use(expressSession(configService));
-  app.useGlobalPipes(i18nValidationPipe);
-  app.useGlobalFilters(i18nValidationExceptionFilter);
+  // Nest settings
+  app.setGlobalPrefix('/api/v1');
+  app.useGlobalPipes(new ValidationPipe());
+  app.enableCors({
+    origin: configService.get<string>('CORS_ORIGINS').split(','),
+    credentials: true,
+  });
 
-  await app.listen(configService.get('APP_PORT'));
+  // Express middlewares
+  app.use(helmet());
+  app.use(session(sessionOptions(configService)));
+
+  await app.listen(configService.get<number>('PORT'));
 }
 
 bootstrap();

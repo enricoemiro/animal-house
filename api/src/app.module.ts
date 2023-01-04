@@ -1,75 +1,22 @@
-import { MailerModule } from '@enricoemiro/mailer';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { WinstonModule } from 'nest-winston';
-import { I18nModule } from 'nestjs-i18n';
 
-import { AclGuard } from '@app/acl/acl.guard';
-import { ActivityModule } from '@app/activity/activity.module';
-import { AuthGuard } from '@app/auth/auth.guard';
-import { AuthModule } from '@app/auth/auth.module';
-import { configModuleOptions } from '@app/config/env.config';
-import { i18nModuleOptions } from '@app/config/i18n.config';
-import { MailerConfigService } from '@app/config/mailer.config';
-import { MongooseConfigService } from '@app/config/mongoose.config';
-import { ThrottlerConfigService } from '@app/config/throttler.config';
-import { WinstonConfigService } from '@app/config/winston.config';
-import { DevModule } from '@app/dev/dev.module';
-import { HeadOfficeModule } from '@app/headOffice/headOffice.module';
-import { PermissionModule } from '@app/permission/permission.module';
-import { UserModule } from '@app/user/user.module';
-import { AllExceptionsFilter } from '@app/utils/filters/allExceptions.filters';
+import { configModuleOptions } from '@/config/env';
 
-import { AnimalModule } from './animal/animal.module';
+import { ACLGuard } from './components/acl/acl.guard';
+import { AuthGuard } from './components/auth/auth.guard';
+import { AuthModule } from './components/auth/auth.module';
+import { PermissionModule } from './components/permission/permission.module';
+import { UserModule } from './components/user/user.module';
+import { GlobalErrorFilter } from './filters/global-error.filter';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(configModuleOptions),
-    I18nModule.forRoot(i18nModuleOptions),
-    WinstonModule.forRootAsync({
-      useClass: WinstonConfigService,
-    }),
-    MailerModule.forRootAsync({
-      useClass: MailerConfigService,
-      inject: [ConfigService],
-      isGlobal: true,
-    }),
-    MongooseModule.forRootAsync({
-      useClass: MongooseConfigService,
-      inject: [ConfigService],
-    }),
-    ThrottlerModule.forRootAsync({
-      useClass: ThrottlerConfigService,
-      inject: [ConfigService],
-    }),
-    AuthModule,
-    UserModule,
-    PermissionModule,
-    DevModule,
-    HeadOfficeModule,
-    ActivityModule,
-    AnimalModule,
-  ],
+  imports: [ConfigModule.forRoot(configModuleOptions), AuthModule, UserModule, PermissionModule],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AclGuard,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: ACLGuard },
+    { provide: APP_FILTER, useClass: GlobalErrorFilter },
   ],
 })
 export class AppModule {}

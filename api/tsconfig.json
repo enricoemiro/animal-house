@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    /**
-     * Type checking rules
-     */
+    // Type checking rules
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "exactOptionalPropertyTypes": false,
@@ -17,42 +15,34 @@
     // noImplicitThis, useUnknownInCatchVariables.
     "strict": true,
     "strictNullChecks": false,
+    "noImplicitAny": false,
 
-    /**
-     * Modules rules
-     */
-    "baseUrl": "./src",
+    // Modules rules
+    "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "NodeNext",
     "paths": {
-      "@app/*": ["*"]
+      "@/*": ["./src/*"],
+      "@mocks/*": ["./test/__mocks__/*"]
     },
 
-    /**
-     * Emit rules
-     */
+    // Emit rules
     "declaration": false,
     "outDir": "./dist",
     "removeComments": true,
     "sourceMap": true,
 
-    /**
-     * Interop Constraints
-     */
+    // Interop Constraints
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
 
-    /**
-     * Language and Environment
-     */
+    // Language and Environment
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES2017",
 
-    /**
-     * Completeness
-     */
+    // Completeness
     "skipLibCheck": true
   }
 }

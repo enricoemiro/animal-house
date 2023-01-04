@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+exiterr() {
+  printf "\033[31mError: %s\033[0m\n" "$1" >&2
+  exit 1
+}
+
+[[ -z "$1" ]] && exiterr "missing email argument."
+[[ -z "$2" ]] && exiterr "missing destination argument."
+
+email="$1"
+source="$2"
+destination="$email@marullo.cs.unibo.it:/home/web/site212227/html"
+
+tar -czvf source.tar.gz $source
+scp -r source.tar.gz $destination

@@ -1,0 +1,12 @@
+{
+  "outputDir": "api-bundle",
+  "includes": [
+    "dist",
+    "node_modules",
+    ".env",
+    "pm2.config.js",
+    "nest-cli.json",
+    "package.json",
+    "yarn.lock"
+  ]
+}

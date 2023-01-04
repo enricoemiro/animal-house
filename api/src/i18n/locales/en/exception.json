@@ -1,5 +1,0 @@
-{
-  "notFound": "The requested URL was not found on this server. That's all we know.",
-  "forbidden": "You do not have permission to access this resource.",
-  "internalServerError": "The server encountered an internal server error or misconfiguration and was unable to complete your request."
-}
