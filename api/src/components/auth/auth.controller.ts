@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, Session } from '@nestjs/common';
 import { compare } from 'bcrypt';
+import { Response } from 'express';
 import { Session as ExpressSession } from 'express-session';
 
 import { BlockedUserException } from '@/components/user/exceptions/blocked-user.exception';
@@ -25,14 +26,14 @@ export class AuthController {
 
   @Post('login')
   async login(
+    @Res({ passthrough: false }) response: Response,
     @Body() { email, password: plainPassword }: LoginDTO,
     @Session() session: UserSession,
   ) {
     const {
-      id,
       password: hashedPassword,
       isBlocked,
-      permissions,
+      ...rest
     } = await this.userService.findOneByEmail(email);
 
     if (!(await compare(plainPassword, hashedPassword))) {
@@ -43,27 +44,33 @@ export class AuthController {
       throw new BlockedUserException();
     }
 
-    session.user = { id, email, permissions };
+    session.user = rest;
     session.isOutdated = false;
 
-    return { message: 'Authentication completed successfully.' };
+    return response.status(200).json({
+      message: 'Authentication completed successfully.',
+    });
   }
 
   @Get('logout')
   @RequiresAuth(true)
-  logout(@Session() session: ExpressSession) {
+  logout(@Res({ passthrough: false }) response: Response, @Session() session: ExpressSession) {
     session.destroy((error: any) => {
       if (error) {
         throw new LogoutException();
       }
-    });
 
-    return { message: 'You are now logged out.' };
+      response.clearCookie('sid');
+
+      return response.status(200).json({
+        message: 'You are now logged out.',
+      });
+    });
   }
 
-  @Get('status')
+  @Get('me')
   @RequiresAuth(true)
-  status() {
-    return { message: 'You are logged in.' };
+  me(@Session() session: UserSession) {
+    return { user: session.user };
   }
 }

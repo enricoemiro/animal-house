@@ -24,11 +24,18 @@ export class GlobalErrorFilter implements ExceptionFilter {
   }
 
   private httpException(exception: HttpException) {
-    return {
+    const response: any = {
       name: exception.name,
       message: exception.message,
       status: exception.getStatus(),
     };
+
+    const { validationErrors }: any = exception.getResponse() || {};
+    if (validationErrors) {
+      response.validationErrors = validationErrors;
+    }
+
+    return response;
   }
 
   private defaultException(exception: any) {

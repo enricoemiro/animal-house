@@ -1,4 +1,5 @@
-import { Gender } from '@prisma/client';
+import { Gender, Role } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsDateString,
   IsEmail,
@@ -26,12 +27,14 @@ export class UserDTO {
   @MaxLength(64)
   password: string;
 
+  @Transform(({ value }) => value.toUpperCase())
   @IsEnum(Gender)
   gender: Gender;
 
   @IsDateString({ strict: true })
   dateOfBirth: string;
 
-  @IsMongoId({ each: true })
-  permissions: string[];
+  @Transform(({ value }) => value.toUpperCase())
+  @IsEnum(Role)
+  role: Role;
 }

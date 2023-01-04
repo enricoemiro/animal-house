@@ -14,10 +14,12 @@ export const sessionOptions = (configService: ConfigService): SessionOptions => 
   store: mongoStore(configService),
   secret: configService.get('SESSION_SECRET'),
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
+  unset: 'destroy',
   cookie: {
     secure: false,
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: 'strict',
   },
 });

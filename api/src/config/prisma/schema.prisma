@@ -8,28 +8,83 @@ generator client {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  email       String   @unique
+  email       String     @unique
   password    String
-  gender      Gender?
-  dateOfBirth String?
-  isBlocked   Boolean  @default(false)
-  permissions String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  gender      Gender
+  dateOfBirth String
+  isBlocked   Boolean    @default(false)
+  role        Role       @default(USER)
+  activityIDs String[]   @db.ObjectId
+  activities  Activity[] @relation(fields: [activityIDs], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   @@map("users")
 }
 
-model Permission {
-  id          String         @id @default(auto()) @map("_id") @db.ObjectId
-  name        PermissionName @unique
-  description String?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+model HeadOffice {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  location      String     @unique
+  streetAddress String
+  coordinates   String
+  activities    Activity[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
-  @@map("permissions")
+  @@map("headoffices")
+}
+
+model Activity {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  description       String?
+  dateOfPerformance String
+  mode              Mode
+  availability      Int
+  headOffice        HeadOffice? @relation(fields: [headOfficeId], references: [id])
+  headOfficeId      String?     @db.ObjectId
+  userIDs           String[]    @db.ObjectId
+  users             User[]      @relation(fields: [userIDs], references: [id])
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@map("activities")
+}
+
+model Product {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String    @unique
+  description  String
+  availability Int
+  price        Float
+  images       String[]
+  category     Category? @relation(fields: [categoryId], references: [id])
+  categoryId   String?   @db.ObjectId
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productsIDs String[] @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("orders")
 }
 
 enum Gender {
@@ -38,10 +93,12 @@ enum Gender {
   OTHER
 }
 
-// Each name must have the following structure: {api_endpoint}:{action}. For example:
-// - 'user:create' for the permission to create users
-// - 'user:read' for the permission to read users
-// - 'user:update' for the permission to update users
-enum PermissionName {
-  USER_CREATE
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Mode {
+  ONLINE
+  IN_PERSON
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import { omit } from 'lodash';
 
 import { PrismaService } from '@/config/prisma/prisma';
-import { MustHaveFields } from '@/helpers/types/must-have-fields.type';
+import { isDuplicateKeyError } from '@/helpers/helpers';
 
 import { EmailAlreadyInUseException } from './exceptions/email-already-in-use.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
@@ -11,15 +12,11 @@ import { UserNotFoundException } from './exceptions/user-not-found.exception';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async createOne(user: MustHaveFields<Omit<User, 'id'>, 'name' | 'email' | 'password'>) {
+  async createOne(user: any) {
     try {
       return await this.prismaService.user.create({ data: user });
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002' &&
-        error.meta.target === 'users_email_key'
-      ) {
+      if (isDuplicateKeyError(error, 'users_email_key')) {
         throw new EmailAlreadyInUseException();
       }
 
@@ -35,5 +32,43 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async bookedActivities(userId: User['id']) {
+    try {
+      const { activities } = await this.prismaService.user.findFirst({
+        where: { id: userId },
+        select: {
+          activities: {
+            include: {
+              headOffice: true,
+              users: false,
+            },
+          },
+        },
+      });
+
+      return activities.map((activity) => omit(activity, ['usersIDs', 'createdAt', 'updatedAt']));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProfile(
+    id: User['id'],
+    data: Partial<Pick<User, 'email' | 'name' | 'dateOfBirth' | 'gender'>>,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.user.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }
