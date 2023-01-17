@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Auth from './components/outlet/Auth';
 import Base from './components/outlet/Base';
 import RestrictedRoute from './components/outlet/RestrictedRoute';
+import { Activities } from './components/pages/Activities';
 import { Dashboard } from './components/pages/Dashboard';
 import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
@@ -36,6 +37,7 @@ export default createBrowserRouter([
             ],
           },
           { path: '/headoffices', element: <HeadOfficesPage /> },
+          { path: '/activities', element: <Activities /> },
         ],
       },
     ],

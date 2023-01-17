@@ -16,7 +16,7 @@ export class ProductService {
     >,
   ) {
     try {
-      return await this.prismaService.category.create({ data: product });
+      return await this.prismaService.product.create({ data: product });
     } catch (error) {
       if (isDuplicateKeyError(error, 'products_name_key')) {
       }
@@ -26,6 +26,22 @@ export class ProductService {
   }
 
   async getProductsByCategory(categoryId: Category['id']) {
-    console.log(categoryId);
+    try {
+      return await this.prismaService.product.findMany({
+        where: {
+          categoryId: categoryId,
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          availability: true,
+          price: true,
+          images: true,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }

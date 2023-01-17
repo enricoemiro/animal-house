@@ -1,11 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+
+import { GET_ALL_CATEGORIES_KEY, getAllCategories } from '@/api/categories/getAllCategories';
+import {
+  GET_PRODUCTS_BY_CATEGORY_KEY,
+  getProductsByCategory,
+} from '@/api/products/getProductsByCategory';
 
 import { HorizontalNavigation } from '../../shared/partials/HorizontalNavigation';
 import ProductCard from '../shop/ProductCard';
-import products from '../shop/products.json';
+
+//import products from '../shop/products.json';
 
 function HomePage() {
   const [cartProducts, setCartProducts] = useState([]);
+  const [categoryId, setCategoryId] = useState('');
+  const [categoryName, setCategoryName] = useState('');
   const items = [
     'Item 1',
     'Item 2',
@@ -30,6 +40,23 @@ function HomePage() {
     'Item 21',
   ];
 
+  const { isLoading, data: categories } = useQuery([GET_ALL_CATEGORIES_KEY], getAllCategories);
+
+  const { data: products } = useQuery(
+    [GET_PRODUCTS_BY_CATEGORY_KEY],
+    () => getProductsByCategory(categoryId),
+    {
+      enabled: !!categoryId,
+      onSuccess: () => setCategoryId(null),
+    },
+  );
+
+  const onCategoryClick = (id, name) => {
+    console.log(id);
+    setCategoryId(id);
+    setCategoryName(name);
+  };
+
   function handleAddToCartButton(product) {
     const prevCart = cartProducts;
     const data = {
@@ -44,17 +71,22 @@ function HomePage() {
   }
   return (
     <>
-      <HorizontalNavigation items={items} />
+      {categories && <HorizontalNavigation items={categories} onCategoryClick={onCategoryClick} />}
 
-      <section>
-        <div className="flex items-center justify-center flex-wrap mt-5">
-          <div className="grid grid-flow-row grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-x-5 gap-y-3">
-            {products.data.map((product) => (
-              <ProductCard product={product} handleAddToCartButton={handleAddToCartButton} />
-            ))}
+      {products && (
+        <section>
+          <div className="flex items-center mt-5">
+            <h1 className="font-bold text-2xl">{'Prodotti per ' + categoryName}</h1>
           </div>
-        </div>
-      </section>
+          <div className="flex items-center justify-center flex-wrap mt-5">
+            <div className="grid grid-flow-row grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-x-5 gap-y-3">
+              {products.map((product) => (
+                <ProductCard product={product} handleAddToCartButton={handleAddToCartButton} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

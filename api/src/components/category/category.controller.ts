@@ -1,9 +1,11 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
+import { RequiresAuth } from '../auth/decorators/requires-auth.decorator';
 import { CategoryService } from './category.service';
 import { CreateDTO } from './dtos/create.dto';
 
 @Controller('category')
+@RequiresAuth(true)
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 import { BOOK_ACTIVITY_KEY, bookActivity } from '@/api/activities/bookActivity';
+import { BOOKABLE_ACTIVITIES_KEY } from '@/api/activities/bookableActivities';
 import { BOOKED_ACTIVITIES_KEY } from '@/api/activities/bookedActivities';
 import { UNBOOK_ACTIVITY_KEY, unbookActivity } from '@/api/activities/unbookActivity';
+import { GET_ACTIVITIES_BY_HEADOFFICE_ID_KEY } from '@/api/headoffice/getActivitiesByHeadOfficeId';
 import queryClient from '@/config/query';
 
 import ErrorRenderer from './ErrorRenderer';
@@ -37,6 +39,8 @@ function ActivitiesList({ activities }) {
     enabled: !!bookedElement,
     onSuccess: () => {
       queryClient.invalidateQueries([BOOKED_ACTIVITIES_KEY]);
+      queryClient.invalidateQueries([BOOKABLE_ACTIVITIES_KEY]);
+      queryClient.invalidateQueries([GET_ACTIVITIES_BY_HEADOFFICE_ID_KEY]);
       setBookedElement(null);
     },
     onError: () => setBookedElement(null),
