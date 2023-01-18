@@ -44,4 +44,20 @@ export class ProductService {
       throw error;
     }
   }
+  // se vogliamo mettere più immagini bisogna
+  // appendere un index dato dalla lunghezza dell'array
+  async updatePicture(productId: Product['id']) {
+    try {
+      return await this.prismaService.product.update({
+        where: { id: productId },
+        data: {
+          images: {
+            push: 'http://localhost:3000/public/products/' + productId + '.webp',
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

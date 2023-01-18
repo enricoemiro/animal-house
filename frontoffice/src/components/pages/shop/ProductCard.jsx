@@ -1,5 +1,5 @@
 import { CurrencyEuroIcon, ShoppingCartIcon } from '@heroicons/react/20/solid';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 
 /**
  * Product card with information and purchase options.
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * @param {string} props.product.name - Product name.
  * @param {number} props.product.price - Product price.
  * @param {number} props.product.stock - Available quantity of the product.
- * @param {string} props.product.image - URL of the product image.
+ * @param {Array} props.product.images - URL of the product image.
  * @param {function} props.onAddToCart - Callback function for adding the product to the cart.
  */
 function ProductCard({ product, onAddToCart }) {
@@ -25,11 +25,11 @@ function ProductCard({ product, onAddToCart }) {
 
   return (
     <div className="rounded border">
-      <img className="w-64 rounded" src={product.image} />
+      <img className="w-64 rounded" crossOrigin="use-credentials" src={product.images[0]} />
 
       <div className="p-3 flex flex-col bg-gray-200">
         <h1 className="font-bold">{product.name}</h1>
-        <p className="font-bold">Stock: {product.stock}</p>
+        <p className="font-bold">Stock: {product.availability}</p>
 
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -54,7 +54,7 @@ ProductCard.propTypes = {
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     stock: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
+    images: PropTypes.arrayOf(string),
   }).isRequired,
   onAddToCart: PropTypes.func.isRequired,
 };

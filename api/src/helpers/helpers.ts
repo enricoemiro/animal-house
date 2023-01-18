@@ -1,3 +1,5 @@
+import { basename, dirname, extname } from 'path';
+
 import { Prisma } from '@prisma/client';
 
 export const isDuplicateKeyError = (error: any, key: string) => {
@@ -7,3 +9,11 @@ export const isDuplicateKeyError = (error: any, key: string) => {
     error.meta.target === key
   );
 };
+
+export function extractPath(path: string) {
+  return {
+    dirname: dirname(path),
+    basename: basename(path),
+    extension: extname(path),
+  };
+}
