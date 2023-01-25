@@ -11,7 +11,7 @@ import { UnbookDTO } from './dtos/unbook.dto';
 @Controller('activity')
 @RequiresAuth(true)
 export class ActivityController {
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService) { }
 
   @Post('create')
   async create(@Body() createDTO: CreateDTO) {
@@ -35,5 +35,23 @@ export class ActivityController {
   async unbook(@Body() { id }: UnbookDTO, @Session() session: UserSession) {
     await this.activityService.unbookOne(id, session.user.id);
     return { message: 'The activity has been successfully unbooked.' };
+  }
+
+  @Get('get/activities')
+  async getActivities() {
+    const activities = await this.activityService.getActivities();
+    return activities;
+  }
+
+  @Get('get/live/activities')
+  async getLiveActivities() {
+    const activities = await this.activityService.getLiveActivities();
+    return activities;
+  }
+
+  @Get('get/online/activities')
+  async getOnlineActivities() {
+    const activities = await this.activityService.getOnlineActivities();
+    return activities;
   }
 }

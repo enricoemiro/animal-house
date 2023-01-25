@@ -23,7 +23,7 @@ import { ProductService } from './product.service';
 @Controller('product')
 @RequiresAuth(true)
 export class ProductController {
-  constructor(private productService: ProductService, private imageService: ImageService) {}
+  constructor(private productService: ProductService, private imageService: ImageService) { }
 
   @Post('create')
   async create(@Body() createDTO: CreateDTO) {
@@ -39,7 +39,7 @@ export class ProductController {
     if (!products) {
       throw new ProductsNotFoundException();
     }
-    return products;
+    return { products };
   }
 
   @Post('update/picture')
@@ -57,5 +57,11 @@ export class ProductController {
     await this.productService.updatePicture(updatePictureDTO.id);
 
     return { message: 'The product image has been successfully updated.' };
+  }
+
+  @Get('get/products')
+  async getProducts() {
+    const products = await this.productService.getProducts();
+    return products;
   }
 }

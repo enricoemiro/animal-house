@@ -19,4 +19,7 @@ export class ActivityDTO {
 
   @IsInt()
   availability: number;
+
+  @IsMongoId()
+  headOfficeId: string;
 }

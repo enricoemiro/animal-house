@@ -12,6 +12,7 @@ import { HeadOfficeModule } from './components/headOffice/headOffice.module';
 import { OrderModule } from './components/order/order.module';
 import { ProductModule } from './components/product/product.module';
 import { UserModule } from './components/user/user.module';
+import { AdminModule } from './components/admin/admin.module';
 import { GlobalErrorFilter } from './filters/global-error.filter';
 
 @Module({
@@ -24,6 +25,7 @@ import { GlobalErrorFilter } from './filters/global-error.filter';
     CategoryModule,
     ProductModule,
     OrderModule,
+    AdminModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

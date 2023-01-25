@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 @Controller('user')
 @RequiresAuth(true)
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   @Get('booked/activities')
   async bookedActivities(@Session() session: UserSession) {

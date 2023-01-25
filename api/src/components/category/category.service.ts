@@ -9,7 +9,7 @@ import { DuplicateCategoryNameException } from './exceptions/duplicate-category-
 
 @Injectable()
 export class CategoryService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async createOne(category: MustHaveFields<Category, 'name'>) {
     try {
@@ -38,6 +38,22 @@ export class CategoryService {
         },
       });
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteCategory(name: Category['name']) {
+    try {
+      return this.prismaService.category.delete({
+        where: { name },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getCategories() {
+    try { return await this.prismaService.category.findMany() } catch (error) {
       throw error;
     }
   }

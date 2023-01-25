@@ -74,4 +74,46 @@ export class HeadOfficeService {
       throw error;
     }
   }
+
+  async deleteHeadOffice(id: HeadOffice['id']) {
+    try {
+      return this.prismaService.headOffice.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteHeadOffices(headOfficeIDs: HeadOffice['id'][]) {
+    try {
+      return this.prismaService.headOffice.deleteMany({
+        where: {
+          id: {
+            in: headOfficeIDs,
+          }
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async editHeadOffice(
+    id: HeadOffice['id'],
+    data: Partial<Pick<HeadOffice, 'location' | 'streetAddress' | 'coordinates'>>,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.headOffice.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

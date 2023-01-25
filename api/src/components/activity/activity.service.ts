@@ -11,12 +11,12 @@ import { NoSeatsAvailableException } from './exceptions/no-seats-available.excep
 
 @Injectable()
 export class ActivityService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async createOne(
     activity: MustHaveFields<
       Activity,
-      'name' | 'description' | 'dateOfPerformance' | 'mode' | 'availability'
+      'name' | 'description' | 'dateOfPerformance' | 'mode' | 'availability' | 'headOfficeId'
     >,
   ) {
     try {
@@ -91,6 +91,108 @@ export class ActivityService {
       }
 
       return activities;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getActivities() {
+    try {
+      return await this.prismaService.activity.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          dateOfPerformance: true,
+          mode: true,
+          availability: true,
+          headOffice: true,
+          users: { select: { email: true, id: true } },
+        },
+      })
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getLiveActivities() {
+    try {
+      const activities = await this.prismaService.activity.findMany({
+        where: {
+          mode: "IN_PERSON",
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          dateOfPerformance: true,
+          mode: true,
+          availability: true,
+          headOffice: true,
+          users: { select: { email: true, id: true } },
+        },
+      });
+
+      if (!activities) {
+        throw new AvailableActivitiesNotFoundException();
+      }
+
+      return activities;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getOnlineActivities() {
+    try {
+      const activities = await this.prismaService.activity.findMany({
+        where: {
+          mode: "ONLINE",
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          dateOfPerformance: true,
+          mode: true,
+          availability: true,
+          users: { select: { email: true, id: true } },
+        },
+      });
+
+      if (!activities) {
+        throw new AvailableActivitiesNotFoundException();
+      }
+
+      return activities;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async editActivity(
+    id: Activity['id'],
+    data: Partial<Pick<Activity, 'name' | 'description' | 'dateOfPerformance' | 'mode' | 'availability' | 'headOfficeId'>>,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.activity.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteActivity(id: Activity['id']) {
+    try {
+      return this.prismaService.activity.delete({
+        where: { id },
+      });
     } catch (error) {
       throw error;
     }
