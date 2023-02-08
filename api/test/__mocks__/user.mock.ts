@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-import { UserSession } from '@/components/user/interfaces/user-session.interface';
+import { UserSession } from '@/app/user/interfaces/user-session.interface';
 
 export const defaultUser: User = {
   id: '123',
