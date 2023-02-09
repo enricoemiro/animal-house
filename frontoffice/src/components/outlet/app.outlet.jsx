@@ -6,6 +6,8 @@ import { HEADER_HEIGHT, Header } from '@/components/layouts/header/header.compon
 const navigation = [
   { label: 'Ecommerce', href: '/' },
   { label: 'Board', href: '/board' },
+  { label: 'Activities', href: '/activities' },
+  { label: 'Head Offices', href: '/headoffices' },
 ];
 
 export const AppOutlet = () => {

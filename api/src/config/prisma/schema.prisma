@@ -9,17 +9,19 @@ generator client {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  email       String   @unique
+  email       String     @unique
   password    String
   gender      Gender?
   dateOfBirth String?
-  isBlocked   Boolean  @default(false)
-  role        Role     @default(USER)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isBlocked   Boolean    @default(false)
+  role        Role       @default(USER)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   posts       Post[]
+  activities  Activity[] @relation(fields: [activityIDs], references: [id])
+  activityIDs String[]   @db.ObjectId
 
   @@map("users")
 }
@@ -46,6 +48,35 @@ model PostImage {
   updatedAt DateTime @updatedAt
 
   @@map("posts_images")
+}
+
+model HeadOffice {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  location      String     @unique
+  streetAddress String
+  coordinates   String
+  activities    Activity[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("headoffices")
+}
+
+model Activity {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  description       String?
+  dateOfPerformance DateTime
+  mode              Mode
+  availability      Int
+  headOffice        HeadOffice @relation(fields: [headOfficeId], references: [id])
+  headOfficeId      String     @db.ObjectId
+  users             User[]     @relation(fields: [userIDs], references: [id])
+  userIDs           String[]   @db.ObjectId
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  @@map("activities")
 }
 
 enum PostCategory {

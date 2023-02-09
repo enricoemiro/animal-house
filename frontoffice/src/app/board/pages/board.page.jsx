@@ -1,27 +1,22 @@
-import { Box, Group, Text, Title } from '@mantine/core';
+import { Center, SimpleGrid } from '@mantine/core';
 
 import { CreatePostButton } from '@/app/board/components/create-post-button.component';
 import { Posts } from '@/app/board/components/posts.component';
+import { PageHeader } from '@/components/layouts/page-header.component';
 
 export const BoardPage = () => {
   return (
-    <>
-      <Box mb="xl" sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Title order={1} color="dark">
-          Board
-        </Title>
+    <SimpleGrid spacing="md">
+      <PageHeader
+        title="Board"
+        subtitle="Connect with animal lovers on our user-friendly bulletin board. Share updates, view posts, and join the conversation in our community of pet enthusiasts. Get connected today!"
+      />
 
-        <Text fz="lg" color="dimmed">
-          Connect with animal lovers on our user-friendly bulletin board. Share updates, view posts,
-          and join the conversation in our community of pet enthusiasts. Get connected today!
-        </Text>
-      </Box>
-
-      <Group position="center" spacing="xs" mb="xl">
+      <Center>
         <CreatePostButton />
-      </Group>
+      </Center>
 
       <Posts />
-    </>
+    </SimpleGrid>
   );
 };
