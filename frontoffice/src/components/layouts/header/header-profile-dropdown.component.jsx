@@ -1,6 +1,5 @@
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 import { Menu } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth/use-auth.hook';
 import { UserButton } from '@/components/buttons/user-button.component';
