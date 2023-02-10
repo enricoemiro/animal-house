@@ -78,6 +78,9 @@ export class ActivityService {
           id: activityId,
         },
         data: {
+          availability: {
+            increment: 1,
+          },
           users: {
             disconnect: {
               id: userId,
