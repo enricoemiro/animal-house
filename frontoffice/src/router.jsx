@@ -21,15 +21,21 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <EcommercePage /> },
           { path: '/board', element: <BoardPage /> },
-          { path: '/activities', element: <ActivitiesPage /> },
-          { path: '/headoffices', element: <HeadOfficesPage /> },
           { path: '/page/not/found', element: <NotFoundPage /> },
           { path: '*', element: <Navigate to="/page/not/found" replace /> },
         ],
       },
       {
         element: <ProtectedRouteOutlet />,
-        children: [],
+        children: [
+          {
+            element: <AppOutlet />,
+            children: [
+              { path: '/activities', element: <ActivitiesPage /> },
+              { path: '/headoffices', element: <HeadOfficesPage /> },
+            ],
+          },
+        ],
       },
       {
         element: <GuestRouteOutlet />,
