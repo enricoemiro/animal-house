@@ -1,7 +1,9 @@
-import { Grid } from '@mantine/core';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import { Button, Grid } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
-import { ActivityList } from '@/app/activity/components/activity-list.component';
+import { ActivityCard } from '@/app/activity/components/activity-card.component';
+import { PageHeader } from '@/components/layouts/page-header.component';
 
 import {
   GET_USER_BOOKED_ACTIVITIES_KEY,
@@ -18,11 +20,24 @@ export const ProfilePage = () => {
 
   return (
     <Grid>
-      <Grid.Col span={8}>
-        <ActivityList activities={activities} />
+      <Grid.Col>
+        <PageHeader
+          title="Profile"
+          subtitle="Keep track of your booked activities and pets in one convenient place with your profile page. Edit your bookings, manage your pets and keep everything organized with ease."
+        />
       </Grid.Col>
 
-      <Grid.Col span={4}>
+      <Grid.Col span={9}>
+        {activities.map((activity) => {
+          return <ActivityCard key={activity.id} activity={activity} activeButton="unbook" />;
+        })}
+      </Grid.Col>
+
+      <Grid.Col span={3}>
+        <Button leftIcon={<PlusIcon width={16} />} fullWidth>
+          Add an animal
+        </Button>
+
         <div>Animals</div>
       </Grid.Col>
     </Grid>

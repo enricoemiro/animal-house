@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 
 import { ActivityModule } from './app/activity/activity.module';
+import { AnimalModule } from './app/animal/animal.module';
 import { AuthModule } from './app/auth/auth.module';
 import { HeadOfficeModule } from './app/headOffice/headOffice.module';
 import { PostModule } from './app/post/post.module';
@@ -19,6 +20,7 @@ import { multerModuleOptions } from './config/multer.config';
     UserModule,
     PostModule,
     UserModule,
+    AnimalModule,
     HeadOfficeModule,
     ActivityModule,
   ],
