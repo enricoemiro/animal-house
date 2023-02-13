@@ -44,16 +44,22 @@ export class UserService {
     return user;
   }
 
-  async updateProfile(id: User['id'], data: Prisma.UserUpdateInput) {
+  async bookedActivities(userId: User['id']) {
     try {
-      if (Object.keys(data).length === 0) {
-        return null;
-      }
-
-      return await this.prismaService.client.user.update({
-        where: { id },
-        data,
+      const { activities } = await this.prismaService.client.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          activities: {
+            include: {
+              users: false,
+            },
+          },
+        },
       });
+
+      return activities;
     } catch (error) {
       throw error;
     }

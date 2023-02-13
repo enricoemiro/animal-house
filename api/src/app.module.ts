@@ -18,6 +18,7 @@ import { multerModuleOptions } from './config/multer.config';
     AuthModule,
     UserModule,
     PostModule,
+    UserModule,
     HeadOfficeModule,
     ActivityModule,
   ],
