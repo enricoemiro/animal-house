@@ -3,7 +3,7 @@ import { Box, Text } from '@mantine/core';
 import { closeModal } from '@mantine/modals';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
-import uuid from 'react-uuid';
+import { useId } from 'react';
 
 import { DELETE_POST_KEY, deletePost } from '@/app/board/api/delete-post.api';
 import { GET_POSTS } from '@/app/board/api/get-posts.api';
@@ -16,7 +16,7 @@ import { queryClient } from '@/config/query';
 import { DELETE_POST_MODAL_ID } from './delete-post-button.component';
 
 export const DeletePostModal = ({ postId }) => {
-  const DELETE_POST_NOTIFICATION_ID = uuid();
+  const DELETE_POST_NOTIFICATION_ID = useId();
 
   const mutation = useMutation({
     mutationKey: DELETE_POST_KEY,

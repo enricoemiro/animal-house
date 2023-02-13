@@ -47,11 +47,13 @@ export const Posts = () => {
         )}
       </Flex>
 
-      <CursorPagination
-        onPreviousPage={() => setCursor({ before: meta?.startCursor })}
-        onNextPage={() => setCursor({ after: meta?.endCursor })}
-        {...meta}
-      />
+      <Flex justify="center">
+        <CursorPagination
+          onPreviousPage={() => setCursor({ before: meta?.startCursor })}
+          onNextPage={() => setCursor({ after: meta?.endCursor })}
+          {...meta}
+        />
+      </Flex>
     </Flex>
   );
 };
