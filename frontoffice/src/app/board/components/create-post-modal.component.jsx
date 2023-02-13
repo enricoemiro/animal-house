@@ -3,8 +3,7 @@ import { Box, SimpleGrid } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-import uuid from 'react-uuid';
+import { useId, useState } from 'react';
 
 import { CREATE_POST_KEY, createPost } from '@/app/board/api/create-post.api';
 import { GET_POSTS } from '@/app/board/api/get-posts.api';
@@ -20,7 +19,7 @@ import { queryClient } from '@/config/query';
 import { PostSchema } from '@/schemas/post.schema';
 
 export const CreatePostModal = () => {
-  const CREATE_POST_NOTIFICATION_ID = uuid();
+  const CREATE_POST_NOTIFICATION_ID = useId();
   const [files, setFiles] = useState([]);
 
   const mutation = useMutation({
