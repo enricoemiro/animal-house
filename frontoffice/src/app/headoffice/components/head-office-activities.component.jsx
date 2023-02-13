@@ -1,8 +1,7 @@
-import { Flex, SimpleGrid, Text, Title } from '@mantine/core';
+import { Flex, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 
-import { ActivityCard } from '@/app/activity/components/activity-card.component';
+import { ActivityList } from '@/app/activity/components/activity-list.component';
 import {
   GET_ACTIVITIES_BY_HEADOFFICE_ID_KEY,
   getActivitiesByHeadOfficeId,
@@ -16,29 +15,10 @@ export const HeadOfficeActivities = ({ headOffice }) => {
     retry: 0,
   });
 
-  const renderActivities = useMemo(() => {
-    if (activities.length === 0) {
-      return (
-        <Text color="dimmed">
-          No activities appear to be available at this location at the moment, please try again
-          later.
-        </Text>
-      );
-    }
-
-    return (
-      <SimpleGrid>
-        {activities?.map((activity) => {
-          return <ActivityCard key={activity.id} activity={activity} />;
-        })}
-      </SimpleGrid>
-    );
-  }, [activities]);
-
   return (
     <Flex direction="column" gap="xs" mt="xs">
       <Title order={2}>All activities ({headOffice.location})</Title>
-      {renderActivities}
+      <ActivityList activities={activities} />
     </Flex>
   );
 };

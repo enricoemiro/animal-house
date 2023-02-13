@@ -27,6 +27,7 @@ export const UnbookActivityButton = ({ activity, ...others }) => {
       color="red"
       leftIcon={<TrashIcon width={16} />}
       onClick={() => query.refetch()}
+      loading={query.isInitialLoading}
       {...others}
     >
       Unbook

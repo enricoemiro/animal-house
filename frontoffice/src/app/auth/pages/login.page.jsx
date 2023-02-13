@@ -1,7 +1,5 @@
 import { Anchor, Box, Group, SimpleGrid } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { useMutation } from '@tanstack/react-query';
 import { same } from 'original';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -9,21 +7,16 @@ import { LOGIN_KEY, login } from '@/app/auth/api/login.api';
 import { ME_KEY } from '@/app/auth/api/me.api';
 import { AuthOutlet } from '@/app/auth/auth.outlet';
 import { SubmitButton } from '@/components/buttons/submit-button.component';
-import { ErrorRenderer } from '@/components/error-renderer.component';
 import { EmailInput } from '@/components/form/email-input.component';
 import { PasswordInput } from '@/components/form/password-input.component';
-import { ErrorNotification } from '@/components/notifications/error-notification.component';
-import { LoadingNotification } from '@/components/notifications/loading-notification.component';
-import { SuccessNotification } from '@/components/notifications/success-notification.component';
 import { queryClient } from '@/config/query';
+import { useMutationWithNotification } from '@/hooks/use-mutation-with-notification.hook';
 import { UserSchema } from '@/schemas/user.schema';
 
 const LoginSchema = UserSchema.pick({
   email: true,
   password: true,
 });
-
-const LOGIN_NOTIFICATION_ID = 'loginNotificationId';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -37,24 +30,10 @@ export const LoginPage = () => {
     },
   });
 
-  const mutation = useMutation({
+  const mutation = useMutationWithNotification({
     mutationKey: [LOGIN_KEY],
     mutationFn: login,
-    onMutate: () => {
-      showNotification(
-        LoadingNotification({
-          id: LOGIN_NOTIFICATION_ID,
-        }),
-      );
-    },
-    onSuccess: async (data) => {
-      updateNotification(
-        SuccessNotification({
-          id: LOGIN_NOTIFICATION_ID,
-          message: data,
-        }),
-      );
-
+    onSuccess: async () => {
       await queryClient.invalidateQueries([ME_KEY]);
 
       const returnTo = searchParams.has('returnTo') ? searchParams.get('returnTo') : null;
@@ -66,14 +45,6 @@ export const LoginPage = () => {
       }
 
       return navigate('/', { replace: true });
-    },
-    onError: (error) => {
-      updateNotification(
-        ErrorNotification({
-          id: LOGIN_NOTIFICATION_ID,
-          message: <ErrorRenderer error={error} />,
-        }),
-      );
     },
   });
 

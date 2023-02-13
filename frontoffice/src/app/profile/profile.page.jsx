@@ -1,14 +1,16 @@
-import { PlusIcon } from '@heroicons/react/24/solid';
-import { Button, Grid } from '@mantine/core';
+import { Center, Grid, SimpleGrid } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
-import { ActivityCard } from '@/app/activity/components/activity-card.component';
+import { ActivityList } from '@/app/activity/components/activity-list.component';
 import { PageHeader } from '@/components/layouts/page-header.component';
 
+import { GET_USER_ANIMALS, getUserAnimals } from './api/get-user-animals.api';
 import {
   GET_USER_BOOKED_ACTIVITIES_KEY,
   getUserBookedActivities,
 } from './api/get-user-booked-activities.api';
+import { AnimalCard } from './components/animal-card.component';
+import { CreateAnimalButton } from './components/create-animal-button.component';
 
 export const ProfilePage = () => {
   const { data: activities } = useQuery({
@@ -18,28 +20,39 @@ export const ProfilePage = () => {
     retry: 0,
   });
 
+  const { data: animals } = useQuery({
+    queryKey: [GET_USER_ANIMALS],
+    queryFn: getUserAnimals,
+    initialData: [],
+    retry: 0,
+  });
+
   return (
-    <Grid>
-      <Grid.Col>
-        <PageHeader
-          title="Profile"
-          subtitle="Keep track of your booked activities and pets in one convenient place with your profile page. Edit your bookings, manage your pets and keep everything organized with ease."
-        />
-      </Grid.Col>
+    <SimpleGrid spacing="md">
+      <PageHeader
+        title="Profile"
+        subtitle="Keep track of your booked activities and pets in one convenient place with your profile page. Edit your bookings, manage your pets and keep everything organized with ease."
+      />
 
-      <Grid.Col span={9}>
-        {activities.map((activity) => {
-          return <ActivityCard key={activity.id} activity={activity} activeButton="unbook" />;
-        })}
-      </Grid.Col>
+      <Center>
+        <CreateAnimalButton />
+      </Center>
 
-      <Grid.Col span={3}>
-        <Button leftIcon={<PlusIcon width={16} />} fullWidth>
-          Add an animal
-        </Button>
+      <Grid>
+        {activities.length > 0 && (
+          <Grid.Col span={9}>
+            <ActivityList activities={activities} activeButton="unbook" />
+          </Grid.Col>
+        )}
 
-        <div>Animals</div>
-      </Grid.Col>
-    </Grid>
+        {animals.length > 0 && (
+          <Grid.Col span={3}>
+            {animals.map((animal) => {
+              return <AnimalCard key={animal.id} animal={animal} />;
+            })}
+          </Grid.Col>
+        )}
+      </Grid>
+    </SimpleGrid>
   );
 };

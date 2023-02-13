@@ -1,4 +1,3 @@
-import { XCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import {
   Box,
@@ -55,7 +54,7 @@ const ImagePreview = ({ file, onClick }) => {
             cursor: 'pointer',
           })}
         >
-          <XCircleIcon width={64} />
+          <XMarkIcon width={64} />
         </Box>
       )}
     </Box>

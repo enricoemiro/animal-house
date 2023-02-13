@@ -7,6 +7,8 @@ import { useAuth } from '@/app/auth/use-auth.hook';
 
 import { CreatePostModal } from './create-post-modal.component';
 
+export const CREATE_POST_MODAL_ID = 'createPostModal';
+
 export const CreatePostButton = () => {
   const navigate = useNavigate();
   const {
@@ -19,6 +21,7 @@ export const CreatePostButton = () => {
     }
 
     openModal({
+      modalId: CREATE_POST_MODAL_ID,
       centered: true,
       size: 'lg',
       title: <Title size="h3">Create a post</Title>,

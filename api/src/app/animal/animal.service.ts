@@ -24,14 +24,6 @@ export class AnimalService {
     }
   }
 
-  async find() {
-    try {
-      return await this.prismaService.client.animal.findFirst({});
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async delete(animalId: Animal['id']) {
     try {
       return await this.prismaService.client.animal.delete({

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Session } from '@nestjs/common';
 
 import { AnimalService } from '@/app/animal/animal.service';
 import { RequiresAuth } from '@/app/auth/decorators/requires-auth.decorator';
 
+import { CreateUserAnimalDTO } from './dtos/create-user-animal.dto';
+import { DeleteUserAnimalDTO } from './dtos/delete-user-animal.dto';
 import { UserSession } from './interfaces/user-session.interface';
 import { UserService } from './user.service';
 
@@ -25,22 +27,32 @@ export class UserController {
 
   @Get('animals')
   async getUserAnimals(@Session() session: UserSession) {
-    const animals = await this.animalService.find(session.user.id);
+    const animals = await this.userService.getUserAnimals(session.user.id);
 
     return {
       animals: animals,
     };
   }
 
-  @Post('create/animal')
-  async createAnimal(@Session() session: UserSession) {
+  @Post('animals/create')
+  async createUserAnimal(
+    @Body() createUserAnimalDTO: CreateUserAnimalDTO,
+    @Session() session: UserSession,
+  ) {
+    await this.animalService.create({
+      userId: session.user.id,
+      ...createUserAnimalDTO,
+    });
+
     return {
       message: 'The animal has been successfully added',
     };
   }
 
-  @Post('delete/animal')
-  async deleteAnimal(@Session() session: UserSession) {
+  @Delete('animals/delete/:id')
+  async deleteUserAnimal(@Param() { id }: DeleteUserAnimalDTO) {
+    await this.animalService.delete(id);
+
     return {
       message: 'The animal has been successfully deleted',
     };

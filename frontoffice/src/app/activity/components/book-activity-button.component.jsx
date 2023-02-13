@@ -40,6 +40,7 @@ export const BookActivityButton = ({ activity, ...others }) => {
       variant="default"
       leftIcon={<BookmarkIcon width={16} />}
       onClick={() => query.refetch()}
+      loading={query.isInitialLoading}
       {...others}
     >
       Book
