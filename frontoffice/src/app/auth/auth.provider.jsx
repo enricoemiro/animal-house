@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { LOGOUT_KEY, logout } from '@/app/auth/api/logout.api';
 import { ME_KEY, me } from '@/app/auth/api/me.api';
 import { queryClient } from '@/config/query';
+import { useQueryWithNotification } from '@/hooks/use-query-with-notification.hook';
 
 import { AuthContext } from './auth.context';
 
@@ -17,13 +18,13 @@ export const AuthProvider = ({ children }) => {
     retry: false,
   });
 
-  const logoutQuery = useQuery({
+  const logoutQuery = useQueryWithNotification({
     queryFn: logout,
     queryKey: [LOGOUT_KEY],
     retry: false,
     enabled: false,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: [ME_KEY],
       });
     },
