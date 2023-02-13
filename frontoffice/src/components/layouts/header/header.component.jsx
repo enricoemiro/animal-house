@@ -1,131 +1,48 @@
-import {
-  Anchor,
-  Burger,
-  Button,
-  Container,
-  Group,
-  Header as MantineHeader,
-  Paper,
-  Title,
-  Transition,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useNavigate } from 'react-router-dom';
+import { Container, Flex, Group, Header as MantineHeader, useMantineTheme } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
 
-import { useAuth } from '@/app/auth/use-auth.hook';
-
+import { HeaderLogo } from './header-logo.component';
+import { HeaderMobileMenu } from './header-mobile-menu.component';
 import { HeaderNavigationItem } from './header-navigation-item.component';
-import { HeaderProfileDropdown } from './header-profile-dropdown.component';
+import { HeaderRightMenu } from './header-right-menu.component';
+
+const navigation = [
+  { label: 'Ecommerce', href: '/' },
+  { label: 'Board', href: '/board' },
+  { label: 'Activities', href: '/activities' },
+  { label: 'Head Offices', href: '/headoffices' },
+];
 
 export const HEADER_HEIGHT = 75;
 
-export const Header = ({ navigation } = {}) => {
-  const navigate = useNavigate();
-  const {
-    meQuery: { data: user },
-  } = useAuth();
-
-  const [opened, { toggle }] = useDisclosure(false);
+export const Header = () => {
+  const theme = useMantineTheme();
+  const { width } = useViewportSize();
 
   const items = navigation?.map(({ label, href }) => {
     return <HeaderNavigationItem key={href} label={label} href={href} />;
   });
 
-  const authButtons = (
-    <Group spacing={10}>
-      <Button variant="default" onClick={() => navigate('/auth/register')}>
-        Register
-      </Button>
-
-      <Button onClick={() => navigate('/auth/login')}>Log in</Button>
-    </Group>
-  );
-
   return (
     <MantineHeader
       withBorder
+      fixed={false}
+      zIndex={1}
       height={HEADER_HEIGHT}
-      sx={{
-        position: 'relative',
-        zIndex: 1,
-      }}
+      sx={{ position: 'relative' }}
     >
-      <Container
-        size="lg"
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <Group sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {/** Hamburger menu */}
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            size="sm"
-            sx={(theme) => ({
-              [theme.fn.largerThan('sm')]: {
-                display: 'none',
-              },
-            })}
-          />
+      <Container size="lg" sx={{ display: 'flex', height: '100%' }}>
+        <Group position="apart" sx={{ width: '100%' }}>
+          <Flex align="center" justify="center" columnGap="md">
+            {width <= theme.breakpoints.sm && <HeaderMobileMenu items={items} />}
+            <HeaderLogo />
+            {width > theme.breakpoints.sm && <Group spacing={5}>{items}</Group>}
+          </Flex>
 
-          <Title size="h3">
-            <Anchor
-              variant="text"
-              component="a"
-              color="dark"
-              onClick={() => navigate('/')}
-              sx={{
-                fontFamily: 'Pacifico',
-              }}
-            >
-              Animal House
-            </Anchor>
-          </Title>
-
-          {/** Browser navigation */}
-          <Group
-            spacing={5}
-            sx={(theme) => ({
-              [theme.fn.smallerThan('sm')]: {
-                display: 'none',
-              },
-            })}
-          >
-            {items}
-          </Group>
+          <div>
+            <HeaderRightMenu />
+          </div>
         </Group>
-
-        <div>{!user ? authButtons : <HeaderProfileDropdown />}</div>
-
-        <Transition transition="pop-top-right" duration={200} mounted={opened}>
-          {(styles) => (
-            <Paper
-              withBorder
-              style={styles}
-              sx={(theme) => ({
-                position: 'absolute',
-                top: HEADER_HEIGHT,
-                left: 0,
-                right: 0,
-                zIndex: 0,
-                borderTopRightRadius: 0,
-                borderTopLeftRadius: 0,
-                borderTopWidth: 0,
-                overflow: 'hidden',
-
-                [theme.fn.largerThan('sm')]: {
-                  display: 'none',
-                },
-              })}
-            >
-              {items}
-            </Paper>
-          )}
-        </Transition>
       </Container>
     </MantineHeader>
   );

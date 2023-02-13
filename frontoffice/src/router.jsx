@@ -7,6 +7,7 @@ import { BoardPage } from './app/board/pages/board.page';
 import { EcommercePage } from './app/ecommerce/ecommerce.page';
 import { NotFoundPage } from './app/errors/not-found.page';
 import { HeadOfficesPage } from './app/headoffice/head-office.page';
+import { ProfilePage } from './app/profile/profile.page';
 import { AppOutlet } from './components/outlet/app.outlet';
 import { BaseOutlet } from './components/outlet/base.outlet';
 import { GuestRouteOutlet } from './components/outlet/guest-route.outlet';
@@ -21,15 +22,22 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <EcommercePage /> },
           { path: '/board', element: <BoardPage /> },
-          { path: '/activities', element: <ActivitiesPage /> },
-          { path: '/headoffices', element: <HeadOfficesPage /> },
           { path: '/page/not/found', element: <NotFoundPage /> },
           { path: '*', element: <Navigate to="/page/not/found" replace /> },
         ],
       },
       {
         element: <ProtectedRouteOutlet />,
-        children: [],
+        children: [
+          {
+            element: <AppOutlet />,
+            children: [
+              { path: '/profile', element: <ProfilePage /> },
+              { path: '/activities', element: <ActivitiesPage /> },
+              { path: '/headoffices', element: <HeadOfficesPage /> },
+            ],
+          },
+        ],
       },
       {
         element: <GuestRouteOutlet />,

@@ -1,11 +1,14 @@
 import { Gender } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import { IsDateString, IsEmail, IsEnum, IsMongoId, IsOptional, Length } from 'class-validator';
+import xss from 'xss';
 
 export class UserDTO {
   @IsMongoId()
   id: string;
 
   @Length(1, 128)
+  @Transform(({ value }) => xss(value))
   name: string;
 
   @IsEmail()

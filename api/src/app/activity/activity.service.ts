@@ -5,7 +5,6 @@ import { PrismaService } from '@/config/prisma/prisma.service';
 
 import { ActivityAlreadyBookedException } from './exceptions/activity-already-booked.exception';
 import { ActivityNotFoundException } from './exceptions/activity-not-found.exception';
-import { AvailableActivitiesNotFoundException } from './exceptions/available-activities-not-found.exceptions';
 import { NoSeatsAvailableException } from './exceptions/no-seats-available.exception';
 
 @Injectable()
@@ -55,7 +54,9 @@ export class ActivityService {
             id: activity.id,
           },
           data: {
-            availability: activity.availability - 1,
+            availability: {
+              decrement: 1,
+            },
             users: {
               connect: {
                 id: userId,
@@ -78,6 +79,9 @@ export class ActivityService {
           id: activityId,
         },
         data: {
+          availability: {
+            increment: 1,
+          },
           users: {
             disconnect: {
               id: userId,

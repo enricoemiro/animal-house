@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Activity, HeadOffice, Prisma, User } from '@prisma/client';
+import { HeadOffice, Prisma, User } from '@prisma/client';
 
 import { isDuplicateKeyError } from '@/common/helpers';
 import { PrismaService } from '@/config/prisma/prisma.service';

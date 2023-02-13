@@ -1,4 +1,4 @@
-import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/solid';
 import { Menu } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,8 @@ export const HeaderProfileDropdown = (props) => {
     meQuery: { data: user },
     logoutQuery: { refetch: logout },
   } = useAuth();
+
+  const navigate = useNavigate();
 
   return (
     <Menu
@@ -36,6 +38,10 @@ export const HeaderProfileDropdown = (props) => {
           },
         })}
       >
+        <Menu.Item icon={<Cog8ToothIcon width={20} />} onClick={() => navigate('/profile')}>
+          Profile
+        </Menu.Item>
+
         <Menu.Item icon={<ArrowLeftOnRectangleIcon width={20} />} onClick={() => logout()}>
           Logout
         </Menu.Item>
