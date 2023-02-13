@@ -37,6 +37,7 @@ const ImagePreview = ({ file, onClick }) => {
         sx={() => ({
           ...(hovered && {
             opacity: '25%',
+            cursor: 'pointer',
           }),
         })}
       />
@@ -51,6 +52,7 @@ const ImagePreview = ({ file, onClick }) => {
             transform: 'translate(-50%, -50%)',
             transition: 'ease-in-out',
             color: theme.colors.red[8],
+            cursor: 'pointer',
           })}
         >
           <XCircleIcon width={64} />
