@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth/use-auth.hook';
 
+import { HeaderCartDrawer } from './header-cart-drawer';
 import { HeaderProfileDropdown } from './header-profile-dropdown.component';
 
 export const HeaderRightMenu = () => {
@@ -13,7 +14,14 @@ export const HeaderRightMenu = () => {
   } = useAuth();
 
   if (user) {
-    return <HeaderProfileDropdown />;
+    return (
+      <Group>
+        <div>
+          <HeaderProfileDropdown />
+        </div>
+        <HeaderCartDrawer />
+      </Group>
+    );
   }
 
   return (

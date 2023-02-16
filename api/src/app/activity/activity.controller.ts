@@ -3,10 +3,12 @@ import { Body, Controller, Get, Post, Session } from '@nestjs/common';
 import { RequiresAuth } from '@/app/auth/decorators/requires-auth.decorator';
 import { UserSession } from '@/app/user/interfaces/user-session.interface';
 
+import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { ActivityService } from './activity.service';
 import { BookDTO } from './dtos/book.dto';
 import { CreateDTO } from './dtos/create.dto';
 import { UnbookDTO } from './dtos/unbook.dto';
+import { ActivityNotFoundException } from './exceptions/activity-not-found.exception';
 
 @Controller('activity')
 @RequiresAuth(true)
@@ -29,6 +31,17 @@ export class ActivityController {
     return {
       activities: activities,
     };
+  }
+
+  @Get('get/preview')
+  @SkipAuth()
+  async getPreview() {
+    const activities = await this.activityService.getPreview();
+
+    if (!activities) {
+      throw new ActivityNotFoundException();
+    }
+    return activities;
   }
 
   @Post('book')

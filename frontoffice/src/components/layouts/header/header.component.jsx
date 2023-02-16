@@ -1,6 +1,7 @@
 import { Container, Flex, Group, Header as MantineHeader, useMantineTheme } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 
+import { HeaderCartDrawer } from './header-cart-drawer';
 import { HeaderLogo } from './header-logo.component';
 import { HeaderMobileMenu } from './header-mobile-menu.component';
 import { HeaderNavigationItem } from './header-navigation-item.component';
@@ -39,9 +40,7 @@ export const Header = () => {
             {width > theme.breakpoints.sm && <Group spacing={5}>{items}</Group>}
           </Flex>
 
-          <div>
-            <HeaderRightMenu />
-          </div>
+          <HeaderRightMenu />
         </Group>
       </Container>
     </MantineHeader>

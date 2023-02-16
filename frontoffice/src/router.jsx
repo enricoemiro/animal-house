@@ -4,7 +4,8 @@ import { ActivitiesPage } from './app/activity/activities.page';
 import { LoginPage } from './app/auth/pages/login.page';
 import { RegisterPage } from './app/auth/pages/register.page';
 import { BoardPage } from './app/board/pages/board.page';
-import { EcommercePage } from './app/ecommerce/ecommerce.page';
+import { EcommercePage } from './app/ecommerce/pages/ecommerce.page';
+import { ProductDetails } from './app/ecommerce/pages/product-details';
 import { NotFoundPage } from './app/errors/not-found.page';
 import { HeadOfficesPage } from './app/headoffice/head-office.page';
 import { ProfilePage } from './app/profile/profile.page';
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
               { path: '/profile', element: <ProfilePage /> },
               { path: '/activities', element: <ActivitiesPage /> },
               { path: '/headoffices', element: <HeadOfficesPage /> },
+              { path: '/product/details/:id', element: <ProductDetails /> },
             ],
           },
         ],
