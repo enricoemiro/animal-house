@@ -64,4 +64,25 @@ export class UserService {
       throw error;
     }
   }
+
+  async getUserAnimals(userId: User['id']) {
+    try {
+      const { animals } = await this.prismaService.client.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          animals: {
+            include: {
+              user: false,
+            },
+          },
+        },
+      });
+
+      return animals;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

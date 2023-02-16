@@ -21,6 +21,7 @@ model User {
   updatedAt   DateTime   @updatedAt
   posts       Post[]
   activities  Activity[] @relation(fields: [activityIDs], references: [id])
+  animals     Animal[]
   activityIDs String[]   @db.ObjectId
 
   @@map("users")
@@ -77,6 +78,17 @@ model Activity {
   updatedAt         DateTime   @updatedAt
 
   @@map("activities")
+}
+
+model Animal {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("animals")
 }
 
 enum PostCategory {

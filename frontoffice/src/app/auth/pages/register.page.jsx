@@ -1,23 +1,18 @@
 import { Anchor, Box, Group, SimpleGrid } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { REGISTER_KEY, register } from '@/app/auth/api/register.api';
 import { AuthOutlet } from '@/app/auth/auth.outlet';
 import { SubmitButton } from '@/components/buttons/submit-button.component';
-import { ErrorRenderer } from '@/components/error-renderer.component';
 import { DateOfBirthInput } from '@/components/form/date-of-birth-input.component';
 import { EmailInput } from '@/components/form/email-input.component';
 import { GenderInput } from '@/components/form/gender-input.component';
 import { NameInput } from '@/components/form/name-input.component';
 import { PasswordConfirmationInput } from '@/components/form/password-confirmation-input.component';
 import { PasswordInput } from '@/components/form/password-input.component';
-import { ErrorNotification } from '@/components/notifications/error-notification.component';
-import { LoadingNotification } from '@/components/notifications/loading-notification.component';
-import { SuccessNotification } from '@/components/notifications/success-notification.component';
+import { useMutationWithNotification } from '@/hooks/use-mutation-with-notification.hook';
 import { UserSchema } from '@/schemas/user.schema';
 
 const RegisterSchema = UserSchema.pick({
@@ -32,8 +27,6 @@ const RegisterSchema = UserSchema.pick({
     message: 'The passwords do not match.',
     path: ['passwordConfirmation'],
   });
-
-const REGISTER_NOTIFICATION_ID = 'registerNotificationId';
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -50,33 +43,11 @@ export const RegisterPage = () => {
     },
   });
 
-  const mutation = useMutation({
+  const mutation = useMutationWithNotification({
     mutationKey: [REGISTER_KEY],
     mutationFn: register,
-    onMutate: () => {
-      showNotification(
-        LoadingNotification({
-          id: REGISTER_NOTIFICATION_ID,
-        }),
-      );
-    },
-    onSuccess: (data) => {
-      updateNotification(
-        SuccessNotification({
-          id: REGISTER_NOTIFICATION_ID,
-          message: data,
-        }),
-      );
-
+    onSuccess: async () => {
       form.reset();
-    },
-    onError: (error) => {
-      updateNotification(
-        ErrorNotification({
-          id: REGISTER_NOTIFICATION_ID,
-          message: <ErrorRenderer error={error} />,
-        }),
-      );
     },
   });
 

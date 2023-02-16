@@ -1,5 +1,5 @@
 import { CalendarIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { Flex, SimpleGrid, TextInput } from '@mantine/core';
+import { Center, Flex, SimpleGrid, TextInput } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
 import { useQuery } from '@tanstack/react-query';
 import { isWithinInterval } from 'date-fns';
@@ -79,7 +79,9 @@ export const ActivitiesPage = () => {
         />
       </Flex>
 
-      <ActivityList activities={filterActivites(activities)} />
+      <Center>
+        <ActivityList activities={filterActivites(activities)} />
+      </Center>
     </SimpleGrid>
   );
 };
