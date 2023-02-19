@@ -6,6 +6,7 @@ import { ActivityModule } from './app/activity/activity.module';
 import { AnimalModule } from './app/animal/animal.module';
 import { AuthModule } from './app/auth/auth.module';
 import { HeadOfficeModule } from './app/headOffice/headOffice.module';
+import { ImageModule } from './app/image/image.module';
 import { PostModule } from './app/post/post.module';
 import { UserModule } from './app/user/user.module';
 import { configModuleOptions } from './config/env.config';
@@ -23,6 +24,7 @@ import { multerModuleOptions } from './config/multer.config';
     AnimalModule,
     HeadOfficeModule,
     ActivityModule,
+    ImageModule,
   ],
   exports: [MulterModule],
 })
