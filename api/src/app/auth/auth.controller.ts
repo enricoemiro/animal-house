@@ -24,7 +24,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() { passwordConfirmation, ...rest }: RegisterDTO) {
-    await this.userService.createOne(rest);
+    await this.userService.createOne(rest as any);
 
     return {
       message: 'You have registered successfully.',

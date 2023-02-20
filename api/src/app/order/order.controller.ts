@@ -16,6 +16,8 @@ export class OrderController {
     for (const element of orderElements) {
       productsIDs.push(element.productID);
     }
-    return await this.orderService.createOne(orderElements, user.id, productsIDs);
+    await this.orderService.createOne(orderElements, user.id, productsIDs);
+
+    return { message: 'Your order has been successfully registered.' };
   }
 }

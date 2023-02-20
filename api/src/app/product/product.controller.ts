@@ -1,21 +1,12 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Header,
-  Param,
-  Post,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { RequiresAuth } from '../auth/decorators/requires-auth.decorator';
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { ImageService } from '../image/image.service';
 import { CreateDTO } from './dtos/create.dto';
-import { GetProductByIdDTO } from './dtos/getProductById.dto';
-import { GetProductsByCategoryDTO } from './dtos/getProductsByCategory.dto';
+import { GetProductByIdDTO } from './dtos/get-product-by-id.dto';
+import { GetProductsByCategoryDTO } from './dtos/get-products-by-category.dto';
 import { ProductsNotFoundException } from './exceptions/products-not-found-exception.exception';
 import { ProductService } from './product.service';
 
@@ -50,10 +41,8 @@ export class ProductController {
   }
 
   @Get('get/products/:categoryId')
-  @Header('Cross-Origin-Resource-Policy', 'cross-origin')
   async getProductsByCategory(@Param() { categoryId }: GetProductsByCategoryDTO) {
     const products = await this.productService.getProductsByCategory(categoryId);
-
     if (!products) {
       throw new ProductsNotFoundException();
     }

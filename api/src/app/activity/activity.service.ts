@@ -128,4 +128,12 @@ export class ActivityService {
       throw error;
     }
   }
+
+  async getPreview() {
+    try {
+      return await this.prismaService.client.activity.findMany({ take: 4 });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
