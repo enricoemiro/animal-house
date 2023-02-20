@@ -20,8 +20,10 @@ model User {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   posts       Post[]
+  orders      Order[]
   activities  Activity[] @relation(fields: [activityIDs], references: [id])
   animals     Animal[]
+  games       Game[]
   activityIDs String[]   @db.ObjectId
 
   @@map("users")
@@ -49,6 +51,17 @@ model PostImage {
   updatedAt DateTime @updatedAt
 
   @@map("posts_images")
+}
+
+model ProductImage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   Bytes
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product_images")
 }
 
 model HeadOffice {
@@ -80,6 +93,45 @@ model Activity {
   @@map("activities")
 }
 
+model Product {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  name         String         @unique
+  description  String
+  availability Int
+  price        Float
+  images       ProductImage[]
+  category     Category?      @relation(fields: [categoryId], references: [id])
+  categoryId   String?        @db.ObjectId
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  orders       Order[]        @relation(fields: [orderIDs], references: [id])
+  orderIDs     String[]       @db.ObjectId
+
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+model Order {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?   @db.ObjectId
+  products    Product[] @relation(fields: [productsIDs], references: [id])
+  productsIDs String[]  @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("orders")
+}
+
 model Animal {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -89,6 +141,23 @@ model Animal {
   updatedAt DateTime @updatedAt
 
   @@map("animals")
+}
+
+model Game {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      GameName
+  score     Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@map("game")
+}
+
+enum GameName {
+  QUIZ
 }
 
 enum PostCategory {

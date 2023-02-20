@@ -5,9 +5,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ActivityModule } from './app/activity/activity.module';
 import { AnimalModule } from './app/animal/animal.module';
 import { AuthModule } from './app/auth/auth.module';
+import { CategoryModule } from './app/category/category.module';
+import { GameModule } from './app/game/game.module';
 import { HeadOfficeModule } from './app/headOffice/headOffice.module';
 import { ImageModule } from './app/image/image.module';
+import { OrderModule } from './app/order/order.module';
 import { PostModule } from './app/post/post.module';
+import { ProductModule } from './app/product/product.module';
 import { UserModule } from './app/user/user.module';
 import { configModuleOptions } from './config/env.config';
 import { multerModuleOptions } from './config/multer.config';
@@ -25,6 +29,10 @@ import { multerModuleOptions } from './config/multer.config';
     HeadOfficeModule,
     ActivityModule,
     ImageModule,
+    ProductModule,
+    CategoryModule,
+    OrderModule,
+    GameModule,
   ],
   exports: [MulterModule],
 })
