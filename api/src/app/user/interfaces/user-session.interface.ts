@@ -6,7 +6,7 @@ export interface UserSession extends Session {
    * The authenticated user.
    * The user's data is stored in this property.
    */
-  user: Pick<User, 'id' | 'name' | 'email' | 'role'>;
+  user: Pick<User, 'id' | 'name' | 'email' | 'role' | 'vip'>;
 
   /**
    * Indicates whether the user's data stored in this session is valid.

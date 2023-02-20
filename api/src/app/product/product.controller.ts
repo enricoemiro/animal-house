@@ -41,6 +41,7 @@ export class ProductController {
   }
 
   @Get('get/products/:categoryId')
+  @SkipAuth()
   async getProductsByCategory(@Param() { categoryId }: GetProductsByCategoryDTO) {
     const products = await this.productService.getProductsByCategory(categoryId);
     if (!products) {

@@ -64,22 +64,6 @@ export const CartMainContent = ({ open }) => {
     mutation.mutate(queryData);
   };
 
-  // const {
-  //   isSuccess,
-  //   isLoading,
-  //   data: response,
-  // } = useQuery([CHECKOUT_KEY], () => checkout(query), {
-  //   enabled: !!query,
-  //   onSuccess: async () => {
-  //     await queryClient.refetchQueries({
-  //       queryKey: [GET_PRODUCTS_BY_CATEGORY_KEY],
-  //     });
-  //     updateSubtotal();
-  //     setQuery(null);
-  //     setProducts(null);
-  //   },
-  // });
-
   const updateSubtotal = () => {
     const storedProducts = JSON.parse(localStorage.getItem('cart-key'));
     let sub = 0;
@@ -105,7 +89,7 @@ export const CartMainContent = ({ open }) => {
       });
     }
     if (user?.vip) {
-      vipSub = (sub * 10) / 100;
+      vipSub = sub - (sub * 10) / 100;
     }
 
     return { sub: sub, vipSub: vipSub };
@@ -142,7 +126,7 @@ export const CartMainContent = ({ open }) => {
           <Text fz="lg" fw="bold">
             Subtotal
           </Text>
-          <Text>{subtotal.sub + '€'}</Text>
+          {user?.vip ? <Text>{subtotal.vipSub + '€'}</Text> : <Text>{subtotal.sub + '€'}</Text>}
         </Group>
         <Text fw="bold">
           {' '}

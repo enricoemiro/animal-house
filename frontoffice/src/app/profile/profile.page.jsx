@@ -1,4 +1,4 @@
-import { Center, Grid, SimpleGrid } from '@mantine/core';
+import { Center, Grid, Group, SimpleGrid } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { ActivityList } from '@/app/activity/components/activity-list.component';
@@ -11,6 +11,7 @@ import {
 } from './api/get-user-booked-activities.api';
 import { AnimalCard } from './components/animal-card.component';
 import { CreateAnimalButton } from './components/create-animal-button.component';
+import { UpdateVipButton } from './components/update-vip-button';
 
 export const ProfilePage = () => {
   const { data: activities } = useQuery({
@@ -35,7 +36,10 @@ export const ProfilePage = () => {
       />
 
       <Center>
-        <CreateAnimalButton />
+        <Group spacing="md">
+          <CreateAnimalButton />
+          <UpdateVipButton />
+        </Group>
       </Center>
 
       <Grid>

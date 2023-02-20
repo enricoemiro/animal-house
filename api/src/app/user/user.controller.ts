@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Session } from '@nestjs/common';
+import session from 'express-session';
 
 import { AnimalService } from '@/app/animal/animal.service';
 import { RequiresAuth } from '@/app/auth/decorators/requires-auth.decorator';
 
 import { CreateUserAnimalDTO } from './dtos/create-user-animal.dto';
 import { DeleteUserAnimalDTO } from './dtos/delete-user-animal.dto';
+import { UpdateVipDTO } from './dtos/update-vip.dto';
 import { UserSession } from './interfaces/user-session.interface';
 import { UserService } from './user.service';
 
@@ -56,5 +58,13 @@ export class UserController {
     return {
       message: 'The animal has been successfully deleted',
     };
+  }
+
+  @Post('update/vip')
+  async updateVip(@Session() session: UserSession, @Body() updateVipDTO: UpdateVipDTO) {
+    await this.userService.updateVip(session.user.id, updateVipDTO.vip);
+    session.user.vip = updateVipDTO.vip;
+
+    return { message: 'Vip status succesfully updated' };
   }
 }

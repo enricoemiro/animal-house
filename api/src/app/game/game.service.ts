@@ -34,4 +34,14 @@ export class GameService {
       throw error;
     }
   }
+
+  async getAllGames() {
+    try {
+      return await this.prismaService.client.game.findMany({
+        select: { id: true, name: true, score: true, user: { select: { name: true } } },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -4,14 +4,20 @@ import { onMounted, provide, ref } from 'vue';
 import { me } from '@app/api/auth/me';
 
 import Navbar from './components/Navbar.vue';
+import { logout } from './api/auth/logout';
 
 const sessionUser = ref(null);
+
+function logoutSessionUser() {
+  const response = logout().then((response) => {return response});
+  sessionUser.value = "null"
+}
 
 onMounted(async () => {
   sessionUser.value = await me();
 });
 
-provide('auth', sessionUser);
+provide('auth', {sessionUser, logoutSessionUser});
 </script>
 
 <template>

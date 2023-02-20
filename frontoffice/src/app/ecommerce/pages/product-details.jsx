@@ -3,6 +3,7 @@ import { Badge, Blockquote, Group, SimpleGrid, Stack, Text } from '@mantine/core
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
+import { useAuth } from '@/app/auth/use-auth.hook';
 import { ImageViewer } from '@/components/layouts/image-viewer.component';
 import { PageHeader } from '@/components/layouts/page-header.component';
 
@@ -12,6 +13,9 @@ import { QuantitySelector } from '../components/quantity-selector';
 export const ProductDetails = () => {
   const { id } = useParams();
   const { isLoading, data: product } = useQuery([GET_PRODUCT_BY_ID_KEY], () => getProductById(id));
+  const {
+    meQuery: { data: user },
+  } = useAuth();
 
   return (
     <SimpleGrid cols={2} spacing="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
@@ -25,9 +29,18 @@ export const ProductDetails = () => {
             </Text>
             <Group position="apart">
               <Group spacing={9}>
-                <Text fz="lg">Price:</Text>
-                <Text td="line-through">{product.price + '€'}</Text>
-                <Text c="red">{(product.price * 10) / 100 + '€'}</Text>
+                {user?.vip ? (
+                  <>
+                    <Text>Price:</Text>
+                    <Text td="line-through">{product.price + '€'}</Text>
+                    <Text c="red">{product.price - (product.price * 10) / 100 + '€'}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text>Price:</Text>
+                    <Text>{product.price + '€'}</Text>
+                  </>
+                )}
               </Group>
               <Badge color="red" size="lg" variant="outline">
                 {'Stock: ' + product.availability}

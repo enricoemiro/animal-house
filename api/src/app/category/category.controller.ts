@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { RequiresAuth } from '../auth/decorators/requires-auth.decorator';
+import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { CategoryService } from './category.service';
 import { CreateDTO } from './dtos/create.dto';
 
@@ -16,6 +17,7 @@ export class CategoryController {
   }
 
   @Get('/get/all/categories')
+  @SkipAuth()
   async getAllCategories() {
     const categories = await this.categoryService.getAllCategories();
     return { categories };

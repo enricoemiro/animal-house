@@ -85,4 +85,17 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateVip(userId: User['id'], vipValue: User['vip']) {
+    try {
+      return await this.prismaService.client.user.update({
+        where: { id: userId },
+        data: {
+          vip: vipValue,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
