@@ -30,12 +30,27 @@ export const ProductCard = ({ product }) => {
         </Group>
 
         <Flex direction="row" gap="xs" justify="flex-start" align="center" wrap="nowrap" mb="sm">
-          <Text>Price:</Text>
-          <Text td="line-through">{product.price + '€'}</Text>
-          <Text c="red">{(product.price * 10) / 100 + '€'}</Text>
+          {user?.vip ? (
+            <>
+              <Text>Price:</Text>
+              <Text td="line-through">{product.price + '€'}</Text>
+              <Text c="red">{product.price - (product.price * 10) / 100 + '€'}</Text>
+            </>
+          ) : (
+            <>
+              <Text>Price:</Text>
+              <Text>{product.price + '€'}</Text>
+            </>
+          )}
         </Flex>
 
-        <QuantitySelector product={product} />
+        {user ? (
+          <QuantitySelector product={product} />
+        ) : (
+          <Text fz="md" color="dimmed">
+            Login to buy this product
+          </Text>
+        )}
       </Flex>
     </Card>
   );

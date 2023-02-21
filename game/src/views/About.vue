@@ -76,7 +76,7 @@ const offers = ref([
       </div>
     </section>
 
-    <section class="flex flex-col justify-center mb-8">
+    <section v-if="products.length > 0" class="flex flex-col justify-center mb-8">
       <h2 class="font-extrabold tracking-tight leading-none text-4xl">Products preview</h2>
       <div class="flex items-center justify-center flex-wrap mt-5">
         <ul class="grid grid-flow-row grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-x-5 gap-y-3">
@@ -84,8 +84,12 @@ const offers = ref([
         </ul>
       </div>
     </section>
+    <section v-else class="flex flex-col justify-center mb-8">
+      <h2 class="font-extrabold tracking-tight leading-none text-4xl">Products preview</h2>
+      <p class="text-slate-500 mt-4">Oops, no products were found, maybe some Ewoks took them away.</p>
+    </section>
 
-    <section class="flex flex-col justify-center mb-8">
+    <section v-if="activities.length > 0" class="flex flex-col justify-center mb-8">
       <h2 class="font-extrabold tracking-tight leading-none text-4xl">Services preview</h2>
       <div class="flex mt-5">
         <div class="flex">
@@ -95,5 +99,10 @@ const offers = ref([
         </div>
       </div>
     </section>
+    <section v-else class="flex flex-col justify-center mb-8">
+      <h2 class="font-extrabold tracking-tight leading-none text-4xl">Products preview</h2>
+      <p class="text-slate-500 mt-4">Oops, no activities were found, maybe some Ewoks took them away.</p>
+    </section>
+
   </div>
 </template>

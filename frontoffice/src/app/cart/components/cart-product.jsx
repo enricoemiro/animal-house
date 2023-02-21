@@ -16,7 +16,7 @@ export const CartProduct = ({ product, onProductRemove, id }) => {
         <Flex gap="sm" justify="flex-start" align="center" direction="row" wrap="nowrap">
           <Text fz="lg">Price:</Text>
           <Text td="line-through">{product.price + '€'}</Text>
-          <Text c="red">{(product.price * 10) / 100 + '€'}</Text>
+          <Text c="red">{product.price - (product.price * 10) / 100 + '€'}</Text>
         </Flex>
         <Group position="apart">
           <Badge color="orange" size="lg" radius="md" variant="outline">

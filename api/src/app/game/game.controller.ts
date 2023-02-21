@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Session } from '@nestjs/common';
 
 import { RequiresAuth } from '../auth/decorators/requires-auth.decorator';
 import { UserSession } from '../user/interfaces/user-session.interface';
@@ -15,5 +15,12 @@ export class GameController {
     await this.gameService.upsert(user.id, upsertDTO);
 
     return { message: 'Game created/updated succesfully' };
+  }
+
+  @Get('get/all/games')
+  async getAllGames() {
+    const games = await this.gameService.getAllGames();
+
+    return games;
   }
 }

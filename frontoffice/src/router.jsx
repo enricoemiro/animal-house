@@ -8,6 +8,7 @@ import { EcommercePage } from './app/ecommerce/pages/ecommerce.page';
 import { ProductDetails } from './app/ecommerce/pages/product-details';
 import { NotFoundPage } from './app/errors/not-found.page';
 import { HeadOfficesPage } from './app/headoffice/head-office.page';
+import { LeaderboardPage } from './app/leaderboard/pages/leaderboard-page';
 import { ProfilePage } from './app/profile/profile.page';
 import { AppOutlet } from './components/outlet/app.outlet';
 import { BaseOutlet } from './components/outlet/base.outlet';
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
               { path: '/activities', element: <ActivitiesPage /> },
               { path: '/headoffices', element: <HeadOfficesPage /> },
               { path: '/product/details/:id', element: <ProductDetails /> },
+              { path: '/leaderboard', element: <LeaderboardPage /> },
             ],
           },
         ],

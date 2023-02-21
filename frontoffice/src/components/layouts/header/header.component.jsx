@@ -1,7 +1,6 @@
 import { Container, Flex, Group, Header as MantineHeader, useMantineTheme } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 
-import { HeaderCartDrawer } from './header-cart-drawer';
 import { HeaderLogo } from './header-logo.component';
 import { HeaderMobileMenu } from './header-mobile-menu.component';
 import { HeaderNavigationItem } from './header-navigation-item.component';
@@ -12,6 +11,7 @@ const navigation = [
   { label: 'Board', href: '/board' },
   { label: 'Activities', href: '/activities' },
   { label: 'Head Offices', href: '/headoffices' },
+  { label: 'Leaderboard', href: '/leaderboard' },
 ];
 
 export const HEADER_HEIGHT = 75;

@@ -79,7 +79,7 @@ export class ProductService {
 
   async getPreview() {
     try {
-      return await this.prismaService.client.product.findMany({ take: 4 });
+      return await this.prismaService.client.product.findMany({ take: 8 });
     } catch (error) {
       throw error;
     }

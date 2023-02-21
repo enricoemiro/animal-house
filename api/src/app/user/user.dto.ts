@@ -1,6 +1,14 @@
 import { Gender } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsDateString, IsEmail, IsEnum, IsMongoId, IsOptional, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  Length,
+} from 'class-validator';
 import xss from 'xss';
 
 export class UserDTO {
@@ -24,4 +32,7 @@ export class UserDTO {
   @IsDateString({ strict: true })
   @IsOptional()
   dateOfBirth?: string;
+
+  @IsBoolean()
+  vip?: boolean;
 }
