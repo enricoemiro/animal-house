@@ -43,7 +43,7 @@ export const EcommercePage = () => {
           wrap="nowrap"
         >
           <Image
-            src="/images/spotImage.jpeg"
+            src="/images/spot.jpeg"
             alt="Summer discount of fifty percent if you have vip account"
           />
         </Flex>
@@ -54,7 +54,7 @@ export const EcommercePage = () => {
             <Card shadow="sm" p="lg" radius="md" withBorder>
               <SimpleGrid spacing="md" cols={2}>
                 <Card.Section>
-                  <Image src="images/VIPImage.jpeg" alt="vip account image" />
+                  <Image src="images/vip.jpeg" alt="vip account image" />
                 </Card.Section>
                 <Flex direction="row" justify="center" align="center">
                   <Title ml={8} order={4}>
