@@ -1,5 +1,7 @@
-import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+
+import react from '@vitejs/plugin-react';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 /** @type {import('vite').UserConfig} */
 export default {
@@ -8,5 +10,5 @@ export default {
       '@': resolve(__dirname, './src'),
     },
   },
-  plugins: [react()],
+  plugins: [react(), viteSingleFile()],
 };
