@@ -14,7 +14,7 @@ import { RegisterDTO } from './dtos/register.dto';
 import { InvalidCredentialsException } from './exceptions/invalid-credentials.exception';
 import { LogoutException } from './exceptions/logout.exception';
 
-@Controller('auth')
+@Controller('/api/v1/auth')
 @RequiresAuth(false)
 export class AuthController {
   constructor(

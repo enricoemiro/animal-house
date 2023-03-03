@@ -5,7 +5,7 @@ import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { CategoryService } from './category.service';
 import { CreateDTO } from './dtos/create.dto';
 
-@Controller('category')
+@Controller('/api/v1/category')
 @RequiresAuth(true)
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}

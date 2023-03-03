@@ -7,7 +7,7 @@ import { CreateDTO } from './dtos/create.dto';
 import { GetActivitiesByHeadOfficeIdDTO } from './dtos/get-activities-by-headoffice-id.dto';
 import { HeadOfficeService } from './headOffice.service';
 
-@Controller('headoffice')
+@Controller('/api/v1/headoffice')
 @RequiresAuth(true)
 export class HeadOfficeController {
   constructor(private readonly headOfficeService: HeadOfficeService) {}

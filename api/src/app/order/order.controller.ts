@@ -5,7 +5,7 @@ import { UserSession } from '../user/interfaces/user-session.interface';
 import { CreateDTO } from './dtos/create.dto';
 import { OrderService } from './order.service';
 
-@Controller('order')
+@Controller('/api/v1/order')
 @RequiresAuth(true)
 export class OrderController {
   constructor(private orderService: OrderService) {}

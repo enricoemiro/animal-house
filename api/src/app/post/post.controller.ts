@@ -22,7 +22,7 @@ import { DeleteByPostIdDTO } from './dtos/delete-by-post-id.dto';
 import { PostPaginationDTO } from './dtos/post-pagination.dto';
 import { PostService } from './post.service';
 
-@Controller('post')
+@Controller('/api/v1/post')
 @RequiresAuth(true)
 export class PostController {
   constructor(private readonly postService: PostService, private imageService: ImageService) {}

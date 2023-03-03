@@ -10,7 +10,7 @@ import { CreateDTO } from './dtos/create.dto';
 import { UnbookDTO } from './dtos/unbook.dto';
 import { ActivityNotFoundException } from './exceptions/activity-not-found.exception';
 
-@Controller('activity')
+@Controller('/api/v1/activity')
 @RequiresAuth(true)
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}

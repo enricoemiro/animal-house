@@ -5,7 +5,7 @@ import { UserSession } from '../user/interfaces/user-session.interface';
 import { UpsertDTO } from './dtos/upsert.dto';
 import { GameService } from './game.service';
 
-@Controller('game')
+@Controller('/api/v1/game')
 @RequiresAuth(true)
 export class GameController {
   constructor(private gameService: GameService) {}

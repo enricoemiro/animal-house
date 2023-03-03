@@ -20,7 +20,6 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
 
   // Nest settings
-  app.setGlobalPrefix('/api/v1');
   app.useGlobalGuards(new AuthGuard(reflector));
   app.useGlobalPipes(validationPipe);
   app.useGlobalFilters(new GlobalExceptionFilter(httpAdapterHost));

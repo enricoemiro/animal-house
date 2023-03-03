@@ -10,7 +10,7 @@ import { UpdateVipDTO } from './dtos/update-vip.dto';
 import { UserSession } from './interfaces/user-session.interface';
 import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('/api/v1/user')
 @RequiresAuth(true)
 export class UserController {
   constructor(
