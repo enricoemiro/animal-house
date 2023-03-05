@@ -5,7 +5,20 @@ const emit = defineEmits(['checkAnswer']);
 function checkAnswer(answer) {
   const st = props.store;
   if (st.data.results[st.currentQuestion].correct_answer == answer) {
-    st.score += 10;
+    switch (st.difficulty) {
+      case 'easy':
+        st.score += 10;
+        break;
+      case 'medium':
+        st.score += 30;
+      
+      case 'hard':
+        st.score += 50;
+    
+      default:
+        break;
+    }
+    
     st.rightAnswers++;
     st.showAnswer = true;
     st.data.results[st.currentQuestion]['guessed_right'] = true;

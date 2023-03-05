@@ -3,25 +3,25 @@ import { onMounted, provide, ref } from 'vue';
 
 import { me } from '@app/api/auth/me';
 
-import Navbar from './components/Navbar.vue';
 import { logout } from './api/auth/logout';
+import Navbar from './components/Navbar.vue';
 
 const sessionUser = ref(null);
 
-function logoutSessionUser() {
-  const response = logout().then((response) => {return response});
-  sessionUser.value = "null"
+async function logoutSessionUser() {
+  const response = await logout();
+  sessionUser.value = 'null';
 }
 
 onMounted(async () => {
   sessionUser.value = await me();
 });
 
-provide('auth', {sessionUser, logoutSessionUser});
+provide('auth', { sessionUser, logoutSessionUser });
 </script>
 
 <template>
-  <div id="nav">
+  <div id="nav" class="bg-gray-400">
     <Navbar />
   </div>
 

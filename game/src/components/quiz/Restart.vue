@@ -1,12 +1,18 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 
+import { me } from '@app/api/auth/me';
 import { saveQuizPoints } from '@app/api/quiz/saveQuizPoints';
 
 const props = defineProps(['store']);
 const emit = defineEmits(['restartQuiz']);
 const sessionUser = inject('auth');
 const isLoading = ref(false);
+const session = ref(null);
+
+onMounted(async () => {
+  session.value = await me();
+});
 
 function restartQuiz() {
   const st = props.store;
@@ -72,7 +78,7 @@ function saveAndQuit() {
           </div>
         </button>
         <button
-          v-if="sessionUser"
+          v-if="session"
           @click="saveAndQuit"
           class="w-full bg-gray-200 rounded-lg px-12 py-4 transition md:text-lg hover:bg-gray-300 transition"
           aria-label="Click to restart quiz without saving points"

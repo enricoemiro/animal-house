@@ -1,19 +1,31 @@
 <script setup>
 import { Navbar, NavbarCollapse, NavbarLogo } from 'flowbite-vue';
-import { inject } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 
-const {sessionUser, logoutSessionUser} = inject('auth');
+import { me } from '@app/api/auth/me';
+import snoopyRedBaron from '@app/assets/snoopyRedBaron.jpeg';
+import { frontofficeUrl } from '@app/helpers/helpers';
+
+const { logoutSessionUser } = inject('auth');
+
+
+const session = ref(null);
+onMounted(async () => {
+  session.value = await me();
+});
+
+async function logoutSession() {
+await logoutSessionUser();
+session.value = null;
+
+}
 
 </script>
 
 <template>
   <Navbar id="navbar" class="bg-slate-100">
     <template #logo>
-      <NavbarLogo
-        link="/"
-        alt="Flowbite logo"
-        image-url="https://flowbite.com/docs/images/logo.svg"
-      >
+      <NavbarLogo link="/" alt="Animal House logo" :image-url="snoopyRedBaron">
         Animal House Game
       </NavbarLogo>
     </template>
@@ -34,30 +46,25 @@ const {sessionUser, logoutSessionUser} = inject('auth');
         <router-link
           to="/about"
           class="hover:text-amber-600 transition ease-in-out hover:-translate-y-1 hover:scale-105"
-          aria-label="Go to about page to discover more about us"
+          aria-label="Discover more about us"
           >About</router-link
         >
         <a
-          v-if="!sessionUser"
+          v-if="!session"
           class="hover:text-amber-600 transition ease-in-out hover:-translate-y-1 hover:scale-105"
-          href="http://localhost:5173/auth/login?returnTo=http://localhost:5175/"
+          :href="frontofficeUrl"
+          aria-label="Login"
           >Login</a
         >
         <button
-          v-else
+          v-if="session"
           class="hover:text-amber-600 transition ease-in-out hover:-translate-y-1 hover:scale-105"
           aria-label="Logout"
-          @click="logoutSessionUser"
-          >Logout</button
+          @click="logoutSession"
         >
-        <a
-          class="hover:text-amber-600 transition ease-in-out hover:-translate-y-1 hover:scale-105"
-          href="http://localhost:5173/"
-          aria-label="Go to the Front office application"
-          >Front office</a
-        >
+          Logout
+        </button>
       </NavbarCollapse>
     </template>
   </Navbar>
 </template>
-

@@ -1,9 +1,10 @@
 <script setup>
+import home from '@app/assets/home.jpeg';
 import Curiosity from '@app/components/curiosity/Curiosities.vue';
 </script>
 
 <template>
-  <section class="flex flex-row items-center justify-evenly py-5 bg-white border-b">
+  <section class="flex flex-row items-center justify-evenly py-5 bg-white">
     <div class="flex flex-row max-sm:flex-wrap items-center max-sm:justify-center gap-5">
       <div class="flex flex-col sm:w-3/5 justify-center">
         <h1
@@ -14,7 +15,7 @@ import Curiosity from '@app/components/curiosity/Curiosities.vue';
         <p class="text-md max-sm:text-center">The best for your pet friends</p>
       </div>
       <div class="ml-6 flex flex-row items-center justify-center">
-        <img src="/images/home.jpeg" alt="" class="w-96 h-96 rounded-lg shadow-lg object-cover" />
+        <img :src="home" alt="" class="w-96 h-96 rounded-lg shadow-lg object-cover" />
       </div>
     </div>
   </section>
@@ -32,7 +33,7 @@ import Curiosity from '@app/components/curiosity/Curiosities.vue';
         src="https://www.youtube.com/embed/videoseries?list=PLtDp75hOzOlaQcPfx-Za_Dd1sOBPtdBw3"
         title="YouTube video player"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allow="web-share"
         allowfullscreen
       ></iframe>
     </div>

@@ -21,15 +21,6 @@ function goToNextQuestion() {
   emit('nextQuestion', st);
 }
 
-// const value = computed({
-//   get() {
-//     return props.store;
-//   },
-
-//   set(value) {
-//     emit('update:store', value)
-//   }
-// })
 </script>
 
 <template>

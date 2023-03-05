@@ -7,7 +7,7 @@ import {
   ListboxOptions,
 } from '@headlessui/vue';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const difficulties = ref(['easy', 'medium', 'hard']);
 const selectedDifficulty = ref('easy');
