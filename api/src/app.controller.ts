@@ -80,4 +80,9 @@ export class AppController {
   async frontoffice(@Res() res: Response) {
     res.sendFile(resolve(__dirname, '../../frontoffice/dist/index.html'));
   }
+
+  @Get('/game')
+  async game(@Res() res: Response) {
+    res.sendFile(resolve(__dirname, '../../game/dist/index.html'));
+  }
 }
