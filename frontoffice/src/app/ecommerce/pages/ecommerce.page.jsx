@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { useAuth } from '@/app/auth/use-auth.hook';
+import spot from '@/assets/spot.jpeg';
+import vip from '@/assets/vip.jpeg';
 
 import { GET_ALL_CATEGORIES_KEY, getAllCategories } from '../api/get-all-categories';
 import { HorizontalNavigation } from '../components/horizontal-navigation';
@@ -42,10 +44,7 @@ export const EcommercePage = () => {
           direction="row"
           wrap="nowrap"
         >
-          <Image
-            src="/images/spot.jpeg"
-            alt="Summer discount of fifty percent if you have vip account"
-          />
+          <Image src={spot} alt="Summer discount of fifty percent if you have vip account" />
         </Flex>
         <SimpleGrid spacing="md">{category && <ProductsList category={category} />}</SimpleGrid>
 
@@ -54,7 +53,7 @@ export const EcommercePage = () => {
             <Card shadow="sm" p="lg" radius="md" withBorder>
               <SimpleGrid spacing="md" cols={2}>
                 <Card.Section>
-                  <Image src="images/vip.jpeg" alt="vip account image" />
+                  <Image src={vip} alt="vip account image" />
                 </Card.Section>
                 <Flex direction="row" justify="center" align="center">
                   <Title ml={8} order={4}>
