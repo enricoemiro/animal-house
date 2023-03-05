@@ -21,7 +21,7 @@ export const LeaderboardPage = () => {
 
   const orderPlayersByPoints = (games) => {
     const orderedGames = games.sort((a, b) => {
-      a.score < b.score;
+      return a.score < b.score;
     });
 
     return orderedGames.map((game, index) => {
@@ -53,7 +53,12 @@ export const LeaderboardPage = () => {
       } else {
         return (
           <tr key={game.id}>
-            <td>{index + 1}</td>
+            <td>
+              <Group>
+                <Text fz="md">{index + 1}</Text>
+                {index + 1 === 1 ? <StarIcon color="orange" width={20} height={20} /> : <></>}
+              </Group>
+            </td>
             <td>{game.user.name}</td>
             <td>{game.name}</td>
             <td>{game.score}</td>

@@ -10,7 +10,9 @@ export const HorizontalNavigation = ({ items, onCategoryClick }) => {
             key={id}
             color="dark"
             styles={(theme) => ({
-              root: { '&:hover': { color: theme.colors.yellow, backgroundColor: theme.white } },
+              root: {
+                '&:hover': { color: theme.colors.yellow, backgroundColor: theme.colors.gray[0] },
+              },
             })}
             variant="subtle"
             onClick={() => onCategoryClick(id)}
