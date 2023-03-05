@@ -8,3 +8,5 @@ export const shuffle = (array) => {
   }
   return array;
 };
+
+export const frontofficeUrl = 'http://localhost:8000/frontoffice/';
