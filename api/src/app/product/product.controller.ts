@@ -62,11 +62,11 @@ export class ProductController {
   @Get('get/preview')
   @SkipAuth()
   async getPreview() {
-    const activities = await this.productService.getPreview();
+    const products = await this.productService.getPreview();
 
-    if (!activities) {
+    if (!products) {
       throw new ProductsNotFoundException();
     }
-    return activities;
+    return products;
   }
 }

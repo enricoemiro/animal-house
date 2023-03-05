@@ -79,7 +79,17 @@ export class ProductService {
 
   async getPreview() {
     try {
-      return await this.prismaService.client.product.findMany({ take: 8 });
+      return await this.prismaService.client.product.findMany({
+        take: 8,
+        select: {
+          images: true,
+          name: true,
+          availability: true,
+          description: true,
+          id: true,
+          price: true,
+        },
+      });
     } catch (error) {
       throw error;
     }
