@@ -41,6 +41,11 @@ export const LoginPage = () => {
       // Preventing Unvalidated Redirects and Forwards
       // See: https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
       if (returnTo !== null && same(window.location.href, returnTo)) {
+        if (returnTo.indexOf('://') > 0 || returnTo.indexOf('//') === 0) {
+          window.location.href = returnTo;
+          return;
+        }
+
         return navigate(returnTo, { replace: true });
       }
 
