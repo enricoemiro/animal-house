@@ -10,5 +10,9 @@
   },
   "devDependencies": {
     "vite": "^4.1.0"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.0",
+    "silkrouter": "^4.2.16"
   }
 }
