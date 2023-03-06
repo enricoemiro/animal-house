@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/352b6e21d2.js" crossorigin="anonymous"></script>
+  <title>Backoffice</title>
+</head>
+
+<body id="body-pd">
+  <header class="header" id="header">
+    <div class="header_toggle"><i class="fa-solid fa-bars" id="header-toggle"></i></div>
+    <div id="logged-in"></div>
+  </header>
+  <div class="l-navbar" id="nav-bar">
+    <nav class="nav">
+      <div><a href="/" class="nav_logo text-decoration-none"><i class="fa-solid fa-dog"></i><span
+            class="nav_logo-name">Animal House</span> </a>
+        <div class="nav_list">
+          <a href="/backoffice/users" id="users-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-users"></i><span
+              class="nav_name">Users</span></a>
+          <a href="/backoffice/board" id="board-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-message"></i><span
+              class="nav_name">Board</span></a>
+          <a href="/backoffice/products" id="products-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-bag-shopping"></i><span
+              class="nav_name">Products</span></a>
+          <a href="/backoffice/categories" id="categories-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-list"></i><span
+              class="nav_name">Categories</span></a>
+          <a href="/backoffice/activities" id="activities-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-bell-concierge"></i><span class="nav_name">Activities</span></a>
+          <a href="/backoffice/headoffices" id="headOffices-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-shop"></i><span
+              class="nav_name">HeadOffices</span></a>
+        </div>
+      </div> <a href="#" onclick="return logout()" class="nav_link text-decoration-none"><i
+          class="fa-solid fa-right-from-bracket"></i><span class="nav_name">Sign Out</span></a>
+    </nav>
+  </div>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+      const showNavbar = (toggleId, navId, bodyId, headerId) => {
+        const toggle = document.getElementById(toggleId),
+          nav = document.getElementById(navId),
+          bodypd = document.getElementById(bodyId),
+          headerpd = document.getElementById(headerId)
+
+        // Validate that all variables exist
+        if (toggle && nav && bodypd && headerpd) {
+          toggle.addEventListener('click', () => {
+            // show navbar
+            nav.classList.toggle('show')
+            // change icon
+            toggle.classList.toggle('fa-xmark')
+            // add padding to body
+            bodypd.classList.toggle('body-pd')
+            // add padding to header
+            headerpd.classList.toggle('body-pd')
+          })
+        }
+      }
+
+      showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header')
+
+      /*===== LINK ACTIVE =====*/
+      const linkColor = document.querySelectorAll('.nav_link')
+
+      function colorLink() {
+        if (linkColor) {
+          linkColor.forEach(l => l.classList.remove('active'))
+          this.classList.add('active')
+        }
+      }
+      linkColor.forEach(l => l.addEventListener('click', colorLink))
+    })
+  </script>
+</body>
+
+</html>

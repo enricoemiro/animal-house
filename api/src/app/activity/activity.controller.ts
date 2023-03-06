@@ -13,7 +13,7 @@ import { ActivityNotFoundException } from './exceptions/activity-not-found.excep
 @Controller('/api/v1/activity')
 @RequiresAuth(true)
 export class ActivityController {
-  constructor(private readonly activityService: ActivityService) {}
+  constructor(private readonly activityService: ActivityService) { }
 
   @Post('create')
   async create(@Body() createDTO: CreateDTO) {
@@ -31,6 +31,12 @@ export class ActivityController {
     return {
       activities: activities,
     };
+  }
+
+  @Get('get/activities')
+  async getActivities() {
+    const activities = await this.activityService.getActivities();
+    return activities;
   }
 
   @Get('get/preview')

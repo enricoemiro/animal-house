@@ -89,4 +89,37 @@ export class PostService {
       throw error;
     }
   }
+
+  async getPosts() {
+    try {
+      const posts = await this.prismaService.client.post.findMany({
+        select: {
+          id: true,
+          content: true,
+          category: true,
+          createdAt: true,
+          updatedAt: true,
+          userId: true,
+          user: { select: { name: true, id: true, email: true } },
+        },
+      });
+      return posts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deletePosts(postIDs: Post['id'][]) {
+    try {
+      return this.prismaService.client.post.deleteMany({
+        where: {
+          id: {
+            in: postIDs,
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

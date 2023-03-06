@@ -1,4 +1,4 @@
-import { Gender } from '@prisma/client';
+import { Gender, Role } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,
@@ -35,4 +35,8 @@ export class UserDTO {
 
   @IsBoolean()
   vip?: boolean;
+  
+  @IsOptional()
+  @IsEnum(Role)
+  role: Role;
 }

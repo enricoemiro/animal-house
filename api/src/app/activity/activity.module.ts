@@ -9,5 +9,6 @@ import { ActivityService } from './activity.service';
   imports: [PrismaModule],
   controllers: [ActivityController],
   providers: [ActivityService],
+  exports: [ActivityService],
 })
 export class ActivityModule {}

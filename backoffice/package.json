@@ -1,0 +1,31 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write --no-error-on-unmatched-pattern \"**/*.js\""
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
+    "@types/common-tags": "^1.8.1",
+    "prettier": "^2.8.4",
+    "sass": "^1.58.3",
+    "vite": "^4.1.0",
+    "vite-plugin-singlefile": "^0.13.3"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "axios": "^1.3.4",
+    "bootstrap": "^5.2.3",
+    "common-tags": "^1.8.2",
+    "font-awesome": "^4.7.0",
+    "gridjs": "^6.0.6",
+    "jquery": "^3.6.4",
+    "rxjs": "^7.8.0",
+    "silkrouter": "^4.2.16"
+  }
+}

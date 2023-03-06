@@ -85,4 +85,9 @@ export class AppController {
   async game(@Res() res: Response) {
     res.sendFile(resolve(__dirname, '../../game/dist/index.html'));
   }
+
+  @Get('backoffice*')
+  async backoffice(@Res() res: Response) {
+    res.sendFile(resolve(__dirname, '../../backoffice/dist/index.html'));
+  }
 }

@@ -6,6 +6,7 @@ import { isDuplicateKeyError } from '@/common/helpers';
 import { PrismaService } from '@/config/prisma/prisma.service';
 
 import { EmailAlreadyInUseException } from './exceptions/email-already-in-use.exception';
+import { NotDeletedUserException } from './exceptions/not-deleted-user.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 
 @Injectable()
@@ -93,6 +94,66 @@ export class UserService {
         data: {
           vip: vipValue,
         },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUsers() {
+    try {
+      return await this.prismaService.client.user.findMany();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteUser(id: User['id']) {
+    try {
+      return await this.prismaService.client.$transaction(async (service) => {
+        await service.game.deleteMany({ where: { userId: id } });
+        await service.post.deleteMany({where: {userId: id}});
+        
+
+        const deletedUser = await service.user.delete({
+          where: { id },
+        });
+
+        if (!deletedUser) {
+          throw new NotDeletedUserException();
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // async deleteUsers(userIDs: User['id'][]) {
+  //   try {
+  //     return this.prismaService.client.user.deleteMany({
+  //       where: {
+  //         id: {
+  //           in: userIDs,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  async editUser(
+    id: User['id'],
+    data: Partial<Pick<User, 'email' | 'name' | 'dateOfBirth' | 'gender' | 'role'>>,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.client.user.update({
+        where: { id },
+        data,
       });
     } catch (error) {
       throw error;

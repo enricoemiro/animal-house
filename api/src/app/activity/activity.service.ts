@@ -9,7 +9,7 @@ import { NoSeatsAvailableException } from './exceptions/no-seats-available.excep
 
 @Injectable()
 export class ActivityService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async createOne({ headOfficeId, ...others }: Prisma.ActivityUncheckedCreateInput) {
     try {
@@ -129,9 +129,61 @@ export class ActivityService {
     }
   }
 
+  async getActivities() {
+    try {
+      return await this.prismaService.client.activity.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          dateOfPerformance: true,
+          mode: true,
+          availability: true,
+          headOffice: true,
+          users: { select: { email: true, id: true } },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getPreview() {
     try {
       return await this.prismaService.client.activity.findMany({ take: 4 });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async editActivity(
+    id: Activity['id'],
+    data: Partial<
+      Pick<
+        Activity,
+        'name' | 'description' | 'dateOfPerformance' | 'mode' | 'availability' | 'headOfficeId'
+      >
+    >,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.client.activity.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteActivity(id: Activity['id']) {
+    try {
+      return this.prismaService.client.activity.delete({
+        where: { id },
+      });
     } catch (error) {
       throw error;
     }
