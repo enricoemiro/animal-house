@@ -3,7 +3,6 @@ import axios from '@app/config/axios';
 export const me = async () => {
   try {
     const { data } = await axios.get('/auth/me', {
-      baseURL: import.meta.env.VITE_API_BASE_URL,
       withCredentials: true,
     });
     return data.user;

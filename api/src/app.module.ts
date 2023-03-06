@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 
+import { AppController } from './app.controller';
 import { ActivityModule } from './app/activity/activity.module';
 import { AnimalModule } from './app/animal/animal.module';
 import { AuthModule } from './app/auth/auth.module';
@@ -34,6 +35,7 @@ import { multerModuleOptions } from './config/multer.config';
     OrderModule,
     GameModule,
   ],
+  controllers: [AppController],
   exports: [MulterModule],
 })
 export class AppModule {}

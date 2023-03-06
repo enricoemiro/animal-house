@@ -15,7 +15,7 @@ import { BaseOutlet } from './components/outlet/base.outlet';
 import { GuestRouteOutlet } from './components/outlet/guest-route.outlet';
 import { ProtectedRouteOutlet } from './components/outlet/protected-route.outlet';
 
-export const router = createBrowserRouter([
+const routes = [
   {
     element: <BaseOutlet />,
     children: [
@@ -52,4 +52,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes, {
+  basename: '/frontoffice',
+});

@@ -61,7 +61,7 @@ export const QuantitySelector = ({ product }) => {
           type="submit"
           leftIcon={<ShoppingCartIcon width={20} height={20} />}
         >
-          Buy
+          Add
         </Button>
       </Group>
     </form>

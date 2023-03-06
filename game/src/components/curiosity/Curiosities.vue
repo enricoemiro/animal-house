@@ -3,8 +3,8 @@ import { ref } from 'vue';
 
 import { getAnimalCuriosity } from '@app/api/curiosity/getAnimalCuriosity';
 
-import CuriosityCard from './CuriosityCard.vue';
 import Loader from '../Loader.vue';
+import CuriosityCard from './CuriosityCard.vue';
 
 const curiosityQuery = ref('');
 const queryResponse = ref(null);
@@ -12,9 +12,9 @@ const isLoading = ref(false);
 
 async function fetchCuriosity(event) {
   event.preventDefault();
-  isLoading.value=true;
+  isLoading.value = true;
   const response = await getAnimalCuriosity(curiosityQuery.value);
-  isLoading.value=false;
+  isLoading.value = false;
   queryResponse.value = response.data.slice(0, 6);
 }
 </script>
@@ -65,7 +65,7 @@ async function fetchCuriosity(event) {
         <CuriosityCard v-for="animal in queryResponse" :key="animal.name" :animal="animal" />
       </div>
       <div v-else class="flex w-full flex-row items-center justify-center">
-       <Loader :isLoading="isLoading"/>
+        <Loader :isLoading="isLoading" />
       </div>
     </div>
   </section>

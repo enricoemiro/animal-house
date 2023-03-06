@@ -10,7 +10,7 @@ import { GetProductsByCategoryDTO } from './dtos/get-products-by-category.dto';
 import { ProductsNotFoundException } from './exceptions/products-not-found-exception.exception';
 import { ProductService } from './product.service';
 
-@Controller('product')
+@Controller('/api/v1/product')
 @RequiresAuth(true)
 export class ProductController {
   constructor(private productService: ProductService, private imageService: ImageService) {}
@@ -62,11 +62,11 @@ export class ProductController {
   @Get('get/preview')
   @SkipAuth()
   async getPreview() {
-    const activities = await this.productService.getPreview();
+    const products = await this.productService.getPreview();
 
-    if (!activities) {
+    if (!products) {
       throw new ProductsNotFoundException();
     }
-    return activities;
+    return products;
   }
 }

@@ -1,14 +1,19 @@
 import { Anchor, Box, Card, Center, Flex, Image, SimpleGrid, Text, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth/use-auth.hook';
+import spot from '@/assets/spot.jpeg';
+import vip from '@/assets/vip.jpeg';
 
 import { GET_ALL_CATEGORIES_KEY, getAllCategories } from '../api/get-all-categories';
 import { HorizontalNavigation } from '../components/horizontal-navigation';
 import { ProductsList } from '../components/products-list';
 
 export const EcommercePage = () => {
+  const navigate = useNavigate();
+
   const [category, setCategory] = useState(null);
   const {
     meQuery: { data: user },
@@ -42,10 +47,7 @@ export const EcommercePage = () => {
           direction="row"
           wrap="nowrap"
         >
-          <Image
-            src="/images/spotImage.jpeg"
-            alt="Summer discount of fifty percent if you have vip account"
-          />
+          <Image src={spot} alt="Summer discount of fifty percent if you have vip account" />
         </Flex>
         <SimpleGrid spacing="md">{category && <ProductsList category={category} />}</SimpleGrid>
 
@@ -54,12 +56,12 @@ export const EcommercePage = () => {
             <Card shadow="sm" p="lg" radius="md" withBorder>
               <SimpleGrid spacing="md" cols={2}>
                 <Card.Section>
-                  <Image src="images/VIPImage.jpeg" alt="vip account image" />
+                  <Image src={vip} alt="vip account image" />
                 </Card.Section>
                 <Flex direction="row" justify="center" align="center">
                   <Title ml={8} order={4}>
                     Switch to the{' '}
-                    <Anchor color="orange" href="/profile">
+                    <Anchor color="orange" onClick={() => navigate('/profile')}>
                       VIP
                     </Anchor>{' '}
                     account to get the best discounts.

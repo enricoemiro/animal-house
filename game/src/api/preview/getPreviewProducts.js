@@ -1,8 +1,7 @@
-import axios from 'axios';
+import axios from '@app/config/axios';
 
 export const getPreviewProducts = async () => {
   const response = await axios.get('/product/get/preview', {
-    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',

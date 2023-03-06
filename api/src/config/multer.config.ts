@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { MulterModuleAsyncOptions, MulterOptionsFactory } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { memoryStorage } from 'multer';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
-  constructor(private readonly configService: ConfigService) {}
+  constructor() {}
 
   async createMulterOptions(): Promise<MulterOptions> {
     return {

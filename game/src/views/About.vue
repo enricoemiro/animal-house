@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 
 import { getPreviewActivities } from '@app/api/preview/getPreviewActivities';
 import { getPreviewProducts } from '@app/api/preview/getPreviewProducts';
+import heroBird from '@app/assets/heroBird.jpg';
 import ProductPreview from '@app/components/preview/ProductPreview.vue';
 import ServicePreview from '@app/components/preview/ServicePreview.vue';
 
@@ -32,7 +33,7 @@ const offers = ref([
       <div class="absolute inset-0">
         <img
           class="w-full h-full object-cover"
-          src="images/heroBird.jpg"
+          :src="heroBird"
           alt="A red bird perched on a branch, enjoying a feast of juicy berries."
         />
         <div class="absolute inset-0 bg-gray-500 mix-blend-multiply" aria-hidden="true" />
@@ -86,7 +87,9 @@ const offers = ref([
     </section>
     <section v-else class="flex flex-col justify-center mb-8">
       <h2 class="font-extrabold tracking-tight leading-none text-4xl">Products preview</h2>
-      <p class="text-slate-500 mt-4">Oops, no products were found, maybe some Ewoks took them away.</p>
+      <p class="text-slate-500 mt-4">
+        Oops, no products were found, maybe some Ewoks took them away.
+      </p>
     </section>
 
     <section v-if="activities.length > 0" class="flex flex-col justify-center mb-8">
@@ -100,9 +103,10 @@ const offers = ref([
       </div>
     </section>
     <section v-else class="flex flex-col justify-center mb-8">
-      <h2 class="font-extrabold tracking-tight leading-none text-4xl">Products preview</h2>
-      <p class="text-slate-500 mt-4">Oops, no activities were found, maybe some Ewoks took them away.</p>
+      <h2 class="font-extrabold tracking-tight leading-none text-4xl">Services preview</h2>
+      <p class="text-slate-500 mt-4">
+        Oops, no activities were found, maybe some Ewoks took them away.
+      </p>
     </section>
-
   </div>
 </template>

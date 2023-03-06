@@ -1,8 +1,8 @@
 <script setup>
 import { CalendarIcon, EyeIcon, MapIcon } from '@heroicons/vue/24/outline';
+import { format } from 'date-fns';
 import { TheCard } from 'flowbite-vue';
 import { ref } from 'vue';
-import {format} from 'date-fns';
 
 const props = defineProps(['service']);
 const isExpanded = ref(false);
@@ -12,7 +12,10 @@ function handleExpandClick() {
 }
 
 const icons = ref([
-  { icon: CalendarIcon, text: format(new Date(props.service.dateOfPerformance), 'MM/dd/yyyy HH:mm')},
+  {
+    icon: CalendarIcon,
+    text: format(new Date(props.service.dateOfPerformance), 'MM/dd/yyyy HH:mm'),
+  },
   { icon: MapIcon, text: props.service.mode },
   { icon: EyeIcon, text: props.service.availability },
 ]);

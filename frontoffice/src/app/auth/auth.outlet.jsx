@@ -1,5 +1,7 @@
 import { Box, Container, Image, Paper, Title } from '@mantine/core';
 
+import authBg from '@/assets/auth-bg.jpg';
+
 /**
  * @param {Object} props - Props
  * @param {string} props.title - Title
@@ -36,7 +38,7 @@ export const AuthOutlet = ({ title, children }) => {
               },
             })}
           >
-            <Image radius={0} src="/images/auth-bg.jpg" alt="" />
+            <Image radius={0} src={authBg} alt="" />
           </Box>
 
           <Paper

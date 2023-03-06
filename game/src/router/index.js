@@ -14,7 +14,7 @@ const routes = [
   { path: '/about', name: 'About', component: About },
 ];
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/game'),
   routes,
 });
 export default router;
