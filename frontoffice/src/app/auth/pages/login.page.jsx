@@ -44,11 +44,6 @@ export const LoginPage = () => {
         return navigate(returnTo, { replace: true });
       }
 
-      //if (returnTo !== null && !same(window.location.href, returnTo)) {
-      //  console.log(returnTo);
-      //  window.location.href = returnTo;
-      //}
-
       return navigate('/', { replace: true });
     },
   });
