@@ -5,6 +5,7 @@ import { inject, onMounted, ref } from 'vue';
 import { me } from '@app/api/auth/me';
 import snoopyRedBaron from '@app/assets/snoopyRedBaron.jpeg';
 import { frontofficeUrl } from '@app/helpers/helpers';
+import {baseUrl} from '@app/helpers/helpers';
 
 const { logoutSessionUser } = inject('auth');
 
@@ -19,6 +20,8 @@ await logoutSessionUser();
 session.value = null;
 
 }
+
+const loginUrl = frontofficeUrl + `auth/login?returnTo=${baseUrl}game/`;
 
 </script>
 
@@ -52,7 +55,7 @@ session.value = null;
         <a
           v-if="!session"
           class="hover:text-amber-600 transition ease-in-out hover:-translate-y-1 hover:scale-105"
-          :href="frontofficeUrl"
+          :href="loginUrl"
           aria-label="Login"
           >Login</a
         >
