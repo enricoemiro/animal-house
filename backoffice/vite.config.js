@@ -1,11 +1,12 @@
-import { defineConfig } from "vite";
-import { viteSingleFile } from "vite-plugin-singlefile";
-import { resolve } from "path";
+import { resolve } from 'path';
+
+import { defineConfig } from 'vite';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig({
   resolve: {
     alias: {
-      "~bootstrap": resolve(__dirname, "node_modules/bootstrap"),
+      '~bootstrap': resolve(__dirname, 'node_modules/bootstrap'),
     },
   },
   plugins: [viteSingleFile()],
