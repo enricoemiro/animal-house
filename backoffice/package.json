@@ -15,6 +15,7 @@
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "rxjs": "^7.8.0",
-    "silkrouter": "^4.2.16"
+    "silkrouter": "^4.2.16",
+    "vite-plugin-singlefile": "^0.13.3"
   }
 }
