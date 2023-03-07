@@ -13,7 +13,7 @@ export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly hasherService: HasherService,
-  ) {}
+  ) { }
 
   async createOne({ password, ...rest }: Prisma.UserCreateInput) {
     try {
@@ -98,4 +98,54 @@ export class UserService {
       throw error;
     }
   }
+
+  async getUsers() {
+    try {
+      return await this.prismaService.client.user.findMany();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // async deleteUser(id: User['id']) {
+  //   try {
+  //     return this.prismaService.client.user.delete({
+  //       where: { id },
+  //     });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // async deleteUsers(userIDs: User['id'][]) {
+  //   try {
+  //     return this.prismaService.client.user.deleteMany({
+  //       where: {
+  //         id: {
+  //           in: userIDs,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // async editUser(
+  //   id: User['id'],
+  //   data: Partial<Pick<User, 'email' | 'name' | 'dateOfBirth' | 'gender' | 'role'>>,
+  // ) {
+  //   try {
+  //     if (Object.keys(data).length === 0) {
+  //       return null;
+  //     }
+
+  //     return await this.prismaService.client.user.update({
+  //       where: { id },
+  //       data,
+  //     });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

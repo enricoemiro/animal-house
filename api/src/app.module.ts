@@ -4,6 +4,7 @@ import { MulterModule } from '@nestjs/platform-express';
 
 import { AppController } from './app.controller';
 import { ActivityModule } from './app/activity/activity.module';
+import { AdminModule } from './app/admin/admin.module';
 import { AnimalModule } from './app/animal/animal.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CategoryModule } from './app/category/category.module';
@@ -23,6 +24,7 @@ import { multerModuleOptions } from './config/multer.config';
     ConfigModule.forRoot(configModuleOptions),
     MulterModule.registerAsync(multerModuleOptions),
     AuthModule,
+    AdminModule,
     UserModule,
     PostModule,
     UserModule,
