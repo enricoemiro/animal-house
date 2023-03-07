@@ -18,7 +18,6 @@ export const UpdateVipButton = () => {
 
   const mutation = useMutation({
     mutationFn: async (value) => {
-      console.log(value);
       return await updateVip(value);
     },
     mutationKey: [UPDATE_VIP_KEY],
