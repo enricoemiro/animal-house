@@ -1,5 +1,4 @@
 import 'bootstrap';
+import 'gridjs/dist/theme/mermaid.css';
 import './router';
 import './scss/style.scss';
-
-document.querySelector('#app').innerHTML = `<h1>Hello World!</h1>`;
