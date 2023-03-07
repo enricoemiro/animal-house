@@ -1,9 +1,10 @@
 import axios from '@/config/axios';
 
-export const deleteUser = async (id) => {
+export const editUser = async (id, form) => {
   const response = await axios.request({
-    method: 'DELETE',
-    url: `/admin/delete/user/${id}`,
+    method: 'PUT',
+    url: `/admin/edit/user/${id}`,
+    data: form,
   });
   console.log(response);
   return response.data;

@@ -92,11 +92,11 @@ export class AdminController {
 //     return { message: 'The activity has been successfully created.' };
 //   }
 
-  // @Delete('delete/user/:id')
-  // async deleteUser(@Param() { id }: IdUserDTO) {
-  //   await this.userService.deleteUser(id);
-  //   return { message: 'User deleted successfully.' };
-  // }
+  @Delete('delete/user/:id')
+  async deleteUser(@Param() { id }: IdUserDTO) {
+    await this.userService.deleteUser(id);
+    return { message: 'User deleted successfully.' };
+  }
 
 //   @Delete('delete/users')
 //   async deleteUsers(@Body() { userIDs }: DeleteUsersDTO) {
@@ -152,11 +152,11 @@ export class AdminController {
 //     return { message: 'Head offices deleted successfully.' };
 //   }
 
-//   @Put('edit/user/:id')
-//   async editUser(@Param() { id }: IdUserDTO, @Body() editUserDTO: EditUserDTO) {
-//     await this.userService.editUser(id, editUserDTO);
-//     return { message: 'User edited successfully.' };
-//   }
+  @Put('edit/user/:id')
+  async editUser(@Param() { id }: IdUserDTO, @Body() editUserDTO: EditUserDTO) {
+    await this.userService.editUser(id, editUserDTO);
+    return { message: 'User edited successfully.' };
+  }
 
 //   @Put('edit/product/:id')
 //   async editProduct(@Param() { id }: IdProductDTO, @Body() editProductDTO: EditProductDTO) {

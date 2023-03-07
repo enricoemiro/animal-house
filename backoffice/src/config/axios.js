@@ -9,6 +9,9 @@ import axios from 'axios';
  */
 export default axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: { post: { 'Content-Type': 'application/json' } },
+  headers: {
+    post: { 'Content-Type': 'application/json' },
+    put: { 'Content-Type': 'application/json' }
+  },
   withCredentials: true,
 });

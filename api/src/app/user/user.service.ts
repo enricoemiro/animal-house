@@ -107,15 +107,15 @@ export class UserService {
     }
   }
 
-  // async deleteUser(id: User['id']) {
-  //   try {
-  //     return this.prismaService.client.user.delete({
-  //       where: { id },
-  //     });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  async deleteUser(id: User['id']) {
+    try {
+      return this.prismaService.client.user.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   // async deleteUsers(userIDs: User['id'][]) {
   //   try {
@@ -131,21 +131,21 @@ export class UserService {
   //   }
   // }
 
-  // async editUser(
-  //   id: User['id'],
-  //   data: Partial<Pick<User, 'email' | 'name' | 'dateOfBirth' | 'gender' | 'role'>>,
-  // ) {
-  //   try {
-  //     if (Object.keys(data).length === 0) {
-  //       return null;
-  //     }
+  async editUser(
+    id: User['id'],
+    data: Partial<Pick<User, 'email' | 'name' | 'dateOfBirth' | 'gender' | 'role'>>,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
 
-  //     return await this.prismaService.client.user.update({
-  //       where: { id },
-  //       data,
-  //     });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+      return await this.prismaService.client.user.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
