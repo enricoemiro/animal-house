@@ -15,3 +15,12 @@ export default axios.create({
   },
   withCredentials: true,
 });
+
+export const prod = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    put: { 'Content-Type': 'application/json' }
+  },
+  withCredentials: true,
+});
+
