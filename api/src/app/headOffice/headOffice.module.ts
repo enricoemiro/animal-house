@@ -9,5 +9,6 @@ import { HeadOfficeService } from './headOffice.service';
   imports: [PrismaModule],
   controllers: [HeadOfficeController],
   providers: [HeadOfficeService],
+  exports: [HeadOfficeService],
 })
 export class HeadOfficeModule {}

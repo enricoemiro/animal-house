@@ -35,9 +35,9 @@ export class AdminController {
     private userService: UserService,
     private activityService: ActivityService,
     private categoryService: CategoryService,
-  ) // private headOfficeService: HeadOfficeService,
-  // private postService: PostService,
-  {}
+    private headOfficeService: HeadOfficeService,
+    private postService: PostService,
+  ) {}
   @Get('get/users')
   async getUsers() {
     const users = await this.userService.getUsers();
@@ -56,17 +56,17 @@ export class AdminController {
     return products;
   }
 
-  //   @Get('get/headoffices')
-  //   async getHeadOffices() {
-  //     const headoffices = await this.headOfficeService.getAllLocations();
-  //     return headoffices;
-  //   }
+  @Get('get/headoffices')
+  async getHeadOffices() {
+    const headoffices = await this.headOfficeService.getAllLocations();
+    return headoffices;
+  }
 
-  //   @Get('get/posts')
-  //   async getPosts() {
-  //     const posts = await this.postService.getPosts();
-  //     return posts;
-  //   }
+  @Get('get/posts')
+  async getPosts() {
+    const posts = await this.postService.getPosts();
+    return posts;
+  }
 
   @Post('create/user')
   async createUser(@Body() userDTO: CreateUserDTO) {
@@ -80,11 +80,11 @@ export class AdminController {
     return { message: 'The product has been successfully created.' };
   }
 
-  //   @Post('create/headoffice')
-  //   async createHeadOffice(@Body() createHeadOfficeDTO: CreateHeadOfficeDTO) {
-  //     await this.headOfficeService.createOne(createHeadOfficeDTO);
-  //     return { message: 'The head office has been successfully created.' };
-  //   }
+  @Post('create/headoffice')
+  async createHeadOffice(@Body() createHeadOfficeDTO: CreateHeadOfficeDTO) {
+    await this.headOfficeService.createOne(createHeadOfficeDTO);
+    return { message: 'The head office has been successfully created.' };
+  }
 
   @Post('create/activity')
   async createActivity(@Body() createActivityDTO: CreateActivityDTO) {
@@ -98,11 +98,11 @@ export class AdminController {
     return { message: 'User deleted successfully.' };
   }
 
-  //   @Delete('delete/users')
-  //   async deleteUsers(@Body() { userIDs }: DeleteUsersDTO) {
-  //     await this.userService.deleteUsers(userIDs);
-  //     return { message: 'Users deleted successfully.' };
-  //   }
+  //@Delete('delete/users')
+  //async deleteUsers(@Body() { userIDs }: DeleteUsersDTO) {
+  //  await this.userService.deleteUsers(userIDs);
+  //  return { message: 'Users deleted successfully.' };
+  //}
 
   @Delete('delete/product/:id')
   async deleteProduct(@Param() { id }: IdProductDTO) {
@@ -128,29 +128,29 @@ export class AdminController {
     return { message: 'Category deleted successfully.' };
   }
 
-  //   @Delete('delete/headoffice/:id')
-  //   async deleteHeadOffice(@Param() { id }: IdHeadOfficeDTO) {
-  //     await this.headOfficeService.deleteHeadOffice(id);
-  //     return { message: 'HeadOffice deleted successfully.' };
-  //   }
+  @Delete('delete/headoffice/:id')
+  async deleteHeadOffice(@Param() { id }: IdHeadOfficeDTO) {
+    await this.headOfficeService.deleteHeadOffice(id);
+    return { message: 'HeadOffice deleted successfully.' };
+  }
 
-  //   @Delete('delete/headoffices')
-  //   async deleteHeadOffices(@Body() { headOfficeIDs }: DeleteHeadOfficesDTO) {
-  //     await this.headOfficeService.deleteHeadOffices(headOfficeIDs);
-  //     return { message: 'Head offices deleted successfully.' };
-  //   }
+  @Delete('delete/headoffices')
+  async deleteHeadOffices(@Body() { headOfficeIDs }: DeleteHeadOfficesDTO) {
+    await this.headOfficeService.deleteHeadOffices(headOfficeIDs);
+    return { message: 'Head offices deleted successfully.' };
+  }
 
-  //   @Delete('delete/post/:postId')
-  //   async deletePost(@Param() { postId }: IdPostDTO) {
-  //     await this.postService.deleteByPostId(postId);
-  //     return { message: 'Post deleted succesfully.' };
-  //   }
+  @Delete('delete/post/:postId')
+  async deletePost(@Param() { postId }: IdPostDTO) {
+    await this.postService.deleteByPostId(postId);
+    return { message: 'Post deleted succesfully.' };
+  }
 
-  //   @Delete('delete/posts')
-  //   async deletePosts(@Body() { postIDs }: DeletePostsDTO) {
-  //     await this.postService.deletePosts(postIDs);
-  //     return { message: 'Head offices deleted successfully.' };
-  //   }
+  @Delete('delete/posts')
+  async deletePosts(@Body() { postIDs }: DeletePostsDTO) {
+    await this.postService.deletePosts(postIDs);
+    return { message: 'Head offices deleted successfully.' };
+  }
 
   @Put('edit/user/:id')
   async editUser(@Param() { id }: IdUserDTO, @Body() editUserDTO: EditUserDTO) {
@@ -170,14 +170,14 @@ export class AdminController {
     return { message: 'Activity edited successfully.' };
   }
 
-  //   @Put('edit/headoffice/:id')
-  //   async editHeadOffice(
-  //     @Param() { id }: IdHeadOfficeDTO,
-  //     @Body() editHeadOfficeDTO: CreateHeadOfficeDTO,
-  //   ) {
-  //     await this.headOfficeService.editHeadOffice(id, editHeadOfficeDTO);
-  //     return { message: 'Activity edited successfully.' };
-  //   }
+  @Put('edit/headoffice/:id')
+  async editHeadOffice(
+    @Param() { id }: IdHeadOfficeDTO,
+    @Body() editHeadOfficeDTO: CreateHeadOfficeDTO,
+  ) {
+    await this.headOfficeService.editHeadOffice(id, editHeadOfficeDTO);
+    return { message: 'Activity edited successfully.' };
+  }
 
   @Put('edit/category/:id')
   async editCategory(@Param() { id }: NameCategoryDTO, @Body() editCategoryDTO: CreateCategoryDTO) {
