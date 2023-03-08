@@ -86,7 +86,7 @@ let Products = {
     },
     after_render: async () => {
         // navbar active
-        document.getElementById('products').classList.add("active")
+        document.getElementById('products-nav').classList.add("active")
 
         const products = await getProducts();
         const categories = await getCategories();

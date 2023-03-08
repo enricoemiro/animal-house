@@ -96,7 +96,7 @@ let Users = {
         </body>`
     },
     after_render: async () => {
-        document.getElementById('users').classList.add("active")
+        document.getElementById('users-nav').classList.add("active")
 
         const users = await getUsers();
         const renderUsers = () => {
