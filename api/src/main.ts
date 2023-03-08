@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useGlobalPipes(validationPipe);
   app.useGlobalFilters(new GlobalExceptionFilter(httpAdapterHost));
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGINS').split(','),
+    origin: "http://site212245.tw.cs.unibo.it",
     credentials: true,
   });
 
@@ -35,7 +35,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(session(sessionOptions(configService)));
 
-  await app.listen(configService.get<number>('PORT'));
+  await app.listen('8000');
 }
 
 bootstrap();
