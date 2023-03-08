@@ -16,7 +16,7 @@ export class ActivityDTO {
   description: string;
 
   @IsDateString({ strict: true, strictSeparator: true })
-  dateOfPerformance: string;
+  dateOfPerformance: Date;
 
   @IsEnum(Mode)
   mode: Mode;

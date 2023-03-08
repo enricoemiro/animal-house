@@ -33,9 +33,9 @@ export class AdminController {
   constructor(
     private productService: ProductService,
     private userService: UserService,
-  ) // private activityService: ActivityService,
-  // private categoryService: CategoryService,
-  // private headOfficeService: HeadOfficeService,
+    private activityService: ActivityService,
+    private categoryService: CategoryService,
+  ) // private headOfficeService: HeadOfficeService,
   // private postService: PostService,
   {}
   @Get('get/users')
@@ -44,11 +44,11 @@ export class AdminController {
     return users;
   }
 
-  //   @Get('get/categories')
-  //   async getCategories() {
-  //     const categories = await this.categoryService.getCategories();
-  //     return categories;
-  //   }
+  @Get('get/categories')
+  async getCategories() {
+    const categories = await this.categoryService.getCategories();
+    return categories;
+  }
 
   @Get('get/products')
   async getProducts() {
@@ -86,11 +86,11 @@ export class AdminController {
   //     return { message: 'The head office has been successfully created.' };
   //   }
 
-  //   @Post('create/activity')
-  //   async createActivity(@Body() createActivityDTO: CreateActivityDTO) {
-  //     await this.activityService.createOne(createActivityDTO);
-  //     return { message: 'The activity has been successfully created.' };
-  //   }
+  @Post('create/activity')
+  async createActivity(@Body() createActivityDTO: CreateActivityDTO) {
+    await this.activityService.createOne(createActivityDTO);
+    return { message: 'The activity has been successfully created.' };
+  }
 
   @Delete('delete/user/:id')
   async deleteUser(@Param() { id }: IdUserDTO) {
@@ -116,17 +116,17 @@ export class AdminController {
     return { message: 'Products deleted successfully.' };
   }
 
-  //   @Delete('delete/activity/:id')
-  //   async deleteActivity(@Param() { id }: IdActivityDTO) {
-  //     await this.activityService.deleteActivity(id);
-  //     return { message: 'Activity deleted successfully.' };
-  //   }
+  @Delete('delete/activity/:id')
+  async deleteActivity(@Param() { id }: IdActivityDTO) {
+    await this.activityService.deleteActivity(id);
+    return { message: 'Activity deleted successfully.' };
+  }
 
-  //   @Delete('delete/category/:name')
-  //   async deleteCategory(@Param() { name }: IdCategoryDTO) {
-  //     await this.categoryService.deleteCategory(name);
-  //     return { message: 'Category deleted successfully.' };
-  //   }
+  @Delete('delete/category/:name')
+  async deleteCategory(@Param() { name }: IdCategoryDTO) {
+    await this.categoryService.deleteCategory(name);
+    return { message: 'Category deleted successfully.' };
+  }
 
   //   @Delete('delete/headoffice/:id')
   //   async deleteHeadOffice(@Param() { id }: IdHeadOfficeDTO) {
@@ -164,11 +164,11 @@ export class AdminController {
     return { message: 'Product edited successfully.' };
   }
 
-  //   @Put('edit/activity/:id')
-  //   async editActivity(@Param() { id }: IdActivityDTO, @Body() editActivityDTO: CreateActivityDTO) {
-  //     await this.activityService.editActivity(id, editActivityDTO);
-  //     return { message: 'Activity edited successfully.' };
-  //   }
+  @Put('edit/activity/:id')
+  async editActivity(@Param() { id }: IdActivityDTO, @Body() editActivityDTO: CreateActivityDTO) {
+    await this.activityService.editActivity(id, editActivityDTO);
+    return { message: 'Activity edited successfully.' };
+  }
 
   //   @Put('edit/headoffice/:id')
   //   async editHeadOffice(
@@ -179,24 +179,21 @@ export class AdminController {
   //     return { message: 'Activity edited successfully.' };
   //   }
 
-  //   @Put('edit/category/:id')
-  //   async editCategory(
-  //     @Param() { id }: NameCategoryDTO,
-  //     @Body() editCategoryDTO: CreateCategoryDTO,
-  //   ) {
-  //     await this.categoryService.editCategory(id, editCategoryDTO);
-  //     return { message: 'Activity edited successfully.' };
-  //   }
+  @Put('edit/category/:id')
+  async editCategory(@Param() { id }: NameCategoryDTO, @Body() editCategoryDTO: CreateCategoryDTO) {
+    await this.categoryService.editCategory(id, editCategoryDTO);
+    return { message: 'Activity edited successfully.' };
+  }
 
-  //   @Put('book/activity/:id')
-  //   async bookActivity(@Param() { id }: IdActivityDTO, @Body() idUserDTO: IdUserDTO) {
-  //     await this.activityService.bookOne(id, idUserDTO.id);
-  //     return { message: 'Activity booked successfully' };
-  //   }
+  @Put('book/activity/:id')
+  async bookActivity(@Param() { id }: IdActivityDTO, @Body() idUserDTO: IdUserDTO) {
+    await this.activityService.bookOne(id, idUserDTO.id);
+    return { message: 'Activity booked successfully' };
+  }
 
-  //   @Put('unbook/activity/:id')
-  //   async unbookActivity(@Param() { id }: IdActivityDTO, @Body() idUserDTO: IdUserDTO) {
-  //     await this.activityService.unbookOne(id, idUserDTO.id);
-  //     return { message: 'Activity unbooked successfully' };
-  //   }
+  @Put('unbook/activity/:id')
+  async unbookActivity(@Param() { id }: IdActivityDTO, @Body() idUserDTO: IdUserDTO) {
+    await this.activityService.unbookOne(id, idUserDTO.id);
+    return { message: 'Activity unbooked successfully' };
+  }
 }

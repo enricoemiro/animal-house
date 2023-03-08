@@ -136,4 +136,37 @@ export class ActivityService {
       throw error;
     }
   }
+
+  async editActivity(
+    id: Activity['id'],
+    data: Partial<
+      Pick<
+        Activity,
+        'name' | 'description' | 'dateOfPerformance' | 'mode' | 'availability' | 'headOfficeId'
+      >
+    >,
+  ) {
+    try {
+      if (Object.keys(data).length === 0) {
+        return null;
+      }
+
+      return await this.prismaService.client.activity.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteActivity(id: Activity['id']) {
+    try {
+      return this.prismaService.client.activity.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
