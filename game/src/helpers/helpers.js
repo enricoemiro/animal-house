@@ -9,5 +9,5 @@ export const shuffle = (array) => {
   return array;
 };
 
-export const frontofficeUrl = 'http://localhost:8000/frontoffice/';
-export const baseUrl = 'http://localhost:8000/';
+export const frontofficeUrl = import.meta.env.VITE_API_BASE_URL + '/frontoffice/';
+export const baseUrl = import.meta.env.VITE_API_BASE_URL;
