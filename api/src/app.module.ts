@@ -15,13 +15,11 @@ import { OrderModule } from './app/order/order.module';
 import { PostModule } from './app/post/post.module';
 import { ProductModule } from './app/product/product.module';
 import { UserModule } from './app/user/user.module';
-import { configModuleOptions } from './config/env.config';
 import { multerModuleOptions } from './config/multer.config';
 
 @Global()
 @Module({
   imports: [
-    ConfigModule.forRoot(configModuleOptions),
     MulterModule.registerAsync(multerModuleOptions),
     AuthModule,
     AdminModule,

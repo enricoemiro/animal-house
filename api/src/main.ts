@@ -1,19 +1,17 @@
-import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
 import { AppModule } from './app.module';
 import { AuthGuard } from './app/auth/auth.guard';
 import { PrismaService } from './config/prisma/prisma.service';
-import { sessionOptions } from './config/session.config';
 import { validationPipe } from './config/validation.config';
 import { GlobalExceptionFilter } from './filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const configService = app.get(ConfigService);
   const httpAdapterHost = app.get(HttpAdapterHost);
   const reflector = app.get(Reflector);
 
@@ -22,7 +20,7 @@ async function bootstrap() {
   app.useGlobalPipes(validationPipe);
   app.useGlobalFilters(new GlobalExceptionFilter(httpAdapterHost));
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGINS').split(','),
+    origin: 'https://site212245.tw.cs.unibo.it',
     credentials: true,
   });
 
@@ -33,9 +31,28 @@ async function bootstrap() {
 
   // Express middlewares
   app.use(cookieParser());
-  app.use(session(sessionOptions(configService)));
+  app.use(
+    session({
+      name: 'sid',
+      store: MongoStore.create({
+        collectionName: 'sessions',
+        mongoUrl: 'INSERIRE_QUI_URL_DI_MONGO',
+        stringify: false,
+      }),
+      secret: 'ztXUdhZWJ2tTJenyt4zZdi160fSkG0T1',
+      resave: false,
+      saveUninitialized: false,
+      unset: 'destroy',
+      cookie: {
+        secure: true,
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: 'lax',
+      },
+    }),
+  );
 
-  await app.listen(configService.get<number>('PORT'));
+  await app.listen(8000);
 }
 
 bootstrap();
