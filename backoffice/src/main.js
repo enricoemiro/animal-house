@@ -4,3 +4,4 @@ import 'gridjs/dist/theme/mermaid.css';
 import './router';
 import './scss/style.scss';
 import { logoutHandler } from './app/auth/templates/auth';
+import { sessionHandler } from './app/auth/templates/auth';

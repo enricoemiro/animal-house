@@ -6,6 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/352b6e21d2.js" crossorigin="anonymous"></script>
+  <script>
+    const userControl = (session) => {
+      if ((session.user == null) || (session.user.role != 'ADMIN')) {
+        window.location.href = '/frontoffice/auth/login'
+      }
+    }
+
+    const sessionHandler = async () => {
+      await fetch('http://localhost:8000/api/v1/auth/me', {
+        method: "GET", credentials: 'include', headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => (response.json()))
+        .then((data) => userControl(data))
+    }
+
+    sessionHandler()
+  </script>
   <title>Backoffice</title>
 </head>
 
@@ -19,18 +38,18 @@
       <div><a href="/" class="nav_logo text-decoration-none"><i class="fa-solid fa-dog"></i><span
             class="nav_logo-name">Animal House</span> </a>
         <div class="nav_list">
-          <a href="/backoffice/users" id="users-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-users"></i><span
-              class="nav_name">Users</span></a>
-          <a href="/backoffice/board" id="board-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-message"></i><span
-              class="nav_name">Board</span></a>
-          <a href="/backoffice/products" id="products-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-bag-shopping"></i><span
-              class="nav_name">Products</span></a>
-          <a href="/backoffice/categories" id="categories-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-list"></i><span
-              class="nav_name">Categories</span></a>
+          <a href="/backoffice/users" id="users-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-users"></i><span class="nav_name">Users</span></a>
+          <a href="/backoffice/board" id="board-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-message"></i><span class="nav_name">Board</span></a>
+          <a href="/backoffice/products" id="products-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-bag-shopping"></i><span class="nav_name">Products</span></a>
+          <a href="/backoffice/categories" id="categories-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-list"></i><span class="nav_name">Categories</span></a>
           <a href="/backoffice/activities" id="activities-nav" class="nav_link text-decoration-none"><i
               class="fa-solid fa-bell-concierge"></i><span class="nav_name">Activities</span></a>
-          <a href="/backoffice/headoffices" id="headOffices-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-shop"></i><span
-              class="nav_name">HeadOffices</span></a>
+          <a href="/backoffice/headoffices" id="headOffices-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-shop"></i><span class="nav_name">HeadOffices</span></a>
         </div>
       </div> <a id="logout-nav" class="nav_link text-decoration-none"><i
           class="fa-solid fa-right-from-bracket"></i><span class="nav_name">Sign Out</span></a>
