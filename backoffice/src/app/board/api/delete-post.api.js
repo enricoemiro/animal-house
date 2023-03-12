@@ -5,6 +5,5 @@ export const deletePost = async (id) => {
     method: 'DELETE',
     url: `/admin/delete/post/${id}`,
   });
-  console.log(response);
   return response.data;
 };

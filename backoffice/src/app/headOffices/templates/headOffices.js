@@ -3,8 +3,11 @@ import { html } from 'common-tags';
 import { searchbox } from '../../../helpers/searchbox';
 import { createHeadOffice } from '../api/create-headOffice.api';
 import { deleteHeadOffice } from '../api/delete-headOffice.api';
+import { deleteHeadOffices } from '../api/delete-headOffices.api';
 import { editHeadOffice } from '../api/edit-headOffice.api';
 import { getHeadOffices } from '../api/get-headOffices.api';
+
+import { getCheckedIds } from '../../../helpers/checked-ids';
 
 let HeadOffices = {
   render: () => {
@@ -22,7 +25,7 @@ let HeadOffices = {
           title="Delete"
           aria-label="delete"
           class="btn btn-outline-danger border-0 rounded mx-2"
-          onclick="return deleteHeadOffices(event)"
+          id="multiple-delete"
           type="button"
         >
           <i class="fa-solid fa-trash"></i>
@@ -77,7 +80,7 @@ let HeadOffices = {
                       type="text"
                       name="coordinates"
                       class="form-control"
-                      placeholder="Coordinates"
+                      placeholder="Coordinates (Lat,Long)"
                       aria-label="coordinates"
                       required
                     />
@@ -129,9 +132,9 @@ let HeadOffices = {
                     <td scope="row">
                         <input class="form-check-input body-check" type="checkbox" value="" aria-label="checkbox to select row">
                     </td>
-                    <td class="name">#${ho.id}</td>
+                    <td class="id">#${ho.id}</td>
                     <td class="name">${ho.location}</td>
-                    <td class="id">${ho.streetAddress}</td>
+                    <td class="address">${ho.streetAddress}</td>
                     <td class="email">${ho.coordinates}</td>
                     <td><button type="button" class="btn btn-danger m-3 delete-headoffice-btn">Delete HeadOffice</button>
                         <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal"
@@ -152,16 +155,16 @@ let HeadOffices = {
                                             aria-label="location" required>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <input type="text" name="streetAddress" value="${ho.streetAddress}" class="form-control" placeholder="address"
+                                                <input type="text" name="streetAddress" value="${ho.streetAddress}" class="form-control" placeholder="Address"
                                                     aria-label="address" required>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <input type="text" name="coordinates" value="${ho.coordinates}" class="form-control" placeholder="coordinates"
+                                                <input type="text" name="coordinates" value="${ho.coordinates}" class="form-control" placeholder="Coordinates (Lat,Long)"
                                                     aria-label="coordinates" required>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button save-modal submit" id="${ho.id}" onclick="return editHeadOffice(event)" class="btn btn-primary">Save</button>
+                                            <button type="button save-modal submit" id="${ho.id}" class="btn btn-primary">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -201,6 +204,14 @@ let HeadOffices = {
       await editHeadOffice(id, formDataJsonString);
       location.reload();
     };
+
+    const deleteHeadOfficesHandler = async (event) => {
+      let ids = getCheckedIds();
+      await deleteHeadOffices({ headOfficeIDs: ids });
+      location.reload();
+    }
+
+    document.getElementById('multiple-delete').addEventListener('click', (event) => deleteHeadOfficesHandler(event));
 
     document.getElementById('table-body').innerHTML = renderHeadOffices();
     document

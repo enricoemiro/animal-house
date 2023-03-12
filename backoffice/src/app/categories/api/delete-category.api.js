@@ -5,6 +5,5 @@ export const deleteCategory = async (name) => {
     method: 'DELETE',
     url: `/admin/delete/category/${name}`,
   });
-  console.log(response);
   return response.data;
 };

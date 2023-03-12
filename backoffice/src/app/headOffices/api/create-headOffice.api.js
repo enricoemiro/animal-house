@@ -6,6 +6,5 @@ export const createHeadOffice = async (formData) => {
     url: '/admin/create/headoffice',
     data: formData,
   });
-  console.log(response);
   return response.data;
 };

@@ -147,6 +147,14 @@ a {
     height: 100vh
 }
 
+.vertical-center {
+    min-height: 50vh;
+    /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
 @media screen and (min-width: 768px) {
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;

@@ -6,6 +6,5 @@ export const createCategory = async (formDataJsonString) => {
     url: '/category/create',
     data: formDataJsonString,
   });
-  console.log(response);
   return response.data;
 };

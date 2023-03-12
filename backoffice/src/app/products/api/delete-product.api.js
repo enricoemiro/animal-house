@@ -5,6 +5,5 @@ export const deleteProduct = async (id) => {
     method: 'DELETE',
     url: `/admin/delete/product/${id}`,
   });
-  console.log(response);
   return response.data;
 };

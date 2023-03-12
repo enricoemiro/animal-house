@@ -128,19 +128,19 @@ export class UserService {
     }
   }
 
-  // async deleteUsers(userIDs: User['id'][]) {
-  //   try {
-  //     return this.prismaService.client.user.deleteMany({
-  //       where: {
-  //         id: {
-  //           in: userIDs,
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  async deleteUsers(userIDs: User['id'][]) {
+    try {
+      return this.prismaService.client.user.deleteMany({
+        where: {
+          id: {
+            in: userIDs,
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async editUser(
     id: User['id'],

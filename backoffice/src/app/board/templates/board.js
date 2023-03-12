@@ -1,8 +1,12 @@
+import $ from 'jquery'
 import { html } from 'common-tags';
 
 import { searchbox } from '../../../helpers/searchbox';
+import { deletePosts } from '../api/delete-posts.api';
 import { deletePost } from '../api/delete-post.api';
 import { getPosts } from '../api/get-posts.api';
+
+import { getCheckedIds } from '../../../helpers/checked-ids';
 
 let Board = {
   render: () => {
@@ -20,7 +24,7 @@ let Board = {
           title="Delete"
           aria-label="Delete"
           class="btn btn-outline-danger rounded border-0 mx-2"
-          onclick="return deletePosts(event)"
+          id="multiple-delete"
           type="button"
         >
           <i class="fa-solid fa-trash"></i>
@@ -67,9 +71,8 @@ let Board = {
                     <td class="id">#${post.id}</td>
                     <td class="author">${post.user.name}</td>
                     <td class="date">${new Date(post.createdAt).toLocaleDateString()}</td>
-                    <td class="subject"><span class="badge rounded-pill text-bg-primary">${
-                      post.category != null ? post.category.replace(/_/g, ' ').toLowerCase() : '-'
-                    }
+                    <td class="subject"><span class="badge rounded-pill text-bg-primary">${post.category != null ? post.category.replace(/_/g, ' ').toLowerCase() : '-'
+          }
                     </span></td>
                     <td><button type="button" class="btn btn-danger m-3 delete-post-btn">Delete Post</button></td>
                 </tr>`;
@@ -83,7 +86,15 @@ let Board = {
       location.reload();
     };
 
+    const deletePostsHandler = async (event) => {
+      let ids = getCheckedIds();
+      await deletePosts({ postIDs: ids });
+      location.reload();
+    }
+
     document.getElementById('table-body').innerHTML = renderPosts();
+
+    document.getElementById('multiple-delete').addEventListener('click', (event) => deletePostsHandler(event));
 
     let deleteBtns = document.getElementsByClassName('delete-post-btn');
     for (let btn of deleteBtns) {

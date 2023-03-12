@@ -6,6 +6,5 @@ export const createUser = async (formDataJsonString) => {
     url: '/admin/create/user',
     data: formDataJsonString,
   });
-  console.log(response);
   return response.data;
 };

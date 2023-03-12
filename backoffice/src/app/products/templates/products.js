@@ -4,8 +4,11 @@ import { searchbox } from '../../../helpers/searchbox';
 import { getCategories } from '../../categories/api/get-categories.api';
 import { createProduct } from '../api/create-product.api';
 import { deleteProduct } from '../api/delete-product.api';
+import { deleteProducts } from '../api/delete-products.api';
 import { editProduct } from '../api/edit-product.api';
 import { getProducts } from '../api/get-products.api';
+
+import { getCheckedIds } from '../../../helpers/checked-ids';
 
 let Products = {
   render: () => {
@@ -23,7 +26,7 @@ let Products = {
           title="Delete"
           aria-label="Delete"
           class="btn btn-outline-danger rounded border-0 mx-2"
-          onclick="return deleteProducts(event)"
+          id="multiple-delete"
           type="button"
         >
           <i class="fa-solid fa-trash"></i>
@@ -229,14 +232,12 @@ let Products = {
       event.preventDefault();
       const form = document.getElementById('add-product-form');
       const formData = new FormData(form);
-      console.log(formData);
       await createProduct(formData);
       location.reload();
     };
 
     const deleteProductHandler = async (event) => {
       let id = event.target.closest('tr').id;
-      console.log(id);
       await deleteProduct(id);
       location.reload();
     };
@@ -253,6 +254,14 @@ let Products = {
       await editProduct(id, formDataJsonString);
       location.reload();
     };
+
+    const deleteProductsHandler = async (event) => {
+      let ids = getCheckedIds();
+      await deleteProducts({ productIDs: ids });
+      location.reload();
+    }
+
+    document.getElementById('multiple-delete').addEventListener('click', (event) => deleteProductsHandler(event));
 
     document.getElementById('table-body').innerHTML = renderProducts();
     document

@@ -65,7 +65,6 @@ let Home = {
 
   after_render: async () => {
     const me = await getAuthMe();
-    console.log(me);
     document.getElementById('welcome').innerHTML = 'Welcome back ' + me.user.name + '!';
     //.substring(0, me.user.name.indexOf(' ')) + "!"
   },

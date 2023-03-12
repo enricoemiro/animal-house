@@ -1,9 +1,10 @@
 import axios from '@/config/axios';
 
-export const deleteActivity = async (id) => {
+export const deleteHeadOffices = async (ids) => {
   const response = await axios.request({
     method: 'DELETE',
-    url: `/admin/delete/activity/${id}`,
+    url: `/admin/delete/headoffices`,
+    data: ids,
   });
   return response.data;
 };

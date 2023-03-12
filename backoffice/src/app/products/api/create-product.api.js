@@ -6,6 +6,5 @@ export const createProduct = async (formData) => {
     url: '/product/create',
     data: formData,
   });
-  console.log(response);
   return response.data;
 };
