@@ -9,5 +9,5 @@ export const shuffle = (array) => {
   return array;
 };
 
-export const frontofficeUrl = import.meta.env.VITE_API_BASE_URL + '/frontoffice/';
+export const frontofficeUrl = 'https://site212245.tw.cs.unibo.it' + '/frontoffice/';
 export const baseUrl = import.meta.env.VITE_API_BASE_URL;

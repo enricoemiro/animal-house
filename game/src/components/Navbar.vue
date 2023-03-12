@@ -5,7 +5,6 @@ import { inject, onMounted, ref } from 'vue';
 import { me } from '@app/api/auth/me';
 import snoopyRedBaron from '@app/assets/snoopyRedBaron.jpeg';
 import { frontofficeUrl } from '@app/helpers/helpers';
-import {baseUrl} from '@app/helpers/helpers';
 
 const { logoutSessionUser } = inject('auth');
 
@@ -21,7 +20,7 @@ session.value = null;
 
 }
 
-const loginUrl = frontofficeUrl + `auth/login?returnTo=${baseUrl}game/`;
+const loginUrl = frontofficeUrl + `auth/login?returnTo=https://site212245.tw.cs.unibo.it/game/`;
 
 </script>
 
