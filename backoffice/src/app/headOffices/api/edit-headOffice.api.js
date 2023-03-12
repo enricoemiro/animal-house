@@ -6,6 +6,5 @@ export const editHeadOffice = async (id, form) => {
     url: `/admin/edit/headoffice/${id}`,
     data: form,
   });
-  console.log(response);
   return response.data;
 };

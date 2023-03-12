@@ -6,6 +6,5 @@ export const bookActivity = async (id, form) => {
     url: `/admin/book/activity/${id}`,
     data: form,
   });
-  console.log(response);
   return response.data;
 };

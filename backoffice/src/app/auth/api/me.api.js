@@ -1,9 +1,9 @@
 import axios from '@/config/axios';
 
-export const deleteActivity = async (id) => {
+export const me = async () => {
   const response = await axios.request({
-    method: 'DELETE',
-    url: `/admin/delete/activity/${id}`,
+    method: 'GET',
+    url: '/auth/me',
   });
   return response.data;
 };

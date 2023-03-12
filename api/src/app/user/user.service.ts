@@ -112,8 +112,7 @@ export class UserService {
     try {
       return await this.prismaService.client.$transaction(async (service) => {
         await service.game.deleteMany({ where: { userId: id } });
-        await service.post.deleteMany({where: {userId: id}});
-        
+        await service.post.deleteMany({ where: { userId: id } });
 
         const deletedUser = await service.user.delete({
           where: { id },
@@ -128,19 +127,19 @@ export class UserService {
     }
   }
 
-  // async deleteUsers(userIDs: User['id'][]) {
-  //   try {
-  //     return this.prismaService.client.user.deleteMany({
-  //       where: {
-  //         id: {
-  //           in: userIDs,
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  async deleteUsers(userIDs: User['id'][]) {
+    try {
+      return this.prismaService.client.user.deleteMany({
+        where: {
+          id: {
+            in: userIDs,
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async editUser(
     id: User['id'],

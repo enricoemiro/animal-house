@@ -335,7 +335,6 @@ let Activities = {
 
     const deleteActivityHandler = async (event) => {
       let id = event.target.closest('tr').id;
-      console.log(id);
       await deleteActivity(id);
       location.reload();
     };

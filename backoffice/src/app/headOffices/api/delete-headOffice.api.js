@@ -5,6 +5,5 @@ export const deleteHeadOffice = async (id) => {
     method: 'DELETE',
     url: `/admin/delete/headoffice/${id}`,
   });
-  console.log(response);
   return response.data;
 };

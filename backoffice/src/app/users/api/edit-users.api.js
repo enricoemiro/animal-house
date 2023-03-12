@@ -6,6 +6,5 @@ export const editUser = async (id, form) => {
     url: `/admin/edit/user/${id}`,
     data: form,
   });
-  console.log(response);
   return response.data;
 };

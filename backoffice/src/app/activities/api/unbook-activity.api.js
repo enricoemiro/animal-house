@@ -6,6 +6,5 @@ export const unbookActivity = async (actId, usrId) => {
     url: `/admin/unbook/activity/${actId}`,
     data: JSON.stringify({ id: usrId }),
   });
-  console.log(response);
   return response.data;
 };

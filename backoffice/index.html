@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/352b6e21d2.js" crossorigin="anonymous"></script>
+  <!-- JQuery -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
   <title>Backoffice</title>
 </head>
 
@@ -16,23 +18,23 @@
   </header>
   <div class="l-navbar" id="nav-bar">
     <nav class="nav">
-      <div><a href="/" class="nav_logo text-decoration-none"><i class="fa-solid fa-dog"></i><span
+      <div><a title="Animal House" href="/" class="nav_logo text-decoration-none"><i class="fa-solid fa-dog"></i><span
             class="nav_logo-name">Animal House</span> </a>
         <div class="nav_list">
-          <a href="/backoffice/users" id="users-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-users"></i><span
-              class="nav_name">Users</span></a>
-          <a href="/backoffice/board" id="board-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-message"></i><span
-              class="nav_name">Board</span></a>
-          <a href="/backoffice/products" id="products-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-bag-shopping"></i><span
-              class="nav_name">Products</span></a>
-          <a href="/backoffice/categories" id="categories-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-list"></i><span
-              class="nav_name">Categories</span></a>
-          <a href="/backoffice/activities" id="activities-nav" class="nav_link text-decoration-none"><i
+          <a title="Users" href="/backoffice/users" id="users-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-users"></i><span class="nav_name">Users</span></a>
+          <a title="Board" href="/backoffice/board" id="board-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-message"></i><span class="nav_name">Board</span></a>
+          <a title="Products" href="/backoffice/products" id="products-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-bag-shopping"></i><span class="nav_name">Products</span></a>
+          <a title="Categories" href="/backoffice/categories" id="categories-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-list"></i><span class="nav_name">Categories</span></a>
+          <a title="Activities" href="/backoffice/activities" id="activities-nav" class="nav_link text-decoration-none"><i
               class="fa-solid fa-bell-concierge"></i><span class="nav_name">Activities</span></a>
-          <a href="/backoffice/headoffices" id="headOffices-nav" class="nav_link text-decoration-none"><i class="fa-solid fa-shop"></i><span
-              class="nav_name">HeadOffices</span></a>
+          <a title="HeadOffices" href="/backoffice/headoffices" id="headOffices-nav" class="nav_link text-decoration-none"><i
+              class="fa-solid fa-shop"></i><span class="nav_name">HeadOffices</span></a>
         </div>
-      </div> <a href="#" onclick="return logout()" class="nav_link text-decoration-none"><i
+      </div> <a title="Sign Out" id="logout-nav" class="nav_link text-decoration-none"><i
           class="fa-solid fa-right-from-bracket"></i><span class="nav_name">Sign Out</span></a>
     </nav>
   </div>
@@ -75,6 +77,13 @@
       }
       linkColor.forEach(l => l.addEventListener('click', colorLink))
     })
+
+    // Helper checkboxes
+    $(document).ready(function () {
+      $("#check-all").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+      });
+    });
   </script>
 </body>
 

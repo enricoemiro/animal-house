@@ -98,11 +98,11 @@ export class AdminController {
     return { message: 'User deleted successfully.' };
   }
 
-  //@Delete('delete/users')
-  //async deleteUsers(@Body() { userIDs }: DeleteUsersDTO) {
-  //  await this.userService.deleteUsers(userIDs);
-  //  return { message: 'Users deleted successfully.' };
-  //}
+  @Delete('delete/users')
+  async deleteUsers(@Body() { userIDs }: DeleteUsersDTO) {
+    await this.userService.deleteUsers(userIDs);
+    return { message: 'Users deleted successfully.' };
+  }
 
   @Delete('delete/product/:id')
   async deleteProduct(@Param() { id }: IdProductDTO) {

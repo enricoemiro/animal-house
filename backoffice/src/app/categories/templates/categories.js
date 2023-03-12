@@ -18,7 +18,6 @@ let Categories = {
           id="table-search"
           aria-label="category search bar"
         />
-
         <button
           class="btn btn-primary rounded justify-content-end mx-2"
           type="button"

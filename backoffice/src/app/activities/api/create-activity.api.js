@@ -6,6 +6,5 @@ export const createActivity = async (formData) => {
     url: '/admin/create/activity',
     data: formData,
   });
-  console.log(response);
   return response.data;
 };
