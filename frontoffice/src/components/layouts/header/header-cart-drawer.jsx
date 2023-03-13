@@ -20,7 +20,7 @@ export const HeaderCartDrawer = () => {
         transitionDuration={250}
         overlayBlur={3}
       >
-        <CartMainContent />
+        <CartMainContent open={opened} />
       </Drawer>
       <Group position="center">
         <ActionIcon
