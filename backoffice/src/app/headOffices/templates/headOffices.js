@@ -133,9 +133,9 @@ let HeadOffices = {
                         <input class="form-check-input body-check" type="checkbox" value="" aria-label="checkbox to select row">
                     </td>
                     <td class="id">#${ho.id}</td>
-                    <td class="name">${ho.location}</td>
+                    <td class="location">${ho.location}</td>
                     <td class="address">${ho.streetAddress}</td>
-                    <td class="email">${ho.coordinates}</td>
+                    <td class="coordinates">${ho.coordinates}</td>
                     <td><button type="button" class="btn btn-danger m-3 delete-headoffice-btn">Delete HeadOffice</button>
                         <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#edit-headoffice-${ho.id}">Edit HeadOffice</button>
