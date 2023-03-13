@@ -84,7 +84,7 @@ let Categories = {
       for (const cat of categories) {
         table += `
                     <tr id=${cat.id}>
-                        <td class="name">#${cat.id}</td>
+                        <td class="id">#${cat.id}</td>
                         <td class="name">${cat.name}</td>
                         <td><button type="button" class="btn btn-danger m-3 delete-category-btn">Delete Category</button>
                             <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal"
