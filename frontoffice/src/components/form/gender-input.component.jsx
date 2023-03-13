@@ -13,7 +13,7 @@ export const GenderInput = (props) => {
       data={[
         { value: 'MALE', label: 'Male' },
         { value: 'FEMALE', label: 'Female' },
-        { value: 'PREFER_NOT_TO_SAY', label: 'Prefer not to say' },
+        { value: 'OTHER', label: 'Prefer not to say' },
       ]}
       clearable
       clearButtonLabel="Clear gender field"
