@@ -1,6 +1,5 @@
-import { Badge, Button, Card, Flex, Group, Text } from '@mantine/core';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Anchor, Badge, Button, Card, Flex, Group, Text } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth/use-auth.hook';
 import { ImageViewer } from '@/components/layouts/image-viewer.component';
@@ -8,6 +7,7 @@ import { ImageViewer } from '@/components/layouts/image-viewer.component';
 import { QuantitySelector } from './quantity-selector';
 
 export const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
   const {
     meQuery: { data: user },
   } = useAuth();
@@ -15,9 +15,9 @@ export const ProductCard = ({ product }) => {
   return (
     <Card shadow="md" radius="md" withBorder>
       <Card.Section>
-        <Link to={`/product/details/${product.id}`}>
+        <Anchor onClick={() => navigate(`/product/details/${product.id}`)}>
           <ImageViewer images={product.images} />
-        </Link>
+        </Anchor>
       </Card.Section>
       <Flex direction="column">
         <Group mt="md" mb="md" position="apart">
