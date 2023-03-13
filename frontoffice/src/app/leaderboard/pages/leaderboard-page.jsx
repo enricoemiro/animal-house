@@ -21,7 +21,7 @@ export const LeaderboardPage = () => {
 
   const orderPlayersByPoints = (games) => {
     const orderedGames = games.sort((a, b) => {
-      return a.score < b.score;
+      return b.score - a.score;
     });
 
     return orderedGames.map((game, index) => {
