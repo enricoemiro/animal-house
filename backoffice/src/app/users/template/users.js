@@ -134,6 +134,14 @@ let Users = {
                         <option value="USER" selected>User</option> `;
                 }
 
+                // check for edit user date input
+                let bd
+                if (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(user.dateOfBirth)) {
+                    bd = new Date(user.dateOfBirth)
+                    bd.setDate(bd.getDate() + 1)
+                    bd = bd.toISOString().substring(0, 10)
+                } else { bd = user.dateOfBirth }
+
                 table += `
                     <tr id="${user.id}">
                         <td scope="row" aria-label="checkbox">
@@ -187,8 +195,7 @@ let Users = {
                                                 <div class="input-group mb-3">
                                                     <label class="input-group-text" for="dselect">Date of Birth</label>
                                                     <input type="date" name="dateOfBirth" id="nascita" class="form-control"
-                                                        aria-label="dateOfBirth" value="${user.dateOfBirth
-                    }">
+                                                        aria-label="dateOfBirth" value="${bd}">
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
