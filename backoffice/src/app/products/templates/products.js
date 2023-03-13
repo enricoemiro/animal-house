@@ -200,7 +200,7 @@ let Products = {
                                             </div>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">Price ($)</span>
-                                                <input type="number" class="form-control" name="price" aria-label="Dollar amount" value=${prod.price} required>
+                                                <input type="number" class="form-control" name="price" step="0.01" aria-label="Dollar amount" value=${prod.price} required>
                                             </div>
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="category">Category</label>

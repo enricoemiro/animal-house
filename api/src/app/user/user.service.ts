@@ -14,7 +14,7 @@ export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly hasherService: HasherService,
-  ) {}
+  ) { }
 
   async createOne({ password, ...rest }: Prisma.UserCreateInput) {
     try {
@@ -129,13 +129,34 @@ export class UserService {
 
   async deleteUsers(userIDs: User['id'][]) {
     try {
-      return this.prismaService.client.user.deleteMany({
-        where: {
-          id: {
-            in: userIDs,
+      return this.prismaService.client.$transaction(async (service) => {
+        await service.game.deleteMany({
+          where: {
+            id: {
+              in: userIDs,
+            },
           },
-        },
-      });
+        });
+        await service.post.deleteMany({
+          where: {
+            id: {
+              in: userIDs,
+            },
+          },
+        });
+
+        const deletedUsers = await service.user.deleteMany({
+          where: {
+            id: {
+              in: userIDs,
+            },
+          },
+        });
+
+        if (!deletedUsers) {
+          throw new NotDeletedUserException();
+        }
+      })
     } catch (error) {
       throw error;
     }

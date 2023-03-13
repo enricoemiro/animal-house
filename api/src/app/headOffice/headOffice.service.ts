@@ -5,10 +5,11 @@ import { isDuplicateKeyError } from '@/common/helpers';
 import { PrismaService } from '@/config/prisma/prisma.service';
 
 import { DuplicateHeadOfficeLocationException } from './exceptions/duplicate-headoffice-location.exception';
+import { NotDeletedHeadOfficeException } from './exceptions/not-deleted-headoffice-exception.exception';
 
 @Injectable()
 export class HeadOfficeService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async createOne(headOffice: Prisma.HeadOfficeCreateInput) {
     try {
@@ -84,8 +85,15 @@ export class HeadOfficeService {
 
   async deleteHeadOffice(id: HeadOffice['id']) {
     try {
-      return this.prismaService.client.headOffice.delete({
-        where: { id },
+      return this.prismaService.client.$transaction(async (service) => {
+        await service.activity.deleteMany({ where: { headOfficeId: id } });
+
+        const deletedHeadOffice = await service.headOffice.delete({
+          where: { id },
+        });
+        if (!deletedHeadOffice) {
+          throw new NotDeletedHeadOfficeException();
+        }
       });
     } catch (error) {
       throw error;
@@ -94,13 +102,27 @@ export class HeadOfficeService {
 
   async deleteHeadOffices(headOfficeIDs: HeadOffice['id'][]) {
     try {
-      return this.prismaService.client.headOffice.deleteMany({
-        where: {
-          id: {
-            in: headOfficeIDs,
+      return this.prismaService.client.$transaction(async (service) => {
+        await service.activity.deleteMany({
+          where: {
+            id: {
+              in: headOfficeIDs,
+            },
           },
-        },
-      });
+        });
+
+        const deletedHeadOffices = await service.headOffice.deleteMany({
+          where: {
+            id: {
+              in: headOfficeIDs,
+            },
+          },
+        });
+
+        if (!deletedHeadOffices) {
+          throw new NotDeletedHeadOfficeException();
+        }
+      })
     } catch (error) {
       throw error;
     }
