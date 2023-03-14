@@ -33,7 +33,7 @@ export const ProductDetails = () => {
                   <>
                     <Text>Price:</Text>
                     <Text td="line-through">{product.price + '€'}</Text>
-                    <Text c="red">{product.price - (product.price * 10) / 100 + '€'}</Text>
+                    <Text c="red">{(product.price - (product.price * 10) / 100).toFixed(2) + '€'}</Text>
                   </>
                 ) : (
                   <>
