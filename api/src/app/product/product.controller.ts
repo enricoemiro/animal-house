@@ -24,7 +24,7 @@ export class ProductController {
       name: createDTO.name,
       description: createDTO.description,
       availability: parseInt(createDTO.availability),
-      price: parseInt(createDTO.price),
+      price: parseFloat(createDTO.price),
       categoryId: createDTO.categoryId,
       ...(resizedImages.length > 0
         ? {

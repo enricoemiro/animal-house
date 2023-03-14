@@ -71,6 +71,7 @@ let Products = {
                     <input
                       type="number"
                       name="price"
+                      step="0.01"
                       id="price"
                       class="form-control"
                       aria-label="Dollar amount"
@@ -200,7 +201,7 @@ let Products = {
                                             </div>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">Price ($)</span>
-                                                <input type="number" class="form-control" name="price" aria-label="Dollar amount" value=${prod.price} required>
+                                                <input type="number" class="form-control" step="0.01" name="price" aria-label="Dollar amount" value=${prod.price} required>
                                             </div>
                                             <div class="input-group mb-3">
                                                 <label class="input-group-text" for="category">Category</label>
@@ -249,7 +250,7 @@ let Products = {
       const formData = new FormData(form);
       const plainFormData = Object.fromEntries(formData.entries());
       plainFormData.availability = parseInt(plainFormData.availability);
-      plainFormData.price = parseInt(plainFormData.price);
+      plainFormData.price = parseFloat(plainFormData.price);
       const formDataJsonString = JSON.stringify(plainFormData);
       await editProduct(id, formDataJsonString);
       location.reload();
