@@ -1,5 +1,5 @@
 import { Carousel } from '@mantine/carousel';
-import { Image } from '@mantine/core';
+import { Image as MantineImage } from '@mantine/core';
 import { useId } from 'react';
 
 import { bufferToBase64 } from '@/utils/image';
@@ -9,7 +9,7 @@ const Image = ({image}) => {
 
   return (
     <Carousel.Slide key={id}>
-      <Image
+      <MantineImage
         radius="md"
         src={`data:image/png;base64,` + bufferToBase64(image.content.data)}
         alt=""
